@@ -22,10 +22,8 @@
                             <h4>Create Category</h4>
                         </div>
                         <div class="card-body">
-                            <form action="" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('admin.category.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
-                                @method('PUT')
-
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -64,8 +62,8 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="">Show at Home <span class="text-danger">*</span></label>
-                                    <select name="show_at_home" class="form-control">
+                                    <label for="">Status <span class="text-danger">*</span></label>
+                                    <select name="status" class="form-control">
                                         <option value="1">Active</option>
                                         <option value="0">Inactive</option>
                                     </select>

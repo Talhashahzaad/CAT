@@ -20,7 +20,7 @@ return new class extends Migration
             $table->boolean('show_at_home')->default(0);
             $table->boolean('status')->default(1);
             $table->string('parent_category')->default('None');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }
