@@ -80,7 +80,7 @@
 
                                 <div class="form-group">
                                             <label for="">Description </label>
-                                            <textarea name="description" class="form-control">{{ $location->name }}</textarea>
+                                            <textarea name="description" class="form-control">{{ $location->description }}</textarea>
                                         </div>
 
 

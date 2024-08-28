@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminAuthController;
+use App\Http\Controllers\Admin\AmenityController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LocationController;
@@ -30,9 +31,12 @@ Route::group([
     Route::put('/profile-password',[ProfileController::class,'passwordUpdate'])->name('profile-password.update');
 
     /** Category Route */
-
     Route::resource('/category',CategoryController::class);
+
+    /** Location Route */
     Route::resource('/location',LocationController::class);
 
+    /** Amenity Route */
+    Route::resource('/amenity',AmenityController::class);
 
 });
