@@ -16,8 +16,8 @@ class CategoryStoreRequest extends FormRequest
     {
         return [
 
-            'image_icon' => ['required','image','max:3000' ],
-            'background_image' => ['required','image','max:3000' ],
+            'image_icon' => ['nullable','image','max:3000' ],
+            'background_image' => ['nullable','image','max:3000' ],
             'name' => [ 'required','string', 'max:255', 'unique:categories,name' ],
             'show_at_home' => ['required','boolean'],
             'status' => ['required','boolean'],

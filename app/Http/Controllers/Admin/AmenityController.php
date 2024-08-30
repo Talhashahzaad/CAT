@@ -4,10 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\DataTables\AmenityDataTable;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\AmenityStoreRequest;
 use App\Models\Amenity;
+use Flasher\Prime\Stamp\CreatedAtStamp;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Str;
 
 class AmenityController extends Controller
 {
@@ -30,25 +34,31 @@ class AmenityController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(AmenityStoreRequest $request): RedirectResponse
     {
-        //
+        $amenity = new Amenity();
+        $amenity->icon = $request->icon;
+        $amenity->name = $request->name;
+        $amenity->slug = Str::slug($request->name);
+        $amenity->status = $request->status;
+        $amenity->parent_amenity = $request->parent_amenity;
+        $amenity->description = $request->description;
+        $amenity->save();
+
+        toastr()->success('Created Successfully');
+
+        return to_route('admin.amenity.index');
+
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
-        //
+        $amenity = Amenity::findOrFail($id);
+        return view('admin.amenity.edit', compact('amenity'));
     }
 
     /**

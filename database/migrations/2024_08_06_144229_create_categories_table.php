@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug');
-            $table->string('image_icon');
-            $table->string('background_image');
+            $table->string('image_icon')->nullable();
+            $table->string('background_image')->nullable();
             $table->boolean('show_at_home')->default(0);
             $table->boolean('status')->default(1);
             $table->string('parent_category')->default('None');
