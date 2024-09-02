@@ -47,7 +47,7 @@
 
                                 <div class="form-group">
                                     <label for="">Parent Amenity <span class="text-danger"></span></label>
-                                    <input type="text" class="form-control" name="parent_amenity" value="{{ $amenity->description }}">
+                                    <input type="text" class="form-control" name="parent_amenity" value="{{ $amenity->parent_amenity }}">
                                     {{-- <select name="parent_category" class="form-control">
                                         <option value="none">None</option>
                                         <option value="hair">Hair</option>

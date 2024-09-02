@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\TagController;
 use Illuminate\Support\Facades\Route;
 
 // Route::middleware('guest')->group(function () {
@@ -38,5 +39,7 @@ Route::group([
 
     /** Amenity Route */
     Route::resource('/amenity',AmenityController::class);
+
+    Route::resource('/tag',TagController ::class);
 
 });

@@ -99,8 +99,7 @@ class LocationController extends Controller
     public function destroy(string $id)
     {
         $location = Location::findOrFail($id);
-        $this->deleteFile($location->image_icon);
-        $this->deleteFile($location->background_image);
+        $this->deleteFile($location->location_image);
 
         $location->delete();
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\DataTables\AmenityDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\AmenityStoreRequest;
+use App\Http\Requests\Admin\AmenityUpdateRequest;
 use App\Models\Amenity;
 use Flasher\Prime\Stamp\CreatedAtStamp;
 use Illuminate\Http\JsonResponse;
@@ -64,9 +65,21 @@ class AmenityController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(AmenityUpdateRequest $request, string $id) : RedirectResponse
     {
-        //
+    
+        $amenity = Amenity::findOrFail($id);
+        $amenity->icon = $request->filled('icon') ? $request->icon : $amenity->icon;
+        $amenity->name = $request->name;
+        $amenity->status = $request->status;
+        $amenity->parent_amenity = $request->parent_amenity;
+        $amenity->description = $request->description;
+        $amenity->save();
+
+        toastr()->success('Created Successfully');
+
+        return to_route('admin.amenity.index');
+
     }
 
     /**
@@ -74,6 +87,9 @@ class AmenityController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+       $amenity = Amenity::findOrFail($id);
+       $amenity->delete();
+
+       return response(['status' => 'success', 'message' => 'Item deleted successfuly!']);
     }
 }

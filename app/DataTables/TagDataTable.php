@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\Amenity;
+use App\Models\Tag;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -12,7 +12,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class AmenityDataTable extends DataTable
+class TagDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -23,14 +23,12 @@ class AmenityDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
         ->addColumn('action', function ($query) {
-            $edit = '<a href="' . route('admin.amenity.edit', $query->id) . '" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a>';
-            $delete = '<a href="' . route('admin.amenity.destroy', $query->id) . '" class="delete-item btn btn-sm btn-danger ml-2"><i class="fas fa-trash"></i></a>';
+            $edit = '<a href="' . route('admin.tag.edit', $query->id) . '" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a>';
+            $delete = '<a href="' . route('admin.tag.destroy', $query->id) . '" class="delete-item btn btn-sm btn-danger ml-2"><i class="fas fa-trash"></i></a>';
 
             return $edit . $delete;
         })
-            ->addColumn('icon',function($query){
-                return '<i class="'.$query->icon.'" style="font-size:40px"></i>';
-            })
+
             ->addColumn('status', function ($query) {
                 if ($query->status === 1) {
                     return "<span class='badge badge-primary'>Active</span>";
@@ -38,14 +36,14 @@ class AmenityDataTable extends DataTable
                     return "<span class='badge badge-danger'>Inactive</span>";
                 }
             })
-            ->rawColumns(['icon','action','status'])
+            ->rawColumns(['action','status'])
             ->setRowId('id');
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(Amenity $model): QueryBuilder
+    public function query(Tag $model): QueryBuilder
     {
         return $model->newQuery();
     }
@@ -56,11 +54,11 @@ class AmenityDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('amenity-table')
+                    ->setTableId('tag-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
-                    ->orderBy(0)
+                    ->orderBy(1)
                     ->selectStyleSingle()
                     ->buttons([
                         Button::make('excel'),
@@ -80,9 +78,9 @@ class AmenityDataTable extends DataTable
         return [
 
             Column::make('id'),
-            Column::make('icon'),
             Column::make('name'),
-            Column::make('slug'),
+            Column::make('parent_tag'),
+            Column::make('parent_category'),
             Column::make('status'),
             Column::computed('action')
                   ->exportable(false)
@@ -97,6 +95,6 @@ class AmenityDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'Amenity_' . date('YmdHis');
+        return 'Tag_' . date('YmdHis');
     }
 }
