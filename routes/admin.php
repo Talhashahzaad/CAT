@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AmenityController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ListingController;
 use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\TagController;
@@ -27,19 +28,22 @@ Route::group([
 
     /** Profile Routes */
 
-    Route::get('/profile',[ProfileController::class,'index'])->name('profile');
-    Route::put('/update',[ProfileController::class,'update'])->name('profile.update');
-    Route::put('/profile-password',[ProfileController::class,'passwordUpdate'])->name('profile-password.update');
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::put('/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile-password', [ProfileController::class, 'passwordUpdate'])->name('profile-password.update');
 
     /** Category Route */
-    Route::resource('/category',CategoryController::class);
+    Route::resource('/category', CategoryController::class);
 
     /** Location Route */
-    Route::resource('/location',LocationController::class);
+    Route::resource('/location', LocationController::class);
 
     /** Amenity Route */
-    Route::resource('/amenity',AmenityController::class);
+    Route::resource('/amenity', AmenityController::class);
 
-    Route::resource('/tag',TagController ::class);
+    /** Tag Route */
+    Route::resource('/tag', TagController::class);
 
+    /** Listing Route */
+    Route::resource('listing', ListingController::class);
 });
