@@ -6,8 +6,11 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ListingController;
 use App\Http\Controllers\Admin\LocationController;
+use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\TagController;
+use App\Models\Package;
 use Illuminate\Support\Facades\Route;
 
 // Route::middleware('guest')->group(function () {
@@ -27,7 +30,6 @@ Route::group([
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
     /** Profile Routes */
-
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::put('/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile-password', [ProfileController::class, 'passwordUpdate'])->name('profile-password.update');
@@ -45,5 +47,11 @@ Route::group([
     Route::resource('/tag', TagController::class);
 
     /** Listing Route */
-    Route::resource('listing', ListingController::class);
+    Route::resource('/listing', ListingController::class);
+
+    /** Service Route */
+    Route::resource('/service', ServiceController::class);
+
+    /** Package Route */
+    Route::resource('/package',PackageController::class);
 });

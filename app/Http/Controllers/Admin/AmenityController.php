@@ -67,7 +67,7 @@ class AmenityController extends Controller
      */
     public function update(AmenityUpdateRequest $request, string $id) : RedirectResponse
     {
-    
+
         $amenity = Amenity::findOrFail($id);
         $amenity->icon = $request->filled('icon') ? $request->icon : $amenity->icon;
         $amenity->name = $request->name;
@@ -90,6 +90,6 @@ class AmenityController extends Controller
        $amenity = Amenity::findOrFail($id);
        $amenity->delete();
 
-       return response(['status' => 'success', 'message' => 'Item deleted successfuly!']);
+       return response(['status' => 'success', 'message' => 'Item deleted Successfuly!']);
     }
 }

@@ -106,6 +106,6 @@ class CategoryController extends Controller
 
         $category->delete();
 
-        return response(['status' => 'success', 'message' => 'Item deleted successfuly!']);
+        return response(['status' => 'success', 'message' => 'Item deleted Successfuly!']);
     }
 }

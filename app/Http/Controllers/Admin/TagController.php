@@ -66,7 +66,7 @@ class TagController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id): RedirectResponse
     {
          $tag = Tag::findOrFail($id);
          $tag->name = $request->name;
@@ -90,6 +90,6 @@ class TagController extends Controller
          $tag = Tag::findOrFail($id);
          $tag->delete();
 
-         return response(['status' => 'success', 'message' => 'Item deleted successfully']);
+         return response(['status' => 'success', 'message' => 'Item deleted Successfully']);
    }
 }

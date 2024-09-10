@@ -103,6 +103,6 @@ class LocationController extends Controller
 
         $location->delete();
 
-        return response(['status' => 'success', 'message' => 'Item deleted successfuly!']);
+        return response(['status' => 'success', 'message' => 'Item deleted Successfuly!']);
     }
 }
