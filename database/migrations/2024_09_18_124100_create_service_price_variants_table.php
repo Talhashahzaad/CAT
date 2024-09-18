@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('service_variations', function (Blueprint $table) {
+        Schema::create('service_price_variants', function (Blueprint $table) {
             $table->id();
             $table->foreignId('service_id')->constrained()->onDelete('cascade');
-            $table->string('service_name');
+            $table->string('name')->nullable();
+            $table->text('description')->nullable();
             $table->string('duration');
             $table->string('price_type');
             $table->decimal('price', 8, 2);
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('service_variations');
+        Schema::dropIfExists('service_price_variants');
     }
 };

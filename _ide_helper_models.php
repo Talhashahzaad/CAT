@@ -16,10 +16,39 @@ namespace App\Models{
  * 
  *
  * @property int $id
+ * @property string|null $icon
  * @property string $name
  * @property string $slug
- * @property string $image_icon
- * @property string $background_image
+ * @property int $status
+ * @property string $parent_amenity
+ * @property string|null $description
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Amenity newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Amenity newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Amenity query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Amenity whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Amenity whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Amenity whereIcon($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Amenity whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Amenity whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Amenity whereParentAmenity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Amenity whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Amenity whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Amenity whereUpdatedAt($value)
+ */
+	class Amenity extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $slug
+ * @property string|null $image_icon
+ * @property string|null $background_image
  * @property int $show_at_home
  * @property int $status
  * @property string $parent_category
@@ -42,6 +71,23 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Category whereUpdatedAt($value)
  */
 	class Category extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Listing newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Listing newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Listing query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Listing whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Listing whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Listing whereUpdatedAt($value)
+ */
+	class Listing extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -80,6 +126,113 @@ namespace App\Models{
  * 
  *
  * @property int $id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Package newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Package newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Package query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Package whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Package whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Package whereUpdatedAt($value)
+ */
+	class Package extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $slug
+ * @property int $status
+ * @property string $service_type
+ * @property string $category
+ * @property string|null $description
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ServicePriceVariant> $priceVariants
+ * @property-read int|null $price_variants_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Service newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Service newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Service query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Service whereCategory($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Service whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Service whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Service whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Service whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Service whereServiceType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Service whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Service whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Service whereUpdatedAt($value)
+ */
+	class Service extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property int $service_id
+ * @property string|null $name
+ * @property string|null $description
+ * @property string $duration
+ * @property string $price_type
+ * @property string $price
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Service $service
+ * @method static \Illuminate\Database\Eloquent\Builder|ServicePriceVariant newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ServicePriceVariant newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ServicePriceVariant query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ServicePriceVariant whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ServicePriceVariant whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ServicePriceVariant whereDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ServicePriceVariant whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ServicePriceVariant whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ServicePriceVariant wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ServicePriceVariant wherePriceType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ServicePriceVariant whereServiceId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ServicePriceVariant whereUpdatedAt($value)
+ */
+	class ServicePriceVariant extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $slug
+ * @property int $status
+ * @property string $parent_tag
+ * @property string $parent_category
+ * @property string|null $description
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Tag newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Tag newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Tag query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Tag whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tag whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tag whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tag whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tag whereParentCategory($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tag whereParentTag($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tag whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tag whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Tag whereUpdatedAt($value)
+ */
+	class Tag extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
  * @property string $role
  * @property string $avatar
  * @property string $banner
@@ -87,6 +240,9 @@ namespace App\Models{
  * @property string $email
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property mixed $password
+ * @property string|null $facebook_id
+ * @property string|null $facebook_token
+ * @property string|null $profile_picture
  * @property string|null $phone
  * @property string|null $address
  * @property string|null $about
@@ -112,12 +268,15 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereFacebookId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereFacebookToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereFbLink($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereIgLink($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePhone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereProfilePicture($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRole($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereStatus($value)

@@ -28,14 +28,13 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="name">Name <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" name="name" id="name"
-                                                required>
+                                            <input type="text" class="form-control" name="name" id="name">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="status">Status <span class="text-danger">*</span></label>
-                                            <select name="status" id="status" class="form-control" required>
+                                            <select name="status" id="status" class="form-control">
                                                 <option value="1">Active</option>
                                                 <option value="0">Inactive</option>
                                             </select>
@@ -72,8 +71,13 @@
                                                 <div class="row align-items-center">
                                                     <div class="col-md-3 variant-name" style="display: none;">
                                                         <strong>Service</strong>
+                                                        <input type="hidden" name="variant_name[]" value="Service">
+                                                        <input type="hidden" name="variant_description[]" value="">
                                                     </div>
+
                                                     <div class="col-md-2">
+                                                        <label for="dusration">Duration <span
+                                                                class="text-danger">*</span></label>
                                                         <select class="form-control duration" name="duration[]">
                                                             <option value="1h">1h</option>
                                                             <option value="2h">2h</option>
@@ -81,14 +85,19 @@
                                                         </select>
                                                     </div>
                                                     <div class="col-md-2">
+                                                        <label for="price_type">Price Type <span
+                                                                class="text-danger">*</span></label>
                                                         <select class="form-control price-type" name="price_type[]">
+                                                            <option value="Free">Free</option>
+                                                            <option value="From">From</option>
                                                             <option value="Fixed">Fixed</option>
-                                                            <option value="Variable">Variable</option>
                                                         </select>
                                                     </div>
                                                     <div class="col-md-2">
+                                                        <label for="price">Price <span
+                                                                class="text-danger">*</span></label>
                                                         <input type="number" class="form-control price" name="price[]"
-                                                            placeholder="Price" step="0.01" required>
+                                                            placeholder="Price" step="0.01">
                                                         <div class="error-message text-danger service"></div>
                                                     </div>
                                                     <div class="col-md-3 remove-button" style="display: none;">
@@ -100,7 +109,7 @@
                                         <button id="add-variant" class="btn btn-primary mt-3">Add variant</button>
                                     </div>
                                 </div>
-                                
+
                                 <div class="form-group mt-4">
                                     <button type="submit" class="btn btn-primary">Create</button>
                                 </div>
@@ -141,8 +150,9 @@
                         <div class="form-group">
                             <label for="variantPriceType">Price Type</label>
                             <select class="form-control" id="variantPriceType" name="variantPriceType">
+                                <option value="Free">Free</option>
+                                <option value="From">From</option>
                                 <option value="Fixed">Fixed</option>
-                                <option value="Variable">Variable</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -173,7 +183,7 @@
                 const variantCount = $('.variation-row').length;
                 if (variantCount > 1) {
                     $('.variant-name, .remove-button').show();
-                    $('.variation-row:first .variant-name strong').text('Default Service');
+                    $('.variation-row:first .variant-name strong').text('Service');
                 } else {
                     $('.variant-name, .remove-button').hide();
                 }
@@ -211,7 +221,7 @@
                 <div class="variation-row mt-3">
                     <div class="row align-items-center">
                         <div class="col-md-3 variant-name">
-                            <strong>${displayName}</strong>
+                            <strong>${displayName} </strong>
                             <input type="hidden" name="variant_name[]" value="${name}">
                             <input type="hidden" name="variant_description[]" value="${description}">
                         </div>
@@ -224,8 +234,9 @@
                         </div>
                         <div class="col-md-2">
                             <select class="form-control price-type" name="price_type[]">
+                                <option value="Free" ${priceType === 'Free' ? 'selected' : ''}>Free</option>
+                                <option value="From" ${priceType === 'From' ? 'selected' : ''}>From</option>
                                 <option value="Fixed" ${priceType === 'Fixed' ? 'selected' : ''}>Fixed</option>
-                                <option value="Variable" ${priceType === 'Variable' ? 'selected' : ''}>Variable</option>
                             </select>
                         </div>
                         <div class="col-md-2">
