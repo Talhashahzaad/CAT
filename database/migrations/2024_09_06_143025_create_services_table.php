@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('slug');
             $table->boolean('status')->default(1);
             $table->string('service_type')->default('none');
+            $table->string('total_price')->nullable();
             $table->string('category')->default('none');
             $table->text('description')->nullable();
             $table->timestamps();

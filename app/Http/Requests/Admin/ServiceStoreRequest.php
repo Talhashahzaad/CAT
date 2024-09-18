@@ -21,34 +21,30 @@ class ServiceStoreRequest extends FormRequest
             'service_type' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'duration' => 'required|array',
-            'duration.*' => 'required|string|min:2|max:720',
-            'price_type' => 'required|array',
-            'price_type.*' => 'required|string',
-            'price' => 'required|array',
-            'price.*' => 'required|numeric|min:0',
+            'duration.*' => 'required|string|min:1|max:720',
+            'price_type.*' => ['required', Rule::in(['Free', 'From', 'Fixed'])],
+            'price.*' => [
+                'nullable',
+                function ($attribute, $value, $fail) {
+                    $index = explode('.', $attribute)[1];
+                    $priceType = $this->input("price_type.$index");
+
+                    if ($priceType !== 'Free' && ($value === null || $value === '')) {
+                        $fail('The price is required when the price type is not Free.');
+                    }
+
+                    if ($priceType === 'Free' && $value !== null && $value !== '') {
+                        $fail('The price should not be provided when the price type is Free.');
+                    }
+                },
+                'numeric',
+                'min:0',
+            ],
             // Include these if your table has these columns
             'variant_name' => 'nullable|array',
             'variant_name.*' => 'nullable|string|max:255',
             'variant_description' => 'nullable|array',
             'variant_description.*' => 'nullable|string',
-            // Service validation rules
-            // 'name' => ['required', 'string', 'max:255'],
-            // 'status' => ['required', 'boolean'],
-            // 'service_type' => ['required', 'string', 'max:255'],
-            // 'category' => ['required', 'string', 'max:255'],
-            // 'description' => ['nullable', 'max:255'],
-
-            // Variant validation rules
-            // 'duration' => 'required|array',
-            // 'duration.*' => ['required', Rule::in(['1h', '2h', '3h'])],
-            // 'price_type' => 'required|array',
-            // 'price_type.*' => ['required', Rule::in(['Fixed', 'Variable'])],
-            // 'price' => 'required|array',
-            // 'price.*' => 'required|numeric|min:0',
-            // 'variant_name' => 'nullable|array',
-            // 'variant_name.*' => 'nullable|string|max:255',
-            // 'variant_description' => 'nullable|array',
-            // 'variant_description.*' => 'nullable|string',
         ];
     }
 }

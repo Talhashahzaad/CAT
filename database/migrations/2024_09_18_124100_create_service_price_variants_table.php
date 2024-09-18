@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->string('duration');
             $table->string('price_type');
-            $table->decimal('price', 8, 2);
+            $table->decimal('price', 8, 2)->nullable();
             $table->timestamps();
         });
     }

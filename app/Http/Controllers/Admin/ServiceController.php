@@ -17,61 +17,6 @@ use Str;
 class ServiceController extends Controller
 {
 
-    /**
-     * Duration method for blade file
-     */
-
-    private function getDurations()
-    {
-        $durations = [
-            5 => '5min',
-            10 => '10min',
-            15 => '15min',
-            20 => '20min',
-            25 => '25min',
-            30 => '30min',
-            35 => '35min',
-            40 => '40min',
-            45 => '45min',
-            50 => '50min',
-            55 => '55min',
-            60 => '1h',
-            65 => '1h 5min',
-            70 => '1h 10min',
-            75 => '1h 15min',
-            80 => '1h 20min',
-            85 => '1h 25min',
-            90 => '1h 30min',
-            95 => '1h 35min',
-            100 => '1h 40min',
-            105 => '1h 45min',
-            110 => '1h 50min',
-            115 => '1h 55min',
-            120 => '2h',
-            135 => '2h 15min',
-            150 => '2h 30min',
-            165 => '2h 45min',
-            180 => '3h',
-            195 => '3h 15min',
-            210 => '3h 30min',
-            225 => '3h 45min',
-            240 => '4h',
-            270 => '4h 30min',
-            300 => '5h',
-            330 => '5h 30min',
-            360 => '6h',
-            390 => '6h 30min',
-            420 => '7h',
-            450 => '7h 30min',
-            480 => '8h',
-            540 => '9h',
-            600 => '10h',
-            660 => '11h',
-            720 => '12h'
-        ];
-
-        return $durations;
-    }
 
     /**
      * Display a listing of the resource.
@@ -86,8 +31,8 @@ class ServiceController extends Controller
      */
     public function create(): View
     {
-        $durations = $this->getDurations();
-    return view('admin.service.create', compact('durations'));
+
+        return view('admin.service.create');
     }
 
 
@@ -99,31 +44,42 @@ class ServiceController extends Controller
 
         $validatedData = $request->validated();
 
+        // Decode the price JSON from the request
+        $prices = json_decode($request->price, true);
+
+        // Calculate the total price
+        $totalPrice = 0;
+        foreach ($prices as $priceData) {
+            if ($priceData['type'] !== 'Free' && isset($priceData['price'])) {
+                $totalPrice += floatval($priceData['price']);
+            }
+        }
+
         $service = new Service();
-        $service->name = $request->name;
-        $service->status = $request->status;
-        $service->category = $request->category;
-        $service->service_type = $request->service_type;
-        $service->slug = Str::slug($request->name);
-        $service->description = $request->description;
+        $service->name = $validatedData['name'];
+        $service->status = $validatedData['status'];
+        $service->total_price = $totalPrice; // Store the calculated total price
+        $service->category = $validatedData['category'];
+        $service->service_type = $validatedData['service_type'];
+        $service->slug = Str::slug($validatedData['name']);
+        $service->description = $validatedData['description'];
         $service->save();
 
-        foreach ($validatedData['duration'] as $index => $duration) {
-            ServicePriceVariant::create([
-                'service_id' => $service->id,
-                'duration' => $duration,
-                'price_type' => $validatedData['price_type'][$index],
-                'price' => $validatedData['price'][$index],
-                // Add these if your table has these columns, otherwise remove them
-                'name' => $validatedData['variant_name'][$index] ?? null,
-                'description' => $validatedData['variant_description'][$index] ?? null,
+        foreach ($prices as $priceData) {
+            $service->priceVariants()->create([
+                'name' => $priceData['name'],p
+                'description' => $priceData['description'],
+                'duration' => $priceData['duration'],
+                'price_type' => $priceData['type'],
+                'price' => $priceData['type'] !== 'Free' ? $priceData['price'] : null,
             ]);
         }
 
         toastr()->success('Created Successfully');
-
         return to_route('admin.service.index');
     }
+
+
 
     /**
      * Show the form for editing the specified resource.
