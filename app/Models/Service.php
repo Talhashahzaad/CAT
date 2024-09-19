@@ -24,4 +24,5 @@ class Service extends Model
     {
         return $this->hasMany(ServicePriceVariant::class);
     }
+    
 }

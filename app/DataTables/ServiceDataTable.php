@@ -11,6 +11,8 @@ use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
+use App\Models\Category;
+
 
 class ServiceDataTable extends DataTable
 {
@@ -28,7 +30,10 @@ class ServiceDataTable extends DataTable
 
             return $edit . $delete;
         })
-
+            ->editColumn('category', function ($service) {
+                $category = Category::find($service->category);
+                return $category ? $category->name : 'N/A';
+            })
             ->addColumn('status', function ($query) {
                 if ($query->status === 1) {
                     return "<span class='badge badge-primary'>Active</span>";
@@ -36,7 +41,7 @@ class ServiceDataTable extends DataTable
                     return "<span class='badge badge-danger'>Inactive</span>";
                 }
             })
-            ->rawColumns(['action','status'])
+            ->rawColumns(['action','status','category'])
             ->setRowId('id');
     }
 

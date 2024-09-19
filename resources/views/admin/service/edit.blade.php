@@ -10,7 +10,7 @@
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="{{ route('admin.dashboard.index') }}">Dashboard</a></div>
                 <div class="breadcrumb-item"><a href="{{ route('admin.service.index') }}">Service</a></div>
-                <div class="breadcrumb-item">Edit</div>
+                <div class="breadcrumb-item">Update</div>
             </div>
         </div>
 
@@ -19,7 +19,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Edit Service</h4>
+                            <h4>Update Service</h4>
                         </div>
                         <div class="card-body">
                             <form id="serviceForm" action="{{ route('admin.service.update', $service->id) }}"
