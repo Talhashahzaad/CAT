@@ -147,6 +147,7 @@ namespace App\Models{
  * @property string $slug
  * @property int $status
  * @property string $service_type
+ * @property string|null $total_price
  * @property string $category
  * @property string|null $description
  * @property \Illuminate\Support\Carbon|null $created_at
@@ -164,6 +165,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Service whereServiceType($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Service whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Service whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Service whereTotalPrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Service whereUpdatedAt($value)
  */
 	class Service extends \Eloquent {}
@@ -179,7 +181,7 @@ namespace App\Models{
  * @property string|null $description
  * @property string $duration
  * @property string $price_type
- * @property string $price
+ * @property string|null $price
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Service $service

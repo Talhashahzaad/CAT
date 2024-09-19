@@ -10,6 +10,16 @@ class Service extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'status',
+        'category',
+        'total_price',
+        'service_type',
+        'slug',
+        'description'
+    ];
+
     public function priceVariants()
     {
         return $this->hasMany(ServicePriceVariant::class);

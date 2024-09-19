@@ -6,6 +6,7 @@ use App\DataTables\ServiceDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ServiceStoreRequest;
 use App\Http\Requests\Admin\ServiceUpdateRequest;
+use App\Models\Category;
 use App\Models\ServicePriceVariant;
 use App\Models\Service;
 use Illuminate\Http\JsonResponse;
@@ -23,7 +24,7 @@ class ServiceController extends Controller
      */
     public function index(ServiceDataTable $dataTable): View | JsonResponse
     {
-        return $dataTable->render('admin.service.index');
+        return $dataTable->render('admin.service.index' );
     }
 
     /**
@@ -31,8 +32,8 @@ class ServiceController extends Controller
      */
     public function create(): View
     {
-
-        return view('admin.service.create');
+        $category =  Category::all();
+        return view('admin.service.create',compact('category'));
     }
 
 
@@ -67,7 +68,7 @@ class ServiceController extends Controller
 
         foreach ($prices as $priceData) {
             $service->priceVariants()->create([
-                'name' => $priceData['name'],p
+                'name' => $priceData['name'],
                 'description' => $priceData['description'],
                 'duration' => $priceData['duration'],
                 'price_type' => $priceData['type'],
@@ -86,8 +87,11 @@ class ServiceController extends Controller
      */
     public function edit(string $id)
     {
-        $service = Service::findOrFail($id);
-        return view('admin.service.edit', compact('service'));
+        $service = Service::with('priceVariants')->findOrFail($id);
+        $category =  Category::all();
+        // Add this line for debugging
+        // dd($service->toArray());
+        return view('admin.service.edit', compact('service','category'));
     }
 
     /**
@@ -96,16 +100,55 @@ class ServiceController extends Controller
     public function update(ServiceUpdateRequest $request, string $id): RedirectResponse
     {
         $service = Service::findOrFail($id);
-        $service->name = $request->name;
-        $service->status = $request->status;
-        $service->category = $request->category;
-        $service->service_type = $request->service_type;
-        $service->slug =  Str::slug($request->name);
-        $service->description = $request->description;
-        $service->save();
+
+        // Update service details
+        $service->update([
+            'name' => $request->name,
+            'status' => $request->status,
+            'category' => $request->category,
+            'service_type' => $request->service_type,
+            'slug' => Str::slug($request->name),
+            'description' => $request->description,
+        ]);
+
+        // Decode the price JSON from the request
+        $prices = json_decode($request->price, true);
+
+        // Calculate total price and update variants
+        $totalPrice = 0;
+
+        foreach ($prices as $priceData) {
+            $variantId = $priceData['id'] ?? null;
+            $price = $priceData['type'] !== 'Free' ? floatval($priceData['price']) : 0;
+            $totalPrice += $price;
+
+            $variantData = [
+                'name' => $priceData['name'],
+                'description' => $priceData['description'],
+                'duration' => $priceData['duration'],
+                'price_type' => $priceData['type'],
+                'price' => $price,
+            ];
+
+            if ($variantId) {
+                // Update existing variant
+                $service->priceVariants()->where('id', $variantId)->update($variantData);
+            } else {
+                // Create new variant
+                $service->priceVariants()->create($variantData);
+            }
+        }
+
+        // Update total price
+        $service->update(['total_price' => $totalPrice]);
+
+        // Remove variants that are not in the updated data
+        $updatedVariantIds = array_column($prices, 'id');
+        $service->priceVariants()
+            ->whereNotIn('id', $updatedVariantIds)
+            ->delete();
 
         toastr()->success('Updated Successfully');
-
         return to_route('admin.service.index');
     }
 

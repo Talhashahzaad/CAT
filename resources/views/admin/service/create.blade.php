@@ -49,9 +49,14 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="category">Category</label>
-                                            <input type="text" class="form-control" name="category" id="category"
-                                                value="None">
+                                            <label for="category">Category <span class="text-danger">*</span></label>
+
+                                            <select name="category" class="form-control" id="category">
+                                                @foreach ( $category as $categories )
+                                                <option value="{{ $categories->id }}">{{ $categories->name }}</option>
+                                                @endforeach
+                                            </select>
+
                                         </div>
                                     </div>
                                     <div class="col-md-12">
