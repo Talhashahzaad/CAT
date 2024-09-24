@@ -2,25 +2,33 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\DataTables\PackageDataTable;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\Service;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
+
+use function Termwind\render;
 
 class PackageController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(PackageDataTable $dataTable) : View
     {
-        //
+        return $dataTable->render('admin.package.index');
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create() : View
     {
-        //
+        $services = Service::all();
+        $category = Category::all();
+        return view('admin.package.create', compact('services', 'category'));
     }
 
     /**

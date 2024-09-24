@@ -6,10 +6,10 @@
             <div class="section-header-back">
                 <a href="{{ route('admin.category.index') }}" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
             </div>
-            <h1>Category</h1>
+            <h1>Treatment Category</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="{{ route('admin.dashboard.index') }}">Dashboard</a></div>
-                <div class="breadcrumb-item"><a href="{{ route('admin.category.index') }}">Category</a></div>
+                <div class="breadcrumb-item"><a href="{{ route('admin.category.index') }}">Treatment Category</a></div>
                 <div class="breadcrumb-item">Edit</div>
             </div>
         </div>
@@ -19,7 +19,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Edit Category</h4>
+                            <h4>Edit Treatment Category</h4>
                         </div>
                         <div class="card-body">
                             <form action="{{ route('admin.category.update', $category->id) }}" method="POST"
@@ -76,7 +76,7 @@
 
 
                                <div class="form-group">
-                                    <label for="">Parent Category <span class="text-danger">*</span></label>
+                                    <label for="">Parent Treatment Category <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="parent_category" value="{{ $category->parent_category  }}">
                                     {{-- <select name="parent_category" class="form-control">
                                         <option value="none">None</option>

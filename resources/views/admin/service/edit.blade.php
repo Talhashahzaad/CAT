@@ -6,10 +6,10 @@
             <div class="section-header-back">
                 <a href="{{ route('admin.service.index') }}" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
             </div>
-            <h1>Service</h1>
+            <h1>Treatment</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="{{ route('admin.dashboard.index') }}">Dashboard</a></div>
-                <div class="breadcrumb-item"><a href="{{ route('admin.service.index') }}">Service</a></div>
+                <div class="breadcrumb-item"><a href="{{ route('admin.service.index') }}">Treatment</a></div>
                 <div class="breadcrumb-item">Update</div>
             </div>
         </div>
@@ -19,7 +19,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Update Service</h4>
+                            <h4>Update Treatment</h4>
                         </div>
                         <div class="card-body">
                             <form id="serviceForm" action="{{ route('admin.service.update', $service->id) }}"
@@ -52,7 +52,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="category">Category <span class="text-danger">*</span></label>
+                                            <label for="category">Treatment Category <span class="text-danger">*</span></label>
                                             <select name="category" class="form-control" id="category">
                                                 @foreach ($category as $categories)
                                                     <option @selected($service->category == $categories->id) value="{{ $categories->id }}">

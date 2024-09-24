@@ -6,10 +6,10 @@
             <div class="section-header-back">
                 <a href="{{ route('admin.dashboard.index') }}" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
             </div>
-            <h1>Treatment Category</h1>
+            <h1>Treatment Packages</h1>
             <div class="section-header-breadcrumb">
                 <div class="breadcrumb-item active"><a href="{{ route('admin.dashboard.index') }}">Dashboard</a></div>
-                <div class="breadcrumb-item">Treatment Categories</div>
+                <div class="breadcrumb-item">Treatment Packages</div>
             </div>
         </div>
 
@@ -18,9 +18,9 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>All Treatment Categories</h4>
+                            <h4>All Treatment Packages</h4>
                             <div class="card-header-action">
-                                <a href="{{ route('admin.category.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Create</a>
+                                <a href="{{ route('admin.package.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Create</a>
                             </div>
                         </div>
                         <div class="card-body">

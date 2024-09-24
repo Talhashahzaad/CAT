@@ -187,9 +187,9 @@
                         class="fas fa-columns"></i> <span>Listings</span></a>
                 <ul class="dropdown-menu">
                     <li class="{{ setSidebarActive(['admin.listing.*']) }}"><a class="nav-link" href="{{ route('admin.listing.index') }}">All Listing</a></li>
-                    <li class="{{ setSidebarActive(['admin.service.*']) }}"><a class="nav-link" href="{{ route('admin.service.index') }}">Services</a></li>
-                    <li class="{{ setSidebarActive(['admin.package.*']) }}"><a class="nav-link" href="{{ route('admin.package.index') }}">Packages</a></li>
-                    <li class="{{ setSidebarActive(['admin.category.*']) }}"><a class="nav-link" href="{{ route('admin.category.index') }}">Categories</a></li>
+                    <li class="{{ setSidebarActive(['admin.category.*']) }}"><a class="nav-link" href="{{ route('admin.category.index') }}">Treatment Categories</a></li>
+                    <li class="{{ setSidebarActive(['admin.service.*']) }}"><a class="nav-link" href="{{ route('admin.service.index') }}">Treatments</a></li>
+                    <li class="{{ setSidebarActive(['admin.package.*']) }}"><a class="nav-link" href="{{ route('admin.package.index') }}">Treatment Packages</a></li>
                     <li class="{{ setSidebarActive(['admin.location.*']) }}"><a class="nav-link" href="{{ route('admin.location.index') }}">Locations</a></li>
                     <li class="{{ setSidebarActive(['admin.amenity.*']) }}"><a class="nav-link" href="{{ route('admin.amenity.index') }}">Amenities</a></li>
                     <li class="{{ setSidebarActive(['admin.tag.*']) }}"><a class="nav-link" href="{{ route('admin.tag.index') }}">Tags</a></li>

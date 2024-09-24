@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Package extends Model
+class PackageServiceVariant extends Model
 {
     use HasFactory;
 
-    public function packageServiceVariant()
+    public function package()
     {
-        return $this->hasMany(packageServiceVariant::class);
+        return $this->belongsTo(Package::class);
     }
 }
