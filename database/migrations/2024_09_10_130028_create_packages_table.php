@@ -18,7 +18,9 @@ return new class extends Migration
             $table->string('status');
             $table->string('category');
             $table->text('description')->nullable();
-            $table->string('treatment');
+            $table->string('total_price');
+            $table->string('discount_percentage')->nullable();
+            $table->string('total_time');
             $table->string('price_type');
             $table->string('available_for');
             $table->timestamps();

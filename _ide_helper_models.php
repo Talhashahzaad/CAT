@@ -126,16 +126,68 @@ namespace App\Models{
  * 
  *
  * @property int $id
+ * @property string $name
+ * @property string $slug
+ * @property bool $status
+ * @property \App\Models\Category|null $category
+ * @property string|null $description
+ * @property string $total_price
+ * @property string $discount_percentage
+ * @property string $total_time
+ * @property string $price_type
+ * @property string $available_for
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Service> $services
+ * @property-read int|null $services_count
  * @method static \Illuminate\Database\Eloquent\Builder|Package newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Package newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Package query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Package whereAvailableFor($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Package whereCategory($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Package whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Package whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Package whereDiscountPercentage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Package whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Package whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Package wherePriceType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Package whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Package whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Package whereTotalPrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Package whereTotalTime($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Package whereUpdatedAt($value)
  */
 	class Package extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property int $package_id
+ * @property string|null $treatment_name
+ * @property string|null $treatment_category
+ * @property string|null $variants
+ * @property string $duration
+ * @property string|null $price
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Package $package
+ * @method static \Illuminate\Database\Eloquent\Builder|PackageServiceVariant newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PackageServiceVariant newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|PackageServiceVariant query()
+ * @method static \Illuminate\Database\Eloquent\Builder|PackageServiceVariant whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PackageServiceVariant whereDuration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PackageServiceVariant whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PackageServiceVariant wherePackageId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PackageServiceVariant wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PackageServiceVariant whereTreatmentCategory($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PackageServiceVariant whereTreatmentName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PackageServiceVariant whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PackageServiceVariant whereVariants($value)
+ */
+	class PackageServiceVariant extends \Eloquent {}
 }
 
 namespace App\Models{

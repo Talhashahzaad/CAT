@@ -24,12 +24,12 @@ class ServiceDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-        ->addColumn('action', function ($query) {
-            $edit = '<a href="' . route('admin.service.edit', $query->id) . '" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a>';
-            $delete = '<a href="' . route('admin.service.destroy', $query->id) . '" class="delete-item btn btn-sm btn-danger ml-2"><i class="fas fa-trash"></i></a>';
+            ->addColumn('action', function ($query) {
+                $edit = '<a href="' . route('admin.service.edit', $query->id) . '" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a>';
+                $delete = '<a href="' . route('admin.service.destroy', $query->id) . '" class="delete-item btn btn-sm btn-danger ml-2"><i class="fas fa-trash"></i></a>';
 
-            return $edit . $delete;
-        })
+                return $edit . $delete;
+            })
             ->editColumn('category', function ($service) {
                 $category = Category::find($service->category);
                 return $category ? $category->name : 'N/A';
@@ -41,7 +41,7 @@ class ServiceDataTable extends DataTable
                     return "<span class='badge badge-danger'>Inactive</span>";
                 }
             })
-            ->rawColumns(['action','status','category'])
+            ->rawColumns(['action', 'status', 'category'])
             ->setRowId('id');
     }
 
@@ -59,20 +59,20 @@ class ServiceDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('service-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    //->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->selectStyleSingle()
-                    ->buttons([
-                        Button::make('excel'),
-                        Button::make('csv'),
-                        Button::make('pdf'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    ]);
+            ->setTableId('service-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            //->dom('Bfrtip')
+            ->orderBy(1)
+            ->selectStyleSingle()
+            ->buttons([
+                Button::make('excel'),
+                Button::make('csv'),
+                Button::make('pdf'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload')
+            ]);
     }
 
     /**
@@ -88,10 +88,10 @@ class ServiceDataTable extends DataTable
             Column::make('category'),
             Column::make('status'),
             Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(150)
-                  ->addClass('text-center'),
+                ->exportable(false)
+                ->printable(false)
+                ->width(150)
+                ->addClass('text-center'),
         ];
     }
 

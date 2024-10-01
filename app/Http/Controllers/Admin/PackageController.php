@@ -4,19 +4,24 @@ namespace App\Http\Controllers\Admin;
 
 use App\DataTables\PackageDataTable;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\PackageStoreRequest;
 use App\Models\Category;
 use App\Models\Service;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-
-use function Termwind\render;
+use App\Models\Package;
+use App\Models\PackageServiceVariant;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Str;
+use App\Http\Requests\Admin\PackageUpdateRequest;
 
 class PackageController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(PackageDataTable $dataTable) : View
+    public function index(PackageDataTable $dataTable): View | JsonResponse
     {
         return $dataTable->render('admin.package.index');
     }
@@ -24,9 +29,9 @@ class PackageController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create() : View
+    public function create(): View
     {
-        $services = Service::all();
+        $services = Service::with('priceVariants')->get();
         $category = Category::all();
         return view('admin.package.create', compact('services', 'category'));
     }
@@ -34,9 +39,40 @@ class PackageController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(PackageStoreRequest $request): RedirectResponse
     {
-        //
+        // dd($request->all());
+        $validated = $request->validated();
+
+        // Create the package
+        $package = new Package();
+        $package->name = $validated['name'];
+        $package->slug = Str::slug($validated['name']);
+        $package->status = $validated['status'];
+        $package->category = $validated['category'];
+        $package->description = $validated['description'];
+        $package->total_price = $validated['retail_price'];
+        $package->discount_percentage = $validated['discount_percentage'];
+        $package->total_time = $validated['total_duration'];
+        $package->price_type = $validated['price_type'];
+        $package->available_for = $validated['available_for'];
+        $package->save();
+
+        // Create package service variants
+        foreach ($validated['services'] as $key => $serviceId) {
+            $packageServiceVariant = new PackageServiceVariant();
+            $packageServiceVariant->package_id = $package->id;
+            $packageServiceVariant->treatment_name = $serviceId; // Assuming serviceId is the treatment name
+            $packageServiceVariant->treatment_category = 'default'; // You may need to adjust this
+            $packageServiceVariant->variants = $validated['variants'][$key];
+            $packageServiceVariant->duration = $validated['service_durations'][$key];
+            $packageServiceVariant->price = $validated['service_prices'][$key];
+            $packageServiceVariant->save();
+        }
+
+        toastr()->success('Created Successfully');
+
+        return to_route('admin.package.index');
     }
 
     /**
@@ -50,17 +86,52 @@ class PackageController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id): View
     {
-        //
+        $package = Package::with('packageServiceVariants')->findOrFail($id);
+        $categories = Category::all();
+        $services = Service::with('priceVariants')->get();
+        return view('admin.package.edit', compact('package', 'categories', 'services'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(PackageUpdateRequest $request, string $id): RedirectResponse
     {
-        //
+        $validated = $request->validated();
+
+        $package = Package::findOrFail($id);
+        $package->name = $validated['name'];
+        $package->slug = Str::slug($validated['name']);
+        $package->status = $validated['status'];
+        $package->category = $validated['category'];
+        $package->description = $validated['description'];
+        $package->total_price = $validated['retail_price'];
+        $package->discount_percentage = $validated['discount_percentage'];
+        $package->total_time = $validated['total_duration'];
+        $package->price_type = $validated['price_type'];
+        $package->available_for = $validated['available_for'];
+        $package->save();
+
+        // Delete existing package service variants
+        $package->packageServiceVariants()->delete();
+
+        // Create new package service variants
+        foreach ($validated['services'] as $key => $serviceId) {
+            $packageServiceVariant = new PackageServiceVariant();
+            $packageServiceVariant->package_id = $package->id;
+            $packageServiceVariant->treatment_name = $serviceId;
+            $packageServiceVariant->treatment_category = 'default'; // You may need to adjust this
+            $packageServiceVariant->variants = $validated['variants'][$key];
+            $packageServiceVariant->duration = $validated['service_durations'][$key];
+            $packageServiceVariant->price = $validated['service_prices'][$key];
+            $packageServiceVariant->save();
+        }
+
+        toastr()->success('Updated Successfully');
+
+        return to_route('admin.package.index');
     }
 
     /**
@@ -68,6 +139,14 @@ class PackageController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $package = Package::findOrFail($id);
+
+        // Delete associated PackageServiceVariant records
+        $package->packageServiceVariants()->delete();
+
+        // Delete the package
+        $package->delete();
+
+        return response(['status' => 'success', 'message' => 'Package deleted successfully!']);
     }
 }

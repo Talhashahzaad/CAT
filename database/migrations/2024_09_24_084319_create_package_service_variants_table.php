@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('package_service_variants', function (Blueprint $table) {
             $table->id();
             $table->foreignId('package_id')->constrained()->onDelete('cascade');
-            $table->string('name')->nullable();
-            $table->text('description')->nullable();
+            $table->string('treatment_name')->nullable();
+            $table->string('treatment_category')->nullable();
+            $table->string('variants')->nullable();
             $table->string('duration');
-            $table->string('price_type');
-            $table->decimal('price', 8, 2)->nullable();
+            $table->string('price')->nullable();
             $table->timestamps();
         });
     }
