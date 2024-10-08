@@ -55,7 +55,7 @@ class PackageDataTable extends DataTable
      */
     public function query(Package $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->orderBy('id', 'desc');
     }
 
     /**

@@ -64,7 +64,6 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ asset('admin/assets/js/bootstrap-iconpicker.bundle.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-
     <!-- Template JS File -->
     <script src="{{ asset('admin/assets/js/scripts.js') }}"></script>
 
@@ -105,16 +104,18 @@
                     $.ajax({
                         method: 'DELETE',
                         url: url,
-                        data: {_token: "{{ csrf_token() }}"},
+                        data: {
+                            _token: "{{ csrf_token() }}"
+                        },
                         success: function(response) {
-                            if(response.status === 'success'){
+                            if (response.status === 'success') {
                                 Swal.fire(
                                     'Deleted!',
                                     response.message,
                                     'success'
                                 )
                                 window.location.reload();
-                            }else if (response.status === 'error'){
+                            } else if (response.status === 'error') {
                                 Swal.fire(
                                     'Somthing wen\'t wrong!',
                                     response.message,
@@ -122,7 +123,7 @@
                                 )
                             }
                         },
-                        error: function(xhr, status, error){
+                        error: function(xhr, status, error) {
                             console.log(error);
                         }
 

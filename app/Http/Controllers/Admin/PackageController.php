@@ -114,20 +114,36 @@ class PackageController extends Controller
         $package->available_for = $validated['available_for'];
         $package->save();
 
-        // Delete existing package service variants
-        $package->packageServiceVariants()->delete();
+        // Get existing package service variants
+        $existingVariants = $package->packageServiceVariants()->pluck('id')->toArray();
 
-        // Create new package service variants
+        // Create or update package service variants
+        $updatedVariantIds = [];
         foreach ($validated['services'] as $key => $serviceId) {
-            $packageServiceVariant = new PackageServiceVariant();
-            $packageServiceVariant->package_id = $package->id;
-            $packageServiceVariant->treatment_name = $serviceId;
-            $packageServiceVariant->treatment_category = 'default'; // You may need to adjust this
-            $packageServiceVariant->variants = $validated['variants'][$key];
-            $packageServiceVariant->duration = $validated['service_durations'][$key];
-            $packageServiceVariant->price = $validated['service_prices'][$key];
-            $packageServiceVariant->save();
+            $variantData = [
+                'package_id' => $package->id,
+                'treatment_name' => $serviceId,
+                'treatment_category' => 'default', // You may need to adjust this
+                'variants' => $validated['variants'][$key],
+                'duration' => $validated['service_durations'][$key],
+                'price' => $validated['service_prices'][$key],
+            ];
+
+            $packageServiceVariant = PackageServiceVariant::updateOrCreate(
+                [
+                    'package_id' => $package->id,
+                    'treatment_name' => $serviceId,
+                    'variants' => $validated['variants'][$key],
+                ],
+                $variantData
+            );
+
+            $updatedVariantIds[] = $packageServiceVariant->id;
         }
+
+        // Delete variants that are no longer in the updated list
+        $variantsToDelete = array_diff($existingVariants, $updatedVariantIds);
+        PackageServiceVariant::destroy($variantsToDelete);
 
         toastr()->success('Updated Successfully');
 

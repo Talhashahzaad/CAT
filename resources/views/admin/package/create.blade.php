@@ -4,7 +4,7 @@
     <section class="section">
         <div class="section-header">
             <div class="section-header-back">
-                <a href="{{ route('admin.location.index') }}" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+                <a href="{{ route('admin.package.index') }}" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
             </div>
             <h1>Treatment Package</h1>
             <div class="section-header-breadcrumb">
@@ -218,6 +218,35 @@
             const discountGroup = document.getElementById('discount_group');
             const discountInput = document.getElementById('discount_percentage');
             const priceInfo = document.getElementById('price_info');
+            const totalDurationInput = document.getElementById('total_duration');
+
+            // Code for closing the modal
+            var serviceModal = document.getElementById('serviceModal');
+            var closeButton = serviceModal.querySelector('.close');
+
+            function closeModal() {
+                serviceModal.classList.remove('show');
+                document.body.classList.remove('modal-open');
+                setTimeout(function() {
+                    serviceModal.style.display = 'none';
+                    var modalBackdrop = document.querySelector('.modal-backdrop');
+                    if (modalBackdrop) {
+                        modalBackdrop.parentNode.removeChild(modalBackdrop);
+                    }
+                }, 150); // Adjust this timeout to match your fade duration
+            }
+
+            // Close modal when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target === serviceModal) {
+                    closeModal();
+                }
+            });
+
+            // Close modal when clicking the close button
+            closeButton.addEventListener('click', function() {
+                closeModal();
+            });
 
             let selectedServicesArray = [];
 
@@ -243,28 +272,27 @@
                 const serviceRow = document.createElement('div');
                 serviceRow.classList.add('row', 'service-row', 'mt-2');
 
-                // Determine the price value to store
                 const priceToStore = price === null || price === undefined || price === 'free' || isNaN(parseFloat(
                     price)) ? 'free' : price;
 
                 serviceRow.innerHTML = `
-        <div class="col-md-6">
-            <input type="hidden" name="services[]" value="${serviceName}">
-            <input type="hidden" name="variants[]" value="${variantName}">
-            <input type="hidden" name="service_prices[]" value="${priceToStore}">
-            <input type="hidden" name="service_durations[]" value="${duration}">
-            <p><strong>${serviceName}</strong> - ${variantName}</p>
-        </div>
-        <div class="col-md-2">
-            <p>${duration} min</p>
-        </div>
-        <div class="col-md-2">
-            <p>${priceToStore === 'free' ? 'Free' : '₹' + parseFloat(priceToStore).toFixed(2)}</p>
-        </div>
-        <div class="col-md-2">
-            <button type="button" class="btn btn-danger btn-sm remove-service">Remove</button>
-        </div>
-    `;
+            <div class="col-md-6">
+                <input type="hidden" name="services[]" value="${serviceName}">
+                <input type="hidden" name="variants[]" value="${variantName}">
+                <input type="hidden" name="service_prices[]" value="${priceToStore}">
+                <input type="hidden" name="service_durations[]" value="${duration}">
+                <p><strong>${serviceName}</strong> - ${variantName}</p>
+            </div>
+            <div class="col-md-2">
+                <p>${duration} min</p>
+            </div>
+            <div class="col-md-2">
+                <p>${priceToStore === 'free' ? 'Free' : '₹' + parseFloat(priceToStore).toFixed(2)}</p>
+            </div>
+            <div class="col-md-2">
+                <button type="button" class="btn btn-danger btn-sm remove-service">Remove</button>
+            </div>
+        `;
                 selectedServices.appendChild(serviceRow);
 
                 selectedServicesArray.push({
@@ -275,7 +303,6 @@
                     price: priceToStore,
                     duration
                 });
-
 
                 // Add event listener to remove button
                 serviceRow.querySelector('.remove-service').addEventListener('click', function() {
@@ -289,8 +316,6 @@
                 updateTotals();
             }
 
-            const totalDurationInput = document.getElementById('total_duration');
-
             function updateTotals() {
                 let totalPrice = 0;
                 let totalTime = 0;
@@ -303,7 +328,10 @@
                 });
                 totalPriceElement.textContent = totalPrice > 0 ? '₹' + totalPrice.toFixed(2) : 'Free';
                 totalTimeElement.textContent = formatTime(totalTime);
-                totalDurationInput.value = formatTime(totalTime); // Update the new input field
+                totalDurationInput.value = formatTime(totalTime);
+
+                console.log('Updated total price:', totalPriceElement.textContent);
+
                 updatePricingFields();
             }
 
@@ -336,39 +364,44 @@
 
             function updatePricingFields() {
                 const selectedType = priceTypeSelect.value;
+                console.log('Selected price type:', selectedType);
 
                 retailPriceGroup.style.display = 'block';
                 discountGroup.style.display = 'none';
                 retailPriceInput.readOnly = true;
                 priceInfo.textContent = '';
 
+                console.log('Total price element content:', totalPriceElement.textContent);
+
                 switch (selectedType) {
-                    case 'service_pricing':
+                    case 'Treatment Pricing':
                         retailPriceInput.value = totalPriceElement.textContent === 'Free' ? '0' : totalPriceElement
-                            .textContent.replace('₹', '');
+                            .textContent.replace('₹', '').trim();
                         priceInfo.textContent = 'Total price of selected services';
                         break;
-                    case 'custom_pricing':
+                    case 'Custom Pricing':
                         retailPriceInput.value = '';
                         retailPriceInput.readOnly = false;
                         priceInfo.textContent = 'Enter custom price';
                         break;
-                    case 'percentage_discount':
+                    case 'Percentage Discount':
                         retailPriceInput.value = totalPriceElement.textContent === 'Free' ? '0' : totalPriceElement
-                            .textContent.replace('₹', '');
+                            .textContent.replace('₹', '').trim();
                         discountGroup.style.display = 'block';
                         priceInfo.textContent = 'Discounted price will be calculated';
                         break;
-                    case 'free':
+                    case 'Free':
                         retailPriceGroup.style.display = 'none';
                         retailPriceInput.value = '0';
                         break;
                 }
+
+                console.log('Retail price input value:', retailPriceInput.value);
             }
 
             // Calculate discount when percentage changes
             discountInput.addEventListener('input', function() {
-                if (priceTypeSelect.value === 'percentage_discount') {
+                if (priceTypeSelect.value === 'Percentage Discount') {
                     const totalPrice = parseFloat(totalPriceElement.textContent.replace('₹', '')) || 0;
                     const discountPercentage = parseFloat(discountInput.value) || 0;
                     const discountedPrice = totalPrice * (1 - discountPercentage / 100);

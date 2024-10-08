@@ -265,6 +265,34 @@
             const priceInfo = document.getElementById('price_info');
             const totalDurationInput = document.getElementById('total_duration');
 
+            // Code for closing the modal
+            var serviceModal = document.getElementById('serviceModal');
+            var closeButton = serviceModal.querySelector('.close');
+
+            function closeModal() {
+                serviceModal.classList.remove('show');
+                document.body.classList.remove('modal-open');
+                setTimeout(function() {
+                    serviceModal.style.display = 'none';
+                    var modalBackdrop = document.querySelector('.modal-backdrop');
+                    if (modalBackdrop) {
+                        modalBackdrop.parentNode.removeChild(modalBackdrop);
+                    }
+                }, 150); // Adjust this timeout to match your fade duration
+            }
+
+            // Close modal when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target === serviceModal) {
+                    closeModal();
+                }
+            });
+
+            // Close modal when clicking the close button
+            closeButton.addEventListener('click', function() {
+                closeModal();
+            });
+
             // Store the original total price
             const originalTotalPrice = parseFloat(retailPriceInput.value) || 0;
 
@@ -287,7 +315,6 @@
                 });
             });
 
-            // Function to mark existing services as selected in the modal
             function markExistingServicesAsSelected() {
                 const serviceListItems = document.querySelectorAll('#serviceList li');
                 serviceListItems.forEach(item => {
@@ -310,7 +337,7 @@
                 markExistingServicesAsSelected();
             });
 
-            // Event listener for adding/removing services
+            // Event listener for adding/removing services in the modal
             serviceList.addEventListener('click', function(event) {
                 if (event.target && event.target.matches('li.list-group-item')) {
                     const serviceId = event.target.dataset.serviceName;
@@ -320,20 +347,17 @@
                     const servicePrice = event.target.dataset.servicePrice;
                     const serviceDuration = parseInt(event.target.dataset.serviceDuration);
 
-                    // Check if the service is already selected
                     const isAlreadySelected = selectedServicesArray.some(service =>
                         service.serviceName === serviceId && service.variantName === variantId
                     );
 
                     if (isAlreadySelected) {
-                        // Remove the service if it's already selected
                         selectedServicesArray = selectedServicesArray.filter(service =>
                             !(service.serviceName === serviceId && service.variantName === variantId)
                         );
                         event.target.classList.remove('active');
                         removeServiceFromForm(serviceId, variantId);
                     } else {
-                        // Add the service if it's not already selected
                         addServiceToForm(serviceId, serviceName, variantId, variantName, servicePrice,
                             serviceDuration);
                         event.target.classList.add('active');
@@ -346,7 +370,6 @@
                 const serviceRow = document.createElement('div');
                 serviceRow.classList.add('row', 'service-row', 'mt-2');
 
-                // Determine the price value to store
                 const priceToStore = price === null || price === undefined || price === 'free' || isNaN(parseFloat(
                     price)) ? 'free' : price;
 
@@ -370,7 +393,6 @@
         `;
                 selectedServices.appendChild(serviceRow);
 
-                // Update the selectedServicesArray
                 const existingServiceIndex = selectedServicesArray.findIndex(service =>
                     service.serviceName === serviceId && service.variantName === variantId
                 );
@@ -385,11 +407,6 @@
                         duration
                     });
                 }
-
-                // Add event listener to remove button
-                serviceRow.querySelector('.remove-service').addEventListener('click', function() {
-                    removeServiceFromForm(serviceId, variantId);
-                });
 
                 updateTotals();
             }
@@ -412,6 +429,16 @@
                 updateTotals();
                 markExistingServicesAsSelected();
             }
+
+            // Event listener for remove buttons
+            selectedServices.addEventListener('click', function(event) {
+                if (event.target.classList.contains('remove-service')) {
+                    const serviceRow = event.target.closest('.service-row');
+                    const serviceId = serviceRow.querySelector('input[name="services[]"]').value;
+                    const variantId = serviceRow.querySelector('input[name="variants[]"]').value;
+                    removeServiceFromForm(serviceId, variantId);
+                }
+            });
 
             function updateTotals() {
                 let totalPrice = 0;
