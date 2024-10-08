@@ -4,6 +4,7 @@ use App\Http\Controllers\Business\BusinessAuthController;
 use App\Http\Controllers\Business\DashboardController as BusinessDashboardController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\FacebookController;
 // use App\Http\Controllers\Admin\AdminAuthController;
 
 
@@ -17,6 +18,11 @@ Route::get('business/forgot-password', [BusinessAuthController::class, 'forgotPa
 Route::get('business/dashboard', [BusinessDashboardController::class, 'index'])->name('business.dashboard.index')->middleware('role:vendor');
 
 
+/** Facebook Login start */
+Route::get('auth/facebook', [FacebookController::class, 'redirectToFacebook'])->name('auth.facebook');
+Route::get('auth/facebook/callback', [FacebookController::class, 'handleFacebookCallback']);
+
+/** Facebook Login end */
 
 Route::get('/', function () {
     return view('welcome');
