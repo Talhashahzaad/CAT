@@ -2,13 +2,14 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
     <style>
-        .py-2 {
+        .px-4.py-2.bg-\[\#3b5998\].social {
             padding-top: 10px;
             margin: 2px;
         }
 
-        .rounded-md {
-            border-radius: 3px;
+        .px-4.py-2.bg-white.social {
+            padding-top: 10px;
+            margin: 2px;
         }
     </style>
     <form method="POST" action="{{ route('login') }}">
@@ -18,7 +19,7 @@
             <!-- Facebook Login Button -->
             <a href="{{ route('auth.facebook') }}"
                 class="flex items-center w-full bg-[#4267B2] text-white rounded-md hover:bg-[#365899] transition duration-150 ease-in-out">
-                <div class="px-4 py-2 bg-[#3b5998]">
+                <div class="px-4 py-2 bg-[#3b5998] social">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path
                             d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
@@ -32,7 +33,7 @@
             <!-- Google Login Button -->
             <a href="{{ route('auth.google') }}"
                 class="flex items-center w-full bg-[#4285F4] text-white rounded-md hover:bg-[#357ae8] transition duration-150 ease-in-out">
-                <div class="px-4 py-2 bg-white">
+                <div class="px-4 py-2 bg-white social">
                     <svg class="w-5 h-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"

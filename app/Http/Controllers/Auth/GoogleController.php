@@ -20,25 +20,35 @@ class GoogleController extends Controller
     public function handleGoogleCallback()
     {
         try {
-            $user = Socialite::driver('google')->user();
-            $finduser = User::where('google_id', $user->id)->first();
+            $googleUser = Socialite::driver('google')->user();
 
-            if ($finduser) {
-                Auth::login($finduser);
-                return redirect()->intended('dashboard');
-            } else {
-                $newUser = User::create([
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'google_id' => $user->id,
-                    'password' => encrypt('123456dummy')
-                ]);
+            // Check if user exists by Google ID
+            $user = User::where('google_id', $googleUser->id)->first();
 
-                Auth::login($newUser);
-                return redirect()->intended('dashboard');
+            if (!$user) {
+                // If not found by Google ID, check by email
+                $user = User::where('email', $googleUser->email)->first();
+
+                if ($user) {
+                    // User exists but doesn't have Google ID, update it
+                    $user->google_id = $googleUser->id;
+                    $user->save();
+                } else {
+                    // User doesn't exist, create new user
+                    $user = User::create([
+                        'name' => $googleUser->name,
+                        'email' => $googleUser->email,
+                        'google_id' => $googleUser->id,
+                        'password' => bcrypt(Str::random(16)) // Generate a random password
+                    ]);
+                }
             }
+
+            Auth::login($user);
+            return redirect()->intended('dashboard');
         } catch (\Exception $e) {
-            dd($e->getMessage());
+            Log::error('Google authentication error: ' . $e->getMessage());
+            return redirect()->route('login')->with('error', 'Unable to authenticate with Google. Please try again.');
         }
     }
 }
