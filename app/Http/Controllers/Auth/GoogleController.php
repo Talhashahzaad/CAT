@@ -3,24 +3,25 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
-class FacebookController extends Controller
+class GoogleController extends Controller
 {
-    public function redirectToFacebook()
+    public function redirectToGoogle()
     {
-        return Socialite::driver('facebook')->redirect();
+        return Socialite::driver('google')->redirect();
     }
 
-    public function handleFacebookCallback()
+    public function handleGoogleCallback()
     {
         try {
-            $user = Socialite::driver('facebook')->user();
-            $finduser = User::where('facebook_id', $user->id)->first();
+            $user = Socialite::driver('google')->user();
+            $finduser = User::where('google_id', $user->id)->first();
 
             if ($finduser) {
                 Auth::login($finduser);
@@ -29,7 +30,7 @@ class FacebookController extends Controller
                 $newUser = User::create([
                     'name' => $user->name,
                     'email' => $user->email,
-                    'facebook_id' => $user->id,
+                    'google_id' => $user->id,
                     'password' => encrypt('123456dummy')
                 ]);
 

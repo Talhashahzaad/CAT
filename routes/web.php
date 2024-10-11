@@ -5,6 +5,7 @@ use App\Http\Controllers\Business\DashboardController as BusinessDashboardContro
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\FacebookController;
+use App\Http\Controllers\Auth\GoogleController;
 // use App\Http\Controllers\Admin\AdminAuthController;
 
 
@@ -23,6 +24,12 @@ Route::get('auth/facebook', [FacebookController::class, 'redirectToFacebook'])->
 Route::get('auth/facebook/callback', [FacebookController::class, 'handleFacebookCallback']);
 
 /** Facebook Login end */
+
+/** Google Login start */
+Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('auth.google.callback');
+
+/** Google Login end */
 
 Route::get('/', function () {
     return view('welcome');
