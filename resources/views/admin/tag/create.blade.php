@@ -25,36 +25,37 @@
                             <form action="{{ route('admin.tag.store') }}" method="POST">
                                 @csrf
                                 <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="">Name <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" name="name">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="">Name <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" name="name">
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="">Status <span class="text-danger">*</span></label>
-                                        <select name="status" class="form-control">
-                                            <option value="1">Active</option>
-                                            <option value="0">Inactive</option>
-                                        </select>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="">Status <span class="text-danger">*</span></label>
+                                            <select name="status" class="form-control">
+                                                <option value="1">Active</option>
+                                                <option value="0">Inactive</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="">Parent Tag <span class="text-danger"></span></label>
-                                        <input type="text" class="form-control" name="parent_tag" value="None">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="">Parent Tag <span class="text-danger"></span></label>
+                                            <input type="text" class="form-control" name="parent_tag" value="None">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="">Parent Category <span class="text-danger"></span></label>
+                                            <input type="text" class="form-control" name="parent_category"
+                                                value="None">
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="">Parent Category <span class="text-danger"></span></label>
-                                        <input type="text" class="form-control" name="parent_category" value="None">
-                                    </div>
-                                </div>
-                            </div>
 
 
                                 <div class="form-group">
@@ -77,5 +78,4 @@
 @endsection
 
 @push('scripts')
-
 @endpush

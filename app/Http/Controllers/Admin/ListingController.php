@@ -8,8 +8,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-use function Termwind\render;
-
 class ListingController extends Controller
 {
     /**

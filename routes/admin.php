@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ListingController;
 use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\PackageController;
+use App\Http\Controllers\Admin\ProfessionalCertificateController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\TagController;
@@ -53,5 +54,8 @@ Route::group([
     Route::resource('/service', ServiceController::class);
 
     /** Package Route */
-    Route::resource('/package',PackageController::class);
+    Route::resource('/package', PackageController::class);
+
+    /** Certificate Route */
+    Route::resource('/certificate', ProfessionalCertificateController::class);
 });
