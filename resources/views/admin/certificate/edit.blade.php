@@ -27,35 +27,12 @@
                                 enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
-                                <div class="form-group">
-                                    <label for="">Icon <span class="text-danger">*</span></label>
-                                    <div role="iconpicker" data-align="left" data-unselected-class=" " name="icon"
-                                        data-selected-class="btn-primary" data-icon="{{ $certificate->icon }}"></div>
-                                </div>
+
 
                                 <div class="form-group">
                                     <label for="">Name <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="name"
                                         value="{{ $certificate->name }}">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="">Status <span class="text-danger">*</span></label>
-                                    <select name="status" class="form-control">
-                                        <option @selected($certificate->status === 1) value="1">Active</option>
-                                        <option @selected($certificate->status === 0) value="0">Inactive</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="">Parent Professional Affiliations Certificates <span
-                                            class="text-danger"></span></label>
-                                    <input type="text" class="form-control" name="parent_certificate"
-                                        value="{{ $certificate->parent_certificate }}">
-                                    {{-- <select name="parent_category" class="form-control">
-                                        <option value="none">None</option>
-                                        <option value="hair">Hair</option>
-                                    </select> --}}
                                 </div>
 
                                 <div class="form-group">

@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\ProfessionalCertificate;
+use App\Models\Practitioner;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -12,7 +12,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class ProfessionalCertificatesDataTable extends DataTable
+class PractitionerDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -23,19 +23,19 @@ class ProfessionalCertificatesDataTable extends DataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function ($query) {
-                $edit = '<a href="' . route('admin.certificate.edit', $query->id) . '" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a>';
-                $delete = '<a href="' . route('admin.certificate.destroy', $query->id) . '" class="delete-item btn btn-sm btn-danger ml-2"><i class="fas fa-trash"></i></a>';
+                $edit = '<a href="' . route('admin.practitioner.edit', $query->id) . '" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a>';
+                $delete = '<a href="' . route('admin.practitioner.destroy', $query->id) . '" class="delete-item btn btn-sm btn-danger ml-2"><i class="fas fa-trash"></i></a>';
 
                 return $edit . $delete;
             })
-            ->rawColumns(['icon', 'action', 'status'])
+            ->rawColumns(['icon', 'action'])
             ->setRowId('id');
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(ProfessionalCertificate $model): QueryBuilder
+    public function query(Practitioner $model): QueryBuilder
     {
         return $model->newQuery();
     }
@@ -46,7 +46,7 @@ class ProfessionalCertificatesDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-            ->setTableId('professionalcertificates-table')
+            ->setTableId('practitioner-table')
             ->columns($this->getColumns())
             ->minifiedAjax()
             //->dom('Bfrtip')
@@ -71,6 +71,7 @@ class ProfessionalCertificatesDataTable extends DataTable
 
             Column::make('id'),
             Column::make('name'),
+            Column::make('qualification'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
@@ -84,6 +85,6 @@ class ProfessionalCertificatesDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'ProfessionalCertificates_' . date('YmdHis');
+        return 'Practitioner_' . date('YmdHis');
     }
 }

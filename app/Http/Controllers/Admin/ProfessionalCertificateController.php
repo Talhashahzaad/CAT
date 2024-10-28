@@ -41,10 +41,7 @@ class ProfessionalCertificateController extends Controller
 
         // Create the package
         $package = new ProfessionalCertificate();
-        $package->icon = $validated['icon'];
         $package->name = $validated['name'];
-        $package->status = $validated['status'];
-        $package->parent_certificate = $validated['parent_certificate'];
         $package->slug = Str::slug($validated['name']);
         $package->description = $validated['description'];
         $package->save();
@@ -70,13 +67,9 @@ class ProfessionalCertificateController extends Controller
         $certificate = ProfessionalCertificate::findOrFail($id);
 
         $validated = $request->validated();
-        $certificate->icon = $request->filled('icon') ? $validated['icon'] : $certificate->icon;
         $certificate->name = $validated['name'];
-        $certificate->status = $validated['status'];
-        $certificate->parent_certificate = $validated['parent_certificate'];
         $certificate->description = $validated['description'];
         $certificate->save();
-
         toastr()->success('Updated Successfully');
         return redirect()->route('admin.certificate.index');
     }

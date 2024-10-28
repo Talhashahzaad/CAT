@@ -14,10 +14,7 @@ class ProfessionalCertificateUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'icon' => ['nullable', 'string', 'max:255'],
             'name' => ['required', 'string', 'max:255', 'unique:professional_certificates,name,' . $this->certificate],
-            'status' => ['required', 'boolean'],
-            'parent_certificate' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:255'],
         ];
     }

@@ -28,39 +28,14 @@
                                 @csrf
 
                                 <div class="form-group">
-                                    <label for="">Icon <span class="text-danger">*</span></label>
-                                    <div role="iconpicker" data-align="left" data-unselected-class=" " name="icon"
-                                        data-selected-class="btn-primary"></div>
-                                </div>
-
-                                <div class="form-group">
                                     <label for="">Name <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="name">
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="">Status <span class="text-danger">*</span></label>
-                                    <select name="status" class="form-control">
-                                        <option value="1">Active</option>
-                                        <option value="0">Inactive</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="">Parent Professional Affiliations Certificates <span
-                                            class="text-danger"></span></label>
-                                    <input type="text" class="form-control" name="parent_certificate" value="None">
-                                    {{-- <select name="parent_category" class="form-control">
-                                        <option value="none">None</option>
-                                        <option value="hair">Hair</option>
-                                    </select> --}}
                                 </div>
 
                                 <div class="form-group">
                                     <label for="">Description </label>
                                     <textarea name="description" class="form-control"></textarea>
                                 </div>
-
 
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-primary">Create</button>

@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ListingController;
 use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\PackageController;
+use App\Http\Controllers\Admin\PractitionerController;
 use App\Http\Controllers\Admin\ProfessionalCertificateController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ServiceController;
@@ -58,4 +59,7 @@ Route::group([
 
     /** Certificate Route */
     Route::resource('/certificate', ProfessionalCertificateController::class);
+
+    /** Practitioner Route */
+    Route::resource('/practitioner', PractitionerController::class);
 });

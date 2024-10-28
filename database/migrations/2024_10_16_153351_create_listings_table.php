@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
             $table->foreignId('location_id')->constrained('locations')->onDelete('cascade');
             $table->foreignId('professional_affiliations_id')->nullable();
+            $table->foreignId('practitioner_id')->nullable();
             $table->foreignId('package_id')->nullable();
             $table->foreignId('tag_id')->nullable();
             $table->string('image');

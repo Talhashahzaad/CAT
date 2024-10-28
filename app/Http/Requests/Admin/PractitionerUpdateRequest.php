@@ -4,8 +4,9 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProfessionalCertificateStoreRequest extends FormRequest
+class PractitionerUpdateRequest extends FormRequest
 {
+
 
     /**
      * Get the validation rules that apply to the request.
@@ -15,8 +16,11 @@ class ProfessionalCertificateStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255', 'unique:professional_certificates,name'],
-            'description' => ['nullable', 'string', 'max:255'],
+            'name' => 'required|string|max:255',
+            'qualification' => 'nullable|string',
+            'certificates' => 'nullable|array',
+            'certificates.*' => 'nullable|string',
+            'practitioner_consent_checkbox' => 'required',
         ];
     }
 }
