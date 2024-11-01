@@ -1,5 +1,6 @@
 <?php
 
+
 use App\Http\Controllers\Business\BusinessAuthController;
 use App\Http\Controllers\Business\DashboardController as BusinessDashboardController;
 use App\Http\Controllers\ProfileController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Auth\GoogleController;
 //     Route::get('admin/login', [AdminAuthController::class, 'login'])->name('admin.login');
 //     Route::get('admin/forgot-password', [AdminAuthController::class, 'PasswordRequest'])->name('admin.password.request');
 // });
+
 
 Route::get('business/login', [BusinessAuthController::class, 'login'])->name('business.login');
 Route::get('business/forgot-password', [BusinessAuthController::class, 'forgotPassword'])->name('business.forgotPassword');

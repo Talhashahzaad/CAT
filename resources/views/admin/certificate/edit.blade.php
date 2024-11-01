@@ -27,8 +27,6 @@
                                 enctype="multipart/form-data">
                                 @csrf
                                 @method('PUT')
-
-
                                 <div class="form-group">
                                     <label for="">Name <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" name="name"
