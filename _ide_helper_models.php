@@ -81,10 +81,7 @@ namespace App\Models{
  * @property int $user_id
  * @property int $category_id
  * @property int $location_id
- * @property int|null $professional_affiliations_id
- * @property int|null $practitioner_id
  * @property int|null $package_id
- * @property int|null $tag_id
  * @property string $image
  * @property string $thumbnail_image
  * @property string $title
@@ -93,24 +90,26 @@ namespace App\Models{
  * @property string $phone
  * @property string $email
  * @property string $address
- * @property string $price_range
- * @property string $website
- * @property string $facebook_link
- * @property string $tiktok_link
- * @property string $instagram_link
- * @property string $youtube_link
+ * @property string|null $price_range
+ * @property string|null $website
+ * @property string|null $facebook_link
+ * @property string|null $tiktok_link
+ * @property string|null $instagram_link
+ * @property string|null $youtube_link
  * @property int $is_verified
  * @property int $is_featured
+ * @property string|null $file
  * @property int $views
  * @property string|null $google_map_embed_code
- * @property string|null $file
- * @property string $expired_date
- * @property string $seo_title
- * @property string $seo_description
+ * @property string $expire_date
+ * @property string|null $seo_title
+ * @property string|null $seo_description
  * @property int $status
  * @property string|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Category $category
+ * @property-read \App\Models\Location $location
  * @method static \Illuminate\Database\Eloquent\Builder|Listing newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Listing newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Listing query()
@@ -120,7 +119,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Listing whereDeletedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Listing whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Listing whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Listing whereExpiredDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Listing whereExpireDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Listing whereFacebookLink($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Listing whereFile($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Listing whereGoogleMapEmbedCode($value)
@@ -132,14 +131,11 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Listing whereLocationId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Listing wherePackageId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Listing wherePhone($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Listing wherePractitionerId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Listing wherePriceRange($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Listing whereProfessionalAffiliationsId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Listing whereSeoDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Listing whereSeoTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Listing whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Listing whereStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Listing whereTagId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Listing whereThumbnailImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Listing whereTiktokLink($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Listing whereTitle($value)
@@ -150,6 +146,27 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Listing whereYoutubeLink($value)
  */
 	class Listing extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property int $listing_id
+ * @property int $amenity_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|ListingAmenity newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ListingAmenity newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ListingAmenity query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ListingAmenity whereAmenityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ListingAmenity whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ListingAmenity whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ListingAmenity whereListingId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ListingAmenity whereUpdatedAt($value)
+ */
+	class ListingAmenity extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -260,13 +277,10 @@ namespace App\Models{
  *
  * @property int $id
  * @property int $user_id
+ * @property int|null $listing_id
  * @property string $name
- * @property string $qualification
- * @property int $status
  * @property string $slug
- * @property string $level
- * @property string|null $certification
- * @property string|null $description
+ * @property string|null $qualification
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\PractitionerCertificate> $certificates
@@ -274,15 +288,12 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Practitioner newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Practitioner newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Practitioner query()
- * @method static \Illuminate\Database\Eloquent\Builder|Practitioner whereCertification($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Practitioner whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Practitioner whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Practitioner whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Practitioner whereLevel($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Practitioner whereListingId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Practitioner whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Practitioner whereQualification($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Practitioner whereSlug($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Practitioner whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Practitioner whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Practitioner whereUserId($value)
  */
@@ -293,10 +304,20 @@ namespace App\Models{
 /**
  * 
  *
- * @property-read \App\Models\Practitioner|null $practitioner
+ * @property int $id
+ * @property int $practitioner_id
+ * @property int $certificate_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Practitioner $practitioner
  * @method static \Illuminate\Database\Eloquent\Builder|PractitionerCertificate newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PractitionerCertificate newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PractitionerCertificate query()
+ * @method static \Illuminate\Database\Eloquent\Builder|PractitionerCertificate whereCertificateId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PractitionerCertificate whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PractitionerCertificate whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PractitionerCertificate wherePractitionerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PractitionerCertificate whereUpdatedAt($value)
  */
 	class PractitionerCertificate extends \Eloquent {}
 }
@@ -308,8 +329,6 @@ namespace App\Models{
  * @property int $id
  * @property string $name
  * @property string $slug
- * @property int $status
- * @property string $level
  * @property string|null $description
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -319,10 +338,8 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|ProfessionalCertificate whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ProfessionalCertificate whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ProfessionalCertificate whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ProfessionalCertificate whereLevel($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ProfessionalCertificate whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ProfessionalCertificate whereSlug($value)
- * @method static \Illuminate\Database\Eloquent\Builder|ProfessionalCertificate whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ProfessionalCertificate whereUpdatedAt($value)
  */
 	class ProfessionalCertificate extends \Eloquent {}

@@ -131,7 +131,39 @@
                                             <input type="file" name="attachment" class="form-control">
                                         </div>
                                     </div>
+
                                 </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Professional Affiliations</label>
+                                            <select class="form-control select2" multiple="" name="amenities[]">
+                                                @foreach ($certificates as $certificate)
+                                                    <option value="{{ $certificate->id }}">{{ $certificate->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="">Practitioner Name<span
+                                                    class="text-danger"></span></label>
+                                            <input type="text" name="instagram_link" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="">Practitioner Qualification and Level * <span
+                                                    class="text-danger"></span></label>
+                                            <input type="text" name="tiktok_link" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
                                 <div class="form-group">
                                     <label>Amenities</label>
                                     <select class="form-control select2" multiple="" name="amenities[]">

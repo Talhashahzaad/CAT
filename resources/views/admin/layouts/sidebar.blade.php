@@ -200,10 +200,10 @@
                             href="{{ route('admin.amenity.index') }}">Amenities</a></li>
                     <li class="{{ setSidebarActive(['admin.tag.*']) }}"><a class="nav-link"
                             href="{{ route('admin.tag.index') }}">Tags</a></li>
-                    <li class="{{ setSidebarActive(['admin.certificate.*']) }}"><a class="nav-link"
-                            href="{{ route('admin.certificate.index') }}">Professional Certificates</a></li>
                     <li class="{{ setSidebarActive(['admin.practitioner.*']) }}"><a class="nav-link"
-                            href="{{ route('admin.practitioner.index') }}">Practitioners</a></li>
+                            href="{{ route('admin.practitioner.index') }}">Practitioner Qualifications</a></li>
+                    <li class="{{ setSidebarActive(['admin.certificate.*']) }}"><a class="nav-link"
+                            href="{{ route('admin.certificate.index') }}">Professional Affiliations </a></li>
 
                 </ul>
             </li>

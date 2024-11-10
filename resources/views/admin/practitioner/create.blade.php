@@ -65,8 +65,9 @@
                                 <div class="form-group mt-4">
                                     <input type="checkbox" name="practitioner_concent_checkbox"
                                         id="practitioner_concent_checkbox">
-                                    <label for="practitioner_concent_checkbox">I confirm that the information provided is
-                                        accurate</label>
+                                    <label for="practitioner_concent_checkbox">I confirm that I have obtained consent from
+                                        the practitioner listed on this business profile to display their professional
+                                        affiliations publicly on Check a Treatment.</label>
                                 </div>
 
                                 <div class="form-group">
