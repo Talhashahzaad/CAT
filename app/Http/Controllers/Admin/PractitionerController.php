@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PractitionerStoreRequest;
 use App\Http\Requests\Admin\PractitionerUpdateRequest;
 use App\Models\Practitioner;
-use App\Models\PractitionerCertificate;
 use App\Models\ProfessionalCertificate;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -44,17 +43,9 @@ class PractitionerController extends Controller
         $practitioner->slug = Str::slug($request->name);
         $practitioner->name = $request->name;
         $practitioner->qualification = $request->qualification;
+        $practitioner->certificate = $request->certificate;
         $practitioner->save();
 
-
-        // Store certificates
-        $certificates = $request->input('certificates', []);
-        foreach ($certificates as $certificateId) {
-            $practitionerCertificate = new PractitionerCertificate();
-            $practitionerCertificate->practitioner_id = $practitioner->id;
-            $practitionerCertificate->certificate_id = $certificateId;
-            $practitionerCertificate->save();
-        }
         toastr()->success('Created Successfully');
 
         return redirect()->route('admin.practitioner.index');
@@ -79,24 +70,8 @@ class PractitionerController extends Controller
         $practitioner = Practitioner::findOrFail($id);
         $practitioner->name = $request->name;
         $practitioner->qualification = $request->qualification;
+        $practitioner->certificates = $request->certificates;
         $practitioner->save();
-
-        // Update certificates
-        $certificates = $request->input('certificates', []);
-
-        // Remove certificates that are not in the updated list
-        $practitioner->certificates()->whereNotIn('certificate_id', $certificates)->delete();
-
-        // Add new certificates
-        $existingCertificates = $practitioner->certificates()->pluck('certificate_id')->toArray();
-        foreach ($certificates as $certificateId) {
-            if (!in_array($certificateId, $existingCertificates)) {
-                $practitionerCertificate = new PractitionerCertificate();
-                $practitionerCertificate->practitioner_id = $practitioner->id;
-                $practitionerCertificate->certificate_id = $certificateId;
-                $practitionerCertificate->save();
-            }
-        }
 
         toastr()->success('Updated Successfully');
         return redirect()->route('admin.practitioner.index');
@@ -108,12 +83,9 @@ class PractitionerController extends Controller
     {
         $practitioner = Practitioner::findOrFail($id);
 
-        // Delete associated PractitionerCertificate records
-        $practitioner->certificates()->delete();
-
         // Delete the practitioner
         $practitioner->delete();
 
-        return response(['status' => 'success', 'message' => 'Practitioner and associated certificates deleted successfully!']);
+        return response(['status' => 'success', 'message' => 'Practitioner deleted successfully!']);
     }
 }

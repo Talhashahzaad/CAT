@@ -8,9 +8,4 @@ use Illuminate\Database\Eloquent\Model;
 class Practitioner extends Model
 {
     use HasFactory;
-
-    public function certificates()
-    {
-        return $this->hasMany(PractitionerCertificate::class);
-    }
 }

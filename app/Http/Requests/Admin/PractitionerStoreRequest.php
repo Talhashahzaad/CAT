@@ -17,8 +17,7 @@ class PractitionerStoreRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'qualification' => 'nullable|string',
-            'certificates' => 'nullable|array',
-            'certificates.*' => 'nullable|string',
+            'certificate' => 'nullable|string',
             'practitioner_concent_checkbox' => 'required',
         ];
     }

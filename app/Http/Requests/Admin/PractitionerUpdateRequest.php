@@ -18,8 +18,7 @@ class PractitionerUpdateRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'qualification' => 'nullable|string',
-            'certificates' => 'nullable|array',
-            'certificates.*' => 'nullable|string',
+            'certificate' => 'nullable|string',
             'practitioner_consent_checkbox' => 'required',
         ];
     }

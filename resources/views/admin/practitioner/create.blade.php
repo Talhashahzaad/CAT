@@ -44,22 +44,10 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label for="">Certificate</label>
-                                                <select name="certificates[]" class="form-control certificate-select">
-                                                    <option value="">Select Certificate</option>
-                                                    @foreach ($certificates as $certificate)
-                                                        <option value="{{ $certificate->id }}">{{ $certificate->name }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
+                                                <input type="text" class="form-control" name="certificate">
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-
-                                <button type="button" id="add-certificate" class="btn btn-primary">Add Certificate</button>
-
-                                <div id="error-message" class="text-danger mt-2" style="display: none;">
-                                    Please select a certificate for the previous entry before adding more.
                                 </div>
 
                                 <div class="form-group mt-4">
@@ -83,85 +71,4 @@
 @endsection
 
 @push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const addCertificateBtn = document.getElementById('add-certificate');
-            const certificatesContainer = document.getElementById('certificates-container');
-            const errorMessage = document.getElementById('error-message');
-
-            // Store the certificate options
-            const certificateOptions = `
-                <option value="">Select Certificate</option>
-                @foreach ($certificates as $certificate)
-                    <option value="{{ $certificate->id }}">{{ $certificate->name }}</option>
-                @endforeach
-            `;
-
-            // Add new certificate group
-            addCertificateBtn.addEventListener('click', function() {
-                const lastCertificateGroup = certificatesContainer.querySelector(
-                    '.certificate-group:last-child');
-                const lastCertificateSelect = lastCertificateGroup.querySelector('.certificate-select');
-
-                if (lastCertificateSelect.value) {
-                    errorMessage.style.display = 'none';
-                    addNewCertificateGroup();
-                } else {
-                    errorMessage.style.display = 'block';
-                }
-            });
-
-            // Add a new certificate group
-            function addNewCertificateGroup() {
-                const newGroup = document.createElement('div');
-                newGroup.className = 'certificate-group row align-items-end mb-3';
-                newGroup.innerHTML = `
-                    <div class="col-md-10">
-                        <div class="form-group mb-0">
-                            <label for="">Certificate</label>
-                            <select name="certificates[]" class="form-control certificate-select">
-                                ${certificateOptions}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <button type="button" class="btn btn-danger remove-certificate">Remove</button>
-                    </div>
-                `;
-
-                certificatesContainer.appendChild(newGroup);
-                updateRemoveButtons();
-            }
-
-            // Update remove buttons for all certificate groups
-            function updateRemoveButtons() {
-                const removeButtons = document.querySelectorAll('.remove-certificate');
-                removeButtons.forEach(button => {
-                    button.removeEventListener('click', removeCertificateGroup);
-                    button.addEventListener('click', removeCertificateGroup);
-                });
-            }
-
-            // Remove certificate group
-            function removeCertificateGroup() {
-                this.closest('.certificate-group').remove();
-            }
-
-            // Prevent form submission if any certificate is not selected
-            document.querySelector('form').addEventListener('submit', function(event) {
-                const certificateSelects = certificatesContainer.querySelectorAll('.certificate-select');
-                for (let select of certificateSelects) {
-                    if (!select.value) {
-                        event.preventDefault();
-                        errorMessage.textContent = 'Please select all certificates before submitting.';
-                        errorMessage.style.display = 'block';
-                        errorMessage.scrollIntoView({
-                            behavior: 'smooth'
-                        });
-                        break;
-                    }
-                }
-            });
-        });
-    </script>
 @endpush
