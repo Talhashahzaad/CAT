@@ -31,7 +31,7 @@
                                             </label>
                                             <div id="image-preview" class="image-preview">
                                                 <label for="image-upload" id="image-label">Choose File</label>
-                                                <input type="file" name="image" id="image-upload" />
+                                                <input type="file" name="image" id="image-upload" required />
                                             </div>
                                         </div>
                                     </div>
@@ -125,19 +125,15 @@
                                             <input type="text" name="youtube_link" class="form-control">
                                         </div>
                                     </div>
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <label for="">Attachment <span class="text-danger"></span></label>
-                                            <input type="file" name="attachment" class="form-control">
-                                        </div>
-                                    </div>
+
 
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Professional Affiliations</label>
-                                            <select class="form-control select2" multiple="" name="amenities[]">
+                                            <select class="form-control select2" multiple=""
+                                                name="professional_certificates[]">
                                                 @foreach ($certificates as $certificate)
                                                     <option value="{{ $certificate->id }}">{{ $certificate->name }}
                                                     </option>
@@ -145,33 +141,41 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+
+                                    <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="">Practitioner Name<span
-                                                    class="text-danger"></span></label>
-                                            <input type="text" name="instagram_link" class="form-control">
+                                            <div class="form-group">
+                                                <label for="">Attachment <span class="text-danger"></span></label>
+                                                <input type="file" name="attachment" class="form-control">
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+
+                                    <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="">Practitioner Qualification and Level * <span
-                                                    class="text-danger"></span></label>
-                                            <input type="text" name="tiktok_link" class="form-control">
+                                            <label>Choose Practitioner</label>
+                                            <select class="form-control select2" multiple="" name="practitioner[]">
+                                                @foreach ($practitioners as $practitioner)
+                                                    <option value="{{ $practitioner->id }}">{{ $practitioner->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Amenities</label>
+
+                                            <select class="form-control select2" multiple="" name="amenities[]">
+                                                @foreach ($amenities as $amenity)
+                                                    <option value="{{ $amenity->id }}">{{ $amenity->name }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
 
 
-
-
-                                <div class="form-group">
-                                    <label>Amenities</label>
-                                    <select class="form-control select2" multiple="" name="amenities[]">
-                                        @foreach ($amenities as $amenity)
-                                            <option value="{{ $amenity->id }}">{{ $amenity->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
                                 <div class="form-group">
                                     <label for="">Description <span class="text-danger">*</span></label>
                                     <textarea name="description" class="summernote" required></textarea>

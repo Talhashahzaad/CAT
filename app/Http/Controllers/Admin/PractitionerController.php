@@ -70,7 +70,7 @@ class PractitionerController extends Controller
         $practitioner = Practitioner::findOrFail($id);
         $practitioner->name = $request->name;
         $practitioner->qualification = $request->qualification;
-        $practitioner->certificates = $request->certificates;
+        $practitioner->certificate = $request->certificate;
         $practitioner->save();
 
         toastr()->success('Updated Successfully');

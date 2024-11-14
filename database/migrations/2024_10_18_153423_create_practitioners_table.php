@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug');
             $table->text('qualification')->nullable();
-            $table->string('certificates')->nullable();
+            $table->string('certificate')->nullable();
             $table->timestamps();
         });
     }

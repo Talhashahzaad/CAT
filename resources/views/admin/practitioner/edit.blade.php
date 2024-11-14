@@ -45,7 +45,8 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label for="">Certificate</label>
-                                                <input type="text" class="form-control" name="certificate">
+                                                <input type="text" class="form-control" name="certificate"
+                                                    value="{{ $practitioner->certificate }}">
                                             </div>
                                         </div>
                                     </div>
@@ -54,8 +55,10 @@
                                 <div class="form-group mt-4">
                                     <input type="checkbox" name="practitioner_consent_checkbox"
                                         id="practitioner_consent_checkbox">
-                                    <label for="practitioner_consent_checkbox">I confirm that I have obtained consent from
-                                        the practitioner listed on this business profile to display their professional
+                                    <label for="practitioner_consent_checkbox">I confirm that I have obtained
+                                        consent from
+                                        the practitioner listed on this business profile to display their
+                                        professional
                                         affiliations publicly on Check a Treatment.</label>
                                 </div>
 

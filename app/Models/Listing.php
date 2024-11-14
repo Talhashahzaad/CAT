@@ -14,6 +14,12 @@ class Listing extends Model
     {
         return  $this->belongsTo(Category::class);
     }
+
+    function practitioner(): BelongsTo
+    {
+        return  $this->belongsTo(Practitioner::class);
+    }
+
     function location(): BelongsTo
     {
         return  $this->belongsTo(Location::class);
