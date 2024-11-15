@@ -175,7 +175,8 @@
                                         @endif
                                         <div class="form-group">
                                             <label for="">Attachment <span class="text-danger"></span></label>
-                                            <input type="file" name="attachment" class="form-control"
+                                            <input type="file" name="attachment" class="form-control">
+                                            <input type="hidden" class="form-control" name="old_attachment"
                                                 value="{{ $listing->file }}">
                                         </div>
                                     </div>
