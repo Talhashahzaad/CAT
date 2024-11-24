@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AmenityController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ListingController;
+use App\Http\Controllers\Admin\ListingImageGalleryController;
 use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Admin\PractitionerController;
@@ -48,9 +49,6 @@ Route::group([
     /** Tag Route */
     Route::resource('/tag', TagController::class);
 
-    /** Listing Route */
-    Route::resource('/listing', ListingController::class);
-
     /** Service Route */
     Route::resource('/service', ServiceController::class);
 
@@ -62,4 +60,10 @@ Route::group([
 
     /** Practitioner Route */
     Route::resource('/practitioner', PractitionerController::class);
+
+    /** Listing Route */
+    Route::resource('/listing', ListingController::class);
+
+    /**Listing Image Gallery */
+    Route::resource('/listing-image-gallery', ListingImageGalleryController::class);
 });

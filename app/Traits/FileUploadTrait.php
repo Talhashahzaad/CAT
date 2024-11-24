@@ -4,6 +4,8 @@ namespace App\Traits;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Intervention\Image\Facades\Image;
+
 
 trait  FileUploadTrait
 {
@@ -28,6 +30,57 @@ trait  FileUploadTrait
 
         return null;
     }
+
+    function uploadMultipleImage(Request $request, string $inputName,  $path = '/uploads'): ?array
+    {
+        if ($request->hasFile($inputName)) {
+
+            if (count($request->{$inputName}) > 15) {
+                // Return an error message as an array
+                return ['error' => 'You can upload a maximum of 15 images.'];
+            }
+
+            $images = $request->{$inputName};
+
+            $paths = [];
+
+            foreach ($images as $image) {
+
+                $ext = $image->getClientOriginalExtension();
+                $imageName = 'media_' . uniqid() . '.' . $ext;
+                $image->move(public_path($path), $imageName);
+                $paths[] = $path . '/' . $imageName;
+            }
+
+            return $paths;
+        }
+
+        return null;
+    }
+    // function uploadMultipleImage(Request $request, string $inputName,  $path = '/uploads'): ?array
+    // {
+    //     if ($request->hasFile($inputName) && count($request->{$inputName}) <= 15) {
+
+    //         $images = $request->{$inputName};
+
+    //         $paths = [];
+
+    //         foreach ($images as $image) {
+    //             $ext = 'webp'; // Set the extension to webp
+    //             $imageName = 'media_' . uniqid() . '.' . $ext;
+
+    //             // Convert and save the image as WebP
+    //             Image::make($image)->encode('webp', 90)->save(public_path($path . '/' . $imageName));
+    //             // ... existing code ...
+    //             $paths[] = $path . '/' . $imageName;
+    //         }
+
+    //         return $paths;
+    //     }
+
+    //     return null;
+    // }
+
     function deleteFile($path): void
     {
         // Delete previous image from storage

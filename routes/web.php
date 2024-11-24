@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\GoogleController;
 // use App\Http\Controllers\Admin\AdminAuthController;
 
 
+
 // Route::middleware('guest')->group(function () {
 //     Route::get('admin/login', [AdminAuthController::class, 'login'])->name('admin.login');
 //     Route::get('admin/forgot-password', [AdminAuthController::class, 'PasswordRequest'])->name('admin.password.request');
