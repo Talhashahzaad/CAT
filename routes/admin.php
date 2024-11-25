@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ListingController;
 use App\Http\Controllers\Admin\ListingImageGalleryController;
+use App\Http\Controllers\Admin\ListingVideoGalleryController;
 use App\Http\Controllers\Admin\LocationController;
 use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Admin\PractitionerController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\Admin\ProfessionalCertificateController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\TagController;
+use App\Models\ListingVideoGallery;
 use App\Models\Package;
 use Illuminate\Support\Facades\Route;
 
@@ -66,4 +68,7 @@ Route::group([
 
     /**Listing Image Gallery */
     Route::resource('/listing-image-gallery', ListingImageGalleryController::class);
+
+    /**Listing Video Gallery */
+    Route::resource('/listing-video-gallery', ListingVideoGalleryController::class);
 });
