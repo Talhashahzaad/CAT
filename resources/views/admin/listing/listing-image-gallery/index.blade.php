@@ -19,7 +19,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Image Gallery</h4>
+                            <h4>Image Gallery ( {{ $listingTitle->title }})</h4>
                         </div>
                         <div class="card-body">
                             <form action="{{ route('admin.listing-image-gallery.store') }}" method="POST"

@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Listing extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     function category(): BelongsTo
     {
@@ -23,5 +24,10 @@ class Listing extends Model
     function location(): BelongsTo
     {
         return  $this->belongsTo(Location::class);
+    }
+
+    function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

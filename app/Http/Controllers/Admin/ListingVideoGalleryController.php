@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Listing;
 use App\Models\ListingVideoGallery;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -16,7 +17,8 @@ class ListingVideoGalleryController extends Controller
     public function index(Request $request): View
     {
         $videos = ListingVideoGallery::where('listing_id', $request->id)->get();
-        return View('admin.listing.listing-video-gallery.index', compact('videos'));
+        $listingTitle = Listing::select('title')->where('id', $request->id)->first();
+        return View('admin.listing.listing-video-gallery.index', compact('videos', 'listingTitle'));
     }
 
     /**
@@ -70,8 +72,8 @@ class ListingVideoGalleryController extends Controller
     public function destroy(string $id): Response
     {
         try {
-            $image = ListingVideoGallery::findOrFail($id);
-            $image->delete();
+            $video = ListingVideoGallery::findOrFail($id);
+            $video->delete();
             return response(['status' => 'success', 'message' => 'Deleted Successfully!']);
         } catch (\Exception $e) {
             return response(['status' => 'error', 'message' => 'An error occurred: ' . $e->getMessage()], 500);

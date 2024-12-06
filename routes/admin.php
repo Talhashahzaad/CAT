@@ -72,7 +72,10 @@ Route::group([
     Route::resource('/listing-video-gallery', ListingVideoGalleryController::class);
 
     /**Listing Schedule */
-    Route::get('/listing-schedule', [ListingScheduleController::class, 'index'])->name('listing-schedule.index');
-    Route::get('/listing-schedule/{listing_id}', [ListingScheduleController::class, 'create'])->name('listing-schedule.create');
+    Route::get('/listing-schedule/{listing_id}', [ListingScheduleController::class, 'index'])->name('listing-schedule.index');
+    Route::get('/listing-schedule/{listing_id}/create', [ListingScheduleController::class, 'create'])->name('listing-schedule.create');
     Route::post('/listing-schedule/{listing_id}', [ListingScheduleController::class, 'store'])->name('listing-schedule.store');
+    Route::get('/listing-schedule/{id}/edit', [ListingScheduleController::class, 'edit'])->name('listing-schedule.edit');
+    Route::put('/listing-schedule/{id}', [ListingScheduleController::class, 'update'])->name('listing-schedule.update');
+    Route::delete('/listing-schedule/{id}', [ListingScheduleController::class, 'destroy'])->name('listing-schedule.destroy');
 });

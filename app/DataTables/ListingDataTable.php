@@ -32,7 +32,7 @@ class ListingDataTable extends DataTable
                       <div class="dropdown-menu dropleft" x-placement="left-start" style="position: absolute; transform: translate3d(-202px, 0px, 0px); top: 0px; left: 0px; will-change: transform;">
                         <a class="dropdown-item" href="' . route('admin.listing-image-gallery.index', ['id' => $query->id]) . '">Image Gallery</a>
                         <a class="dropdown-item" href="' . route('admin.listing-video-gallery.index', ['id' => $query->id]) . '">Video Gallery</a>
-                        <a class="dropdown-item" href="' . route('admin.listing-schedule.index', ['id' => $query->id]) . '">Schedule</a>
+                        <a class="dropdown-item" href="' . route('admin.listing-schedule.index', $query->id) . '">Schedule</a>
                         </div>
                     </div>';
                 return $edit . $delete . $more;
@@ -50,7 +50,28 @@ class ListingDataTable extends DataTable
                     return "<span class='badge badge-danger'>Inactive</span>";
                 }
             })
-            ->rawColumns(['status', 'action'])
+            ->addColumn('is_featured', function ($query) {
+                if ($query->is_featured === 1) {
+                    return "<span class='badge badge-primary'>Yes</span>";
+                } else {
+                    return "<span class='badge badge-danger'>No</span>";
+                }
+            })
+            ->addColumn('is_verified', function ($query) {
+                if ($query->is_verified === 1) {
+                    return "<span class='badge badge-primary'>Yes</span>";
+                } else {
+                    return "<span class='badge badge-danger'>No</span>";
+                }
+            })
+            ->addColumn('image', function ($query) {
+                return '<img width="60" src="' . asset($query->image) . '" >';
+            })
+            ->addColumn('by', function ($query) {
+                return $query->user?->name;
+            })
+
+            ->rawColumns(['status', 'action', 'is_featured', 'is_verified', 'image'])
             ->setRowId('id');
     }
 
@@ -92,10 +113,14 @@ class ListingDataTable extends DataTable
         return [
 
             Column::make('id'),
+            Column::make('image'),
             Column::make('title'),
             Column::make('category'),
             Column::make('location'),
             Column::make('status'),
+            Column::make('is_featured')->width(70),
+            Column::make('is_verified')->width(70),
+            Column::make('by'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)
