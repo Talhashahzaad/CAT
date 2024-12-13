@@ -10,6 +10,7 @@ use App\Models\Amenity;
 use App\Models\Category;
 use App\Models\Listing;
 use App\Models\ListingAmenity;
+use App\Models\ListingCategory;
 use App\Models\ListingCertificate;
 use App\Models\ListingPractitioner;
 use App\Models\ListingTag;
@@ -57,7 +58,7 @@ class ListingController extends Controller
      */
     public function store(ListingStoreRequest $request)
     {
-        // dd($request->all());
+
         try {
             $imagePath = $this->uploadImage($request, 'image');
             $thumbnailPath = $this->uploadImage($request, 'thumbnail_image');
@@ -90,6 +91,8 @@ class ListingController extends Controller
             $listing->google_map_embed_code = $request->google_map_embed_code;
             $listing->expire_date = date('Y-m-d');
             $listing->save();
+
+
 
             /** amenity store */
 
@@ -146,6 +149,7 @@ class ListingController extends Controller
     public function edit(string $id): View
     {
         $listing = Listing::findOrFail($id);
+
         $listingAmenities = ListingAmenity::where('listing_id', $listing->id)->pluck('amenity_id')->toArray();
         $listingTag = ListingTag::where('listing_id', $listing->id)->pluck('tag_id')->toArray();
         $listingCertificate = ListingCertificate::where('listing_id', $listing->id)->pluck('certificates_id')->toArray();
@@ -164,7 +168,6 @@ class ListingController extends Controller
      */
     public function update(ListingUpdateRequest $request, string $id): RedirectResponse
     {
-        // dd($request->all());
 
         try {
             $listing =  Listing::findOrFail($id);
@@ -199,7 +202,6 @@ class ListingController extends Controller
             $listing->google_map_embed_code = $request->google_map_embed_code;
             $listing->expire_date = date('Y-m-d');
             $listing->save();
-
 
             // Remove previous amenities
             ListingAmenity::where('listing_id', $listing->id)->delete();

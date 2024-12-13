@@ -7,11 +7,11 @@
     "require": {
         "php": "^8.2",
         "facebook/graph-sdk": "^5.1",
-        "intervention/image": "^3.9",
         "laravel/framework": "^11.9",
         "laravel/sanctum": "^4.0",
         "laravel/socialite": "^5.16",
         "laravel/tinker": "^2.9",
+        "spatie/image": "^3.7",
         "yajra/laravel-datatables": "^11.0",
         "yoeunes/toastr": "^3.0"
     },
