@@ -3,17 +3,20 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+
 
 class FrontendAuthController extends Controller
 {
 
     /** API Frontend Login */
 
-    public function loginApi(Request $request)
+    public function loginApi(Request $request): JsonResponse
     {
         $incomingFields = $request->validate([
             'email' => ['required', 'email'],
@@ -23,27 +26,31 @@ class FrontendAuthController extends Controller
         if (Auth::attempt($incomingFields)) {
             $user = User::where('email', $incomingFields['email'])->first();
             $token = $user->createToken('ourapptoken')->plainTextToken;
-            return $token;
+            return response()->json(['token' => $token], 200);
         }
-        return 'Sorry';
+        return response()->json(['error' => 'Unauthorized'], 401);
     }
 
-    public function storeApi(Request $request): JsonResponse
+    public function storeApi(Request $request)
     {
+        // Validate incoming request data
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required'],
         ]);
 
+        // Create the user
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
+        // Trigger the registered event
         event(new Registered($user));
 
+        // Log the user in
         Auth::login($user);
 
         return response()->json([
