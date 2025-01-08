@@ -207,10 +207,20 @@
 
                 </ul>
             </li>
+            {{-- 
+            <li class="{{ setSidebarActive(['admin.dashboard.index']) }}"><a
+                    href="{{ route('admin.dashboard.index') }}" class="nav-link"><i class="far fa-file-alt"></i>
+                    <span>Contact Form</span></a></li> --}}
+            <li class="dropdown {{ setSidebarActive(['admin.listing.*']) }}">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
+                        class="fas fa-columns"></i> <span>Forms</span></a>
+                <ul class="dropdown-menu">
+                    <li class="{{ setSidebarActive(['admin.listing.*']) }}"><a class="nav-link"
+                            href="{{ route('admin.listing.index') }}">Contact Form</a></li>
+                </ul>
+            </li>
             <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Blank
                         Page</span></a></li>
-
-
         </ul>
 
 
