@@ -27,13 +27,13 @@
 
                                 <div class="form-group">
                                     <label for="">Icon <span class="text-danger">*</span></label>
-                                    <div role="iconpicker" data-align="left" data-unselected-class=" "
-                                        name="icon" data-selected-class="btn-primary"></div>
+                                    <div role="iconpicker" data-align="left" data-unselected-class=" " name="icon"
+                                        data-selected-class="btn-primary"></div>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="">Name <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="name">
+                                    <input type="text" class="form-control" name="name" value="{{ old('name') }}">
                                 </div>
 
                                 <div class="form-group">
@@ -55,7 +55,7 @@
 
                                 <div class="form-group">
                                     <label for="">Description </label>
-                                    <textarea name="description" class="form-control"></textarea>
+                                    <textarea name="description" class="form-control">{{ old('description') }}</textarea>
                                 </div>
 
 

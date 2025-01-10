@@ -28,7 +28,8 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="">Name <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" name="name">
+                                            <input type="text" class="form-control" name="name"
+                                                value="{{ old('name') }}">
                                         </div>
                                     </div>
 
@@ -57,7 +58,7 @@
 
                                 <div class="form-group">
                                     <label for="">Description </label>
-                                    <textarea name="description" class="form-control"></textarea>
+                                    <textarea name="description" class="form-control">{{ old('description') }}</textarea>
                                 </div>
 
                                 <div class="card-treatments">

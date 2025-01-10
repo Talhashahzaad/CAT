@@ -50,7 +50,7 @@
 
                                 <div class="form-group">
                                     <label for="">Name <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="name">
+                                    <input type="text" class="form-control" name="name" value="{{ old('name') }}">
                                 </div>
 
                                 <div class="form-group">
@@ -70,7 +70,8 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="">Parent Treatment Category <span class="text-danger"></span></label>
+                                    <label for="">Parent Treatment Category <span
+                                            class="text-danger"></span></label>
                                     <input type="text" class="form-control" name="parent_category" value="None">
                                     {{-- <select name="parent_category" class="form-control">
                                         <option value="none">None</option>
@@ -80,7 +81,7 @@
 
                                 <div class="form-group">
                                     <label for="">Description </label>
-                                    <textarea name="description" class="form-control"></textarea>
+                                    <textarea name="description" class="form-control"> {{ old('description') }}</textarea>
                                 </div>
 
 
@@ -99,7 +100,7 @@
 
 @push('scripts')
     <script>
-         $.uploadPreview({
+        $.uploadPreview({
             input_field: "#image-upload-2", // Default: .image-upload
             preview_box: "#image-preview-2", // Default: .image-preview
             label_field: "#image-label-2", // Default: .image-label

@@ -28,7 +28,7 @@
 
                                 <div class="form-group">
                                     <label for="name">Name <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="name">
+                                    <input type="text" class="form-control" name="name" value="{{ old('name') }}">
                                 </div>
 
 
@@ -36,7 +36,8 @@
                                 <div class="form-group">
                                     <label for="qualification">Qualification and Level <span
                                             class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="qualification">
+                                    <input type="text" class="form-control" name="qualification"
+                                        value="{{ old('qualification') }}">
                                 </div>
 
                                 <div id="certificates-container">
@@ -44,7 +45,8 @@
                                         <div class="col-md-12">
                                             <div class="form-group">
                                                 <label for="">Certificate</label>
-                                                <input type="text" class="form-control" name="certificate">
+                                                <input type="text" class="form-control" name="certificate"
+                                                    value="{{ old('certificate') }}">
                                             </div>
                                         </div>
                                     </div>

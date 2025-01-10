@@ -28,7 +28,8 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="name">Name <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" name="name" id="name">
+                                            <input type="text" class="form-control" name="name" id="name"
+                                                value="{{ old('name') }}">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -49,11 +50,12 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="category">Treatment Category <span class="text-danger">*</span></label>
+                                            <label for="category">Treatment Category <span
+                                                    class="text-danger">*</span></label>
 
                                             <select name="category" class="form-control" id="category">
-                                                @foreach ( $category as $categories )
-                                                <option value="{{ $categories->id }}">{{ $categories->name }}</option>
+                                                @foreach ($category as $categories)
+                                                    <option value="{{ $categories->id }}">{{ $categories->name }}</option>
                                                 @endforeach
                                             </select>
 
@@ -62,7 +64,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="description">Description</label>
-                                            <textarea name="description" id="description" class="form-control"></textarea>
+                                            <textarea name="description" id="description" class="form-control">{{ old('description') }}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -80,13 +82,15 @@
                                                         <input type="hidden" name="variant_description[]" value="">
                                                     </div>
                                                     <div class="col-md-2">
-                                                        <label for="duration">Duration <span class="text-danger">*</span></label>
+                                                        <label for="duration">Duration <span
+                                                                class="text-danger">*</span></label>
                                                         <select class="form-control duration" name="duration[]">
                                                             <!-- Options will be populated by JavaScript -->
                                                         </select>
                                                     </div>
                                                     <div class="col-md-2">
-                                                        <label for="price_type">Price Type <span class="text-danger">*</span></label>
+                                                        <label for="price_type">Price Type <span
+                                                                class="text-danger">*</span></label>
                                                         <select class="form-control price-type" name="price_type[]">
                                                             <option value="Free">Free</option>
                                                             <option value="From">From</option>
@@ -94,8 +98,10 @@
                                                         </select>
                                                     </div>
                                                     <div class="col-md-2 price-section">
-                                                        <label for="price">Price <span class="text-danger">*</span></label>
-                                                        <input type="number" class="form-control price" name="price[]" step="0.01">
+                                                        <label for="price">Price <span
+                                                                class="text-danger">*</span></label>
+                                                        <input type="number" class="form-control price" name="price[]"
+                                                            step="0.01">
                                                         <div class="error-message text-danger"></div>
                                                     </div>
                                                     <div class="col-md-3 remove-button" style="display: none;">
@@ -173,119 +179,251 @@
 @endsection
 
 @push('scripts')
-<script>
-$(document).ready(function() {
-    const variantModal = new bootstrap.Modal(document.getElementById('variantModal'));
+    <script>
+        $(document).ready(function() {
+            const variantModal = new bootstrap.Modal(document.getElementById('variantModal'));
 
-    const durationOptions = [
-        {value: "5", text: "5min"},
-        {value: "10", text: "10min"},
-        {value: "15", text: "15min"},
-        {value: "20", text: "20min"},
-        {value: "25", text: "25min"},
-        {value: "30", text: "30min"},
-        {value: "35", text: "35min"},
-        {value: "40", text: "40min"},
-        {value: "45", text: "45min"},
-        {value: "50", text: "50min"},
-        {value: "55", text: "55min"},
-        {value: "60", text: "1h"},
-        {value: "65", text: "1h 5min"},
-        {value: "70", text: "1h 10min"},
-        {value: "75", text: "1h 15min"},
-        {value: "80", text: "1h 20min"},
-        {value: "85", text: "1h 25min"},
-        {value: "90", text: "1h 30min"},
-        {value: "95", text: "1h 35min"},
-        {value: "100", text: "1h 40min"},
-        {value: "105", text: "1h 45min"},
-        {value: "110", text: "1h 50min"},
-        {value: "115", text: "1h 55min"},
-        {value: "120", text: "2h"},
-        {value: "135", text: "2h 15min"},
-        {value: "150", text: "2h 30min"},
-        {value: "165", text: "2h 45min"},
-        {value: "180", text: "3h"},
-        {value: "195", text: "3h 15min"},
-        {value: "210", text: "3h 30min"},
-        {value: "225", text: "3h 45min"},
-        {value: "240", text: "4h"},
-        {value: "270", text: "4h 30min"},
-        {value: "300", text: "5h"},
-        {value: "330", text: "5h 30min"},
-        {value: "360", text: "6h"},
-        {value: "390", text: "6h 30min"},
-        {value: "420", text: "7h"},
-        {value: "450", text: "7h 30min"},
-        {value: "480", text: "8h"},
-        {value: "540", text: "9h"},
-        {value: "600", text: "10h"},
-        {value: "660", text: "11h"},
-        {value: "720", text: "12h"}
-    ];
+            const durationOptions = [{
+                    value: "5",
+                    text: "5min"
+                },
+                {
+                    value: "10",
+                    text: "10min"
+                },
+                {
+                    value: "15",
+                    text: "15min"
+                },
+                {
+                    value: "20",
+                    text: "20min"
+                },
+                {
+                    value: "25",
+                    text: "25min"
+                },
+                {
+                    value: "30",
+                    text: "30min"
+                },
+                {
+                    value: "35",
+                    text: "35min"
+                },
+                {
+                    value: "40",
+                    text: "40min"
+                },
+                {
+                    value: "45",
+                    text: "45min"
+                },
+                {
+                    value: "50",
+                    text: "50min"
+                },
+                {
+                    value: "55",
+                    text: "55min"
+                },
+                {
+                    value: "60",
+                    text: "1h"
+                },
+                {
+                    value: "65",
+                    text: "1h 5min"
+                },
+                {
+                    value: "70",
+                    text: "1h 10min"
+                },
+                {
+                    value: "75",
+                    text: "1h 15min"
+                },
+                {
+                    value: "80",
+                    text: "1h 20min"
+                },
+                {
+                    value: "85",
+                    text: "1h 25min"
+                },
+                {
+                    value: "90",
+                    text: "1h 30min"
+                },
+                {
+                    value: "95",
+                    text: "1h 35min"
+                },
+                {
+                    value: "100",
+                    text: "1h 40min"
+                },
+                {
+                    value: "105",
+                    text: "1h 45min"
+                },
+                {
+                    value: "110",
+                    text: "1h 50min"
+                },
+                {
+                    value: "115",
+                    text: "1h 55min"
+                },
+                {
+                    value: "120",
+                    text: "2h"
+                },
+                {
+                    value: "135",
+                    text: "2h 15min"
+                },
+                {
+                    value: "150",
+                    text: "2h 30min"
+                },
+                {
+                    value: "165",
+                    text: "2h 45min"
+                },
+                {
+                    value: "180",
+                    text: "3h"
+                },
+                {
+                    value: "195",
+                    text: "3h 15min"
+                },
+                {
+                    value: "210",
+                    text: "3h 30min"
+                },
+                {
+                    value: "225",
+                    text: "3h 45min"
+                },
+                {
+                    value: "240",
+                    text: "4h"
+                },
+                {
+                    value: "270",
+                    text: "4h 30min"
+                },
+                {
+                    value: "300",
+                    text: "5h"
+                },
+                {
+                    value: "330",
+                    text: "5h 30min"
+                },
+                {
+                    value: "360",
+                    text: "6h"
+                },
+                {
+                    value: "390",
+                    text: "6h 30min"
+                },
+                {
+                    value: "420",
+                    text: "7h"
+                },
+                {
+                    value: "450",
+                    text: "7h 30min"
+                },
+                {
+                    value: "480",
+                    text: "8h"
+                },
+                {
+                    value: "540",
+                    text: "9h"
+                },
+                {
+                    value: "600",
+                    text: "10h"
+                },
+                {
+                    value: "660",
+                    text: "11h"
+                },
+                {
+                    value: "720",
+                    text: "12h"
+                }
+            ];
 
-    function generateDurationOptions(selectedValue = '') {
-        return durationOptions.map(option =>
-            `<option value="${option.value}" ${option.value === selectedValue ? 'selected' : ''}>${option.text}</option>`
-        ).join('');
-    }
-
-    function updateVariantDisplay() {
-        const variantCount = $('.variation-row').length;
-        if (variantCount > 1) {
-            $('.variant-name, .remove-button').show();
-            $('.variation-row:first .variant-name strong').text('Service');
-        } else {
-            $('.variant-name, .remove-button').hide();
-        }
-        updatePriceVisibility();
-    }
-
-    function updatePriceVisibility() {
-        $('.variation-row').each(function(index) {
-            const priceType = $(this).find('.price-type').val();
-            const priceSection = $(this).find('.price-section');
-            const priceInput = priceSection.find('.price');
-            if (priceType === 'Free') {
-                priceSection.hide();
-                priceInput.prop('required', false).val(''); // Clear the value
-            } else {
-                priceSection.show();
-                priceInput.prop('required', true);
+            function generateDurationOptions(selectedValue = '') {
+                return durationOptions.map(option =>
+                    `<option value="${option.value}" ${option.value === selectedValue ? 'selected' : ''}>${option.text}</option>`
+                ).join('');
             }
-        });
-    }
 
-    $('#add-variant').click(function(e) {
-        e.preventDefault();
-        const lastPriceType = $('.variation-row:last .price-type').val();
-        const lastPrice = $('.variation-row:last .price').val();
-        if (lastPriceType !== 'Free' && (!lastPrice || parseFloat(lastPrice) <= 0)) {
-            $('.variation-row:last .price').next('.error-message').text('Please enter a valid price');
-            return;
-        }
-        $('#variantName').val('');
-        $('#variantDuration').html(generateDurationOptions());
-        variantModal.show();
-    });
+            function updateVariantDisplay() {
+                const variantCount = $('.variation-row').length;
+                if (variantCount > 1) {
+                    $('.variant-name, .remove-button').show();
+                    $('.variation-row:first .variant-name strong').text('Service');
+                } else {
+                    $('.variant-name, .remove-button').hide();
+                }
+                updatePriceVisibility();
+            }
 
-    $('#saveVariant').click(function() {
-        const name = $('#variantName').val();
-        const description = $('#variantDescription').val();
-        const price = $('#variantPrice').val();
-        const priceType = $('#variantPriceType').val();
-        const duration = $('#variantDuration').val();
+            function updatePriceVisibility() {
+                $('.variation-row').each(function(index) {
+                    const priceType = $(this).find('.price-type').val();
+                    const priceSection = $(this).find('.price-section');
+                    const priceInput = priceSection.find('.price');
+                    if (priceType === 'Free') {
+                        priceSection.hide();
+                        priceInput.prop('required', false).val(''); // Clear the value
+                    } else {
+                        priceSection.show();
+                        priceInput.prop('required', true);
+                    }
+                });
+            }
 
-        if (priceType !== 'Free' && (!price || parseFloat(price) <= 0)) {
-            alert('Please enter a valid price');
-            return;
-        }
+            $('#add-variant').click(function(e) {
+                e.preventDefault();
+                const lastPriceType = $('.variation-row:last .price-type').val();
+                const lastPrice = $('.variation-row:last .price').val();
+                if (lastPriceType !== 'Free' && (!lastPrice || parseFloat(lastPrice) <= 0)) {
+                    $('.variation-row:last .price').next('.error-message').text(
+                        'Please enter a valid price');
+                    return;
+                }
+                $('#variantName').val('');
+                $('#variantDuration').html(generateDurationOptions());
+                variantModal.show();
+            });
 
-        const serviceName = $('#name').val();
-        const displayName = name || serviceName || 'Service';
-        const variantName = name || serviceName || 'Service';
+            $('#saveVariant').click(function() {
+                const name = $('#variantName').val();
+                const description = $('#variantDescription').val();
+                const price = $('#variantPrice').val();
+                const priceType = $('#variantPriceType').val();
+                const duration = $('#variantDuration').val();
 
-        const newVariation = `
+                if (priceType !== 'Free' && (!price || parseFloat(price) <= 0)) {
+                    alert('Please enter a valid price');
+                    return;
+                }
+
+                const serviceName = $('#name').val();
+                const displayName = name || serviceName || 'Service';
+                const variantName = name || serviceName || 'Service';
+
+                const newVariation = `
         <div class="variation-row mt-3">
             <div class="row align-items-center">
                 <div class="col-md-3 variant-name">
@@ -316,70 +454,71 @@ $(document).ready(function() {
         </div>
     `;
 
-        $('#variations-container').append(newVariation);
-        updateVariantDisplay();
-        variantModal.hide();
-        $('#variantForm')[0].reset();
-    });
-
-    $(document).on('click', '.remove-variant', function() {
-        $(this).closest('.variation-row').remove();
-        updateVariantDisplay();
-    });
-
-    $(document).on('input', '.price', function() {
-        $(this).next('.error-message').text('');
-    });
-
-    $(document).on('change', '.price-type', function() {
-        updatePriceVisibility();
-    });
-
-    // Update existing duration dropdowns
-    $('.duration').each(function() {
-        const currentValue = $(this).val();
-        $(this).html(generateDurationOptions(currentValue));
-    });
-
-    // Form submission
-    $('form').on('submit', function(e) {
-        e.preventDefault();
-
-        // Collect all prices
-        var prices = [];
-        $('.variation-row').each(function() {
-            var priceType = $(this).find('.price-type').val();
-            var price = $(this).find('.price').val();
-            var duration = $(this).find('.duration').val();
-            var variantName = $(this).find('input[name="variant_name[]"]').val();
-            var variantDescription = $(this).find('input[name="variant_description[]"]').val();
-
-            prices.push({
-                name: variantName,
-                description: variantDescription,
-                type: priceType,
-                price: priceType === 'Free' ? null : price,
-                duration: duration
+                $('#variations-container').append(newVariation);
+                updateVariantDisplay();
+                variantModal.hide();
+                $('#variantForm')[0].reset();
             });
+
+            $(document).on('click', '.remove-variant', function() {
+                $(this).closest('.variation-row').remove();
+                updateVariantDisplay();
+            });
+
+            $(document).on('input', '.price', function() {
+                $(this).next('.error-message').text('');
+            });
+
+            $(document).on('change', '.price-type', function() {
+                updatePriceVisibility();
+            });
+
+            // Update existing duration dropdowns
+            $('.duration').each(function() {
+                const currentValue = $(this).val();
+                $(this).html(generateDurationOptions(currentValue));
+            });
+
+            // Form submission
+            $('form').on('submit', function(e) {
+                e.preventDefault();
+
+                // Collect all prices
+                var prices = [];
+                $('.variation-row').each(function() {
+                    var priceType = $(this).find('.price-type').val();
+                    var price = $(this).find('.price').val();
+                    var duration = $(this).find('.duration').val();
+                    var variantName = $(this).find('input[name="variant_name[]"]').val();
+                    var variantDescription = $(this).find('input[name="variant_description[]"]')
+                        .val();
+
+                    prices.push({
+                        name: variantName,
+                        description: variantDescription,
+                        type: priceType,
+                        price: priceType === 'Free' ? null : price,
+                        duration: duration
+                    });
+                });
+
+                // Remove any existing price input
+                $('input[name="price"]').remove();
+
+                // Add prices to a hidden input
+                $('<input>').attr({
+                    type: 'hidden',
+                    name: 'price',
+                    value: JSON.stringify(prices)
+                }).appendTo('form');
+
+                // Submit the form
+                this.submit();
+            });
+
+            // Initial setup
+            updateVariantDisplay();
+            updatePriceVisibility();
         });
-
-        // Remove any existing price input
-        $('input[name="price"]').remove();
-
-        // Add prices to a hidden input
-        $('<input>').attr({
-            type: 'hidden',
-            name: 'price',
-            value: JSON.stringify(prices)
-        }).appendTo('form');
-
-        // Submit the form
-        this.submit();
-    });
-
-    // Initial setup
-    updateVariantDisplay();
-    updatePriceVisibility();
-});
-</script>
+    </script>
 @endpush

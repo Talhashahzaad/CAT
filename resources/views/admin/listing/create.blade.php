@@ -50,7 +50,8 @@
 
                                 <div class="form-group">
                                     <label for="">Title <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="title" required>
+                                    <input type="text" class="form-control" name="title" value="{{ old('title') }}"
+                                        required>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
@@ -78,7 +79,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="">Address <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="address" required>
+                                    <input type="text" class="form-control" name="address" value="{{ old('address') }}"
+                                        required>
                                 </div>
 
 
@@ -86,43 +88,50 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="">Phone <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" name="phone" required>
+                                            <input type="text" class="form-control" name="phone"
+                                                value="{{ old('phone') }}" required>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="">Email <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" name="email" required>
+                                            <input type="text" class="form-control" name="email"
+                                                value="{{ old('email') }}" required>
                                         </div>
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="">Website <span class="text-danger"></span></label>
-                                            <input type="text" class="form-control" name="website">
+                                            <input type="text" class="form-control" name="website"
+                                                value="{{ old('website') }}">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="">Facebook Url <span class="text-danger"></span></label>
-                                            <input type="text" name="facebook_link" class="form-control">
+                                            <input type="text" name="facebook_link" class="form-control"
+                                                value="{{ old('facebook_link') }}">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="">Instagram Url <span class="text-danger"></span></label>
-                                            <input type="text" name="instagram_link" class="form-control">
+                                            <input type="text" name="instagram_link" class="form-control"
+                                                value="{{ old('instagram_link') }}">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="">TikTok Url <span class="text-danger"></span></label>
-                                            <input type="text" name="tiktok_link" class="form-control">
+                                            <input type="text" name="tiktok_link" class="form-control"
+                                                value="{{ old('tiktok_link') }}">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="">YouTube Url <span class="text-danger"></span></label>
-                                            <input type="text" name="youtube_link" class="form-control">
+                                            <input type="text" name="youtube_link" class="form-control"
+                                                value="{{ old('youtube_link') }}">
                                         </div>
                                     </div>
 
@@ -146,7 +155,8 @@
                                         <div class="form-group">
                                             <div class="form-group">
                                                 <label for="">Attachment <span class="text-danger"></span></label>
-                                                <input type="file" name="attachment" class="form-control">
+                                                <input type="file" name="attachment" class="form-control"
+                                                    value="{{ old('attachment') }}">
                                             </div>
                                         </div>
                                     </div>
@@ -178,12 +188,12 @@
 
                                 <div class="form-group">
                                     <label for="">Description <span class="text-danger">*</span></label>
-                                    <textarea name="description" class="summernote" required></textarea>
+                                    <textarea name="description" class="summernote" required>  {{ old('description') }}</textarea>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="">Google Map Embed Code <span class="text-danger">*</span></label>
-                                    <textarea name="google_map_embed_code" class="form-control"></textarea>
+                                    <textarea name="google_map_embed_code" class="form-control">{{ old('google_map_embed_code') }}</textarea>
                                 </div>
                                 <div class="form-group">
                                     <label>Tags</label>
@@ -195,11 +205,12 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="">SEO Title <span class="text-danger">*</span></label>
-                                    <input type="text" name="seo_title" class="form-control">
+                                    <input type="text" name="seo_title" class="form-control"
+                                        value="{{ old('seo_title') }}">
                                 </div>
                                 <div class="form-group">
                                     <label for="">SEO Description <span class="text-danger">*</span></label>
-                                    <textarea name="seo_description" class="form-control"></textarea>
+                                    <textarea name="seo_description" class="form-control">{{ old('seo_description') }}</textarea>
                                 </div>
 
                                 <div class="row">
