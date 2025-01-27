@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\AmenityController;
+use App\Http\Controllers\Admin\BlogCategoryController;
+use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -72,7 +74,7 @@ Route::group([
     /**Listing Video Gallery */
     Route::resource('/listing-video-gallery', ListingVideoGalleryController::class);
 
-    /**Listing Schedule */
+    /**Listing Schedule Route */
     Route::get('/listing-schedule/{listing_id}', [ListingScheduleController::class, 'index'])->name('listing-schedule.index');
     Route::get('/listing-schedule/{listing_id}/create', [ListingScheduleController::class, 'create'])->name('listing-schedule.create');
     Route::post('/listing-schedule/{listing_id}', [ListingScheduleController::class, 'store'])->name('listing-schedule.store');
@@ -82,4 +84,8 @@ Route::group([
 
     /** Contact Form */
     Route::resource('/contact-form', ContactController::class);
+
+    /** Blog Route*/
+    Route::resource('/blog-category', BlogCategoryController::class);
+    Route::resource('/blog', BlogController::class);
 });

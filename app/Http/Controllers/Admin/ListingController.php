@@ -261,9 +261,13 @@ class ListingController extends Controller
      */
     public function destroy(string $id)
     {
-        $listing = Listing::findOrFail($id);
-        $listing->delete();
+        try {
+            Listing::findOrFail($id)->delete();
 
-        return response(['status' => 'success', 'message' => 'Item deleted Successfuly!']);
+            return response(['status' => 'success', 'message' => 'Deleted successfully!']);
+        } catch (\Exception $e) {
+            logger($e);
+            return response(['status' => 'error', 'message' => $e->getMessage()]);
+        }
     }
 }
