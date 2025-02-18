@@ -1,0 +1,69 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\PractitionerStoreRequest;
+use App\Http\Requests\Admin\PractitionerUpdateRequest;
+use App\Models\Practitioner;
+use Auth;
+use Illuminate\Http\Request;
+use Str;
+
+class PractitionerController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $practitioners = Practitioner::all();
+
+        if ($practitioners->isEmpty()) {
+            return response()->json(['message' => 'No practitioners found'], 404);
+        }
+
+        return response()->json($practitioners);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(PractitionerStoreRequest $request)
+    {
+        $practitioner = new Practitioner();
+        $practitioner->user_id = Auth::user()->id;
+        $practitioner->slug = Str::slug($request->name);
+        $practitioner->name = $request->name;
+        $practitioner->qualification = $request->qualification;
+        $practitioner->certificate = $request->certificate;
+        $practitioner->save();
+        return response()->json(['success' => 'Practitioner created successfully'], 200);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(PractitionerUpdateRequest $request, string $id)
+    {
+        $practitioner = Practitioner::findOrFail($id);
+        $practitioner->name = $request->name;
+        $practitioner->qualification = $request->qualification;
+        $practitioner->certificate = $request->certificate;
+        $practitioner->save();
+        return response()->json(['success' => 'Practitioner Updated Successfully'], 200);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        $practitioner = Practitioner::findOrFail($id);
+
+        // Delete the practitioner
+        $practitioner->delete();
+
+        return response()->json(['success' => 'Practitioner deleted successfully!'], 200);
+    }
+}

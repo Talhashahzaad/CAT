@@ -199,13 +199,28 @@
                                     <label for="">Google Map Embed Code <span class="text-danger">*</span></label>
                                     <textarea name="google_map_embed_code" class="form-control">{!! $listing->google_map_embed_code !!}</textarea>
                                 </div>
-                                <div class="form-group">
-                                    <label>Tags</label>
-                                    <select class="form-control select2 listingtag" multiple="" name="tag[]">
-                                        @foreach ($tags as $tag)
-                                            <option value="{{ $tag->id }}">{{ $tag->name }}</option>
-                                        @endforeach
-                                    </select>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Tags</label>
+                                            <select class="form-control select2 listingtag" multiple=""
+                                                name="tag[]">
+                                                @foreach ($tags as $tag)
+                                                    <option value="{{ $tag->id }}">{{ $tag->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Service Booking Capacity</label>
+                                            <input type="text" class="form-control" name="service_capacity"
+                                                value="{{ $listing->service_capacity }}" pattern="\d*"
+                                                title="Please enter a positive number"
+                                                oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="">SEO Title <span class="text-danger">*</span></label>

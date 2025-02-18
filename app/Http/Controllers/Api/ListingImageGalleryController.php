@@ -1,27 +1,31 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Listing;
+use App\Models\ListingImageGallery;
 use App\Traits\FileUploadTrait;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
-use App\Models\ListingImageGallery;
-use Illuminate\Http\Response;
 
 class ListingImageGalleryController extends Controller
 {
     use FileUploadTrait;
-
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): View
+    public function index(Request $request)
     {
-        $images = ListingImageGallery::where('listing_id', $request->id)->get();
+        $images = ListingImageGallery::where('listing_id', $request->id)->select('id', 'image_path')->get();
         $listingTitle = Listing::select('title')->where('id', $request->id)->first();
-        return view('admin.listing.listing-image-gallery.index', compact('images', 'listingTitle'));
+        if ($images->isEmpty()) {
+            return response()->json(['message' => 'No images found'], 404);
+        }
+        // Return the images and listing title if found
+        return response()->json([
+            'title' => $listingTitle->title,
+            'images' => $images
+        ]);
     }
 
     /**
@@ -29,7 +33,6 @@ class ListingImageGalleryController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
         $request->validate([
             'images' => ['required'],
             'images.*' => ['image', 'max:3000'],
@@ -42,7 +45,7 @@ class ListingImageGalleryController extends Controller
 
         // Check if $imagePath contains an error
         if (isset($imagePath['error'])) {
-            return redirect()->back()->withErrors(['images' => $imagePath['error']]);
+            return response()->json(['error' => $imagePath['error']], 422); // Return error as JSON
         }
         foreach ($imagePath as $path) {
             $image =  new ListingImageGallery();
@@ -51,24 +54,22 @@ class ListingImageGalleryController extends Controller
             $image->save();
         }
 
-
-        toastr()->success('Uploaded Successfully');
-        return redirect()->back();
+        return response()->json(['message' => 'Images uploaded successfully'], 201); // Return success message
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id): Response
+    public function destroy(string $id)
     {
         try {
             $image = ListingImageGallery::findOrFail($id);
             $this->deleteFile($image->image);
             $image->delete();
 
-            return response(['status' => 'success', 'message' => 'Deleted Successfully!']);
+            return response()->json(['status' => 'success', 'message' => 'Deleted Successfully!'], 200);
         } catch (\Exception $e) {
-            return response(['status' => 'error', 'message' => 'An error occurred: ' . $e->getMessage()], 500);
+            return response()->json(['status' => 'error', 'message' => 'An error occurred: ' . $e->getMessage()], 500);
         }
     }
 }

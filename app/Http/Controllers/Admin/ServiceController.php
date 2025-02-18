@@ -9,6 +9,7 @@ use App\Http\Requests\Admin\ServiceUpdateRequest;
 use App\Models\Category;
 use App\Models\ServicePriceVariant;
 use App\Models\Service;
+use Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -24,7 +25,7 @@ class ServiceController extends Controller
      */
     public function index(ServiceDataTable $dataTable): View | JsonResponse
     {
-        return $dataTable->render('admin.service.index' );
+        return $dataTable->render('admin.service.index');
     }
 
     /**
@@ -33,7 +34,7 @@ class ServiceController extends Controller
     public function create(): View
     {
         $category =  Category::all();
-        return view('admin.service.create',compact('category'));
+        return view('admin.service.create', compact('category'));
     }
 
 
@@ -57,6 +58,7 @@ class ServiceController extends Controller
         }
 
         $service = new Service();
+        $service->user_id = Auth::user()->id;
         $service->name = $validatedData['name'];
         $service->status = $validatedData['status'];
         $service->total_price = $totalPrice; // Store the calculated total price
@@ -91,7 +93,7 @@ class ServiceController extends Controller
         $category =  Category::all();
         // Add this line for debugging
         // dd($service->toArray());
-        return view('admin.service.edit', compact('service','category'));
+        return view('admin.service.edit', compact('service', 'category'));
     }
 
     /**

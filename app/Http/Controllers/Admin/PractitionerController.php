@@ -8,6 +8,7 @@ use App\Http\Requests\Admin\PractitionerStoreRequest;
 use App\Http\Requests\Admin\PractitionerUpdateRequest;
 use App\Models\Practitioner;
 use App\Models\ProfessionalCertificate;
+use Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -39,7 +40,7 @@ class PractitionerController extends Controller
     public function store(PractitionerStoreRequest $request): RedirectResponse
     {
         $practitioner = new Practitioner();
-        $practitioner->user_id = auth()->user()->id;
+        $practitioner->user_id = Auth::user()->id;
         $practitioner->slug = Str::slug($request->name);
         $practitioner->name = $request->name;
         $practitioner->qualification = $request->qualification;

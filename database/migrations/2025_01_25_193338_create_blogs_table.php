@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('image');
             $table->foreignId('blog_category_id')->constrained('blog_categories')->onDelete('cascade');
+            $table->foreignId('author_id');
             $table->string('title');
             $table->string('views')->default(0);
             $table->string('slug');

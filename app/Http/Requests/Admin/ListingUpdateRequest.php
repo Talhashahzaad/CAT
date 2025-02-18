@@ -30,6 +30,7 @@ class ListingUpdateRequest extends FormRequest
             'youtube_link' => ['nullable'],
             'attachment' => ['nullable', 'mimes:png,jpg,csv,pdf,jpeg', 'max:10000'],
             'tag.*' => ['nullable', 'integer'],
+            'service_capacity' => ['required'],
             'description' => ['required'],
             'google_map_embed_code' => ['nullable'],
             'seo_title' => ['nullable', 'string', 'max:255'],

@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('phone');
             $table->string('email');
             $table->string('address');
+            $table->string('service_capacity');
             $table->text('website')->nullable();
             $table->text('facebook_link')->nullable();
             $table->text('tiktok_link')->nullable();

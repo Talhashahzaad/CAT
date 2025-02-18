@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class PractitionerUpdateRequest extends FormRequest
 {
@@ -19,7 +21,17 @@ class PractitionerUpdateRequest extends FormRequest
             'name' => 'required|string|max:255',
             'qualification' => 'nullable|string',
             'certificate' => 'nullable|string',
-            'practitioner_consent_checkbox' => 'required',
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(
+            response()->json([
+                'success' => false,
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 422)
+        );
     }
 }

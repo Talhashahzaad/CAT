@@ -15,6 +15,7 @@ use App\Models\PackageServiceVariant;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 use App\Http\Requests\Admin\PackageUpdateRequest;
+use Auth;
 
 class PackageController extends Controller
 {
@@ -46,6 +47,7 @@ class PackageController extends Controller
 
         // Create the package
         $package = new Package();
+        $package->user_id = Auth::user()->id;
         $package->name = $validated['name'];
         $package->slug = Str::slug($validated['name']);
         $package->status = $validated['status'];
