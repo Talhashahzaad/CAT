@@ -21,7 +21,7 @@ class LocationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(LocationDataTable $dataTable) : View | JsonResponse
+    public function index(LocationDataTable $dataTable): View | JsonResponse
     {
         return $dataTable->render('admin.location.index');
     }
@@ -29,10 +29,9 @@ class LocationController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create() :View
+    public function create(): View
     {
         return View('admin.location.create');
-
     }
 
     /**
@@ -66,7 +65,7 @@ class LocationController extends Controller
     {
         $locations = Location::all();
         $location = Location::findOrFail($id);
-        return view('admin.location.edit',compact('location','locations'));
+        return view('admin.location.edit', compact('location', 'locations'));
     }
 
     /**
@@ -75,11 +74,11 @@ class LocationController extends Controller
     public function update(LocationUpdateRequest $request, string $id): RedirectResponse
     {
 
-        $locationPath = $this->uploadImage($request, 'location_image',$request->old_image);
+        $locationPath = $this->uploadImage($request, 'location_image', $request->old_image);
 
         $location = Location::findOrFail($id);
         $location->name = $request->name;
-        $location->location_image = !empty($locationPath) ? $locationPath: $request->old_image;
+        $location->location_image = !empty($locationPath) ? $locationPath : $request->old_image;
         $location->show_at_home = $request->show_at_home;
         $location->status = $request->status;
         $location->parent_location = $request->parent_location;
@@ -90,7 +89,6 @@ class LocationController extends Controller
         toastr()->success('Updated Successfully');
 
         return to_route('admin.location.index');
-
     }
 
     /**
@@ -103,6 +101,6 @@ class LocationController extends Controller
 
         $location->delete();
 
-        return response(['status' => 'success', 'message' => 'Item deleted Successfuly!']);
+        return response(['status' => 'success', 'message' => 'Item deleted Successfully!']);
     }
 }

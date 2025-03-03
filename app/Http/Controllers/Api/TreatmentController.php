@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ServiceStoreRequest;
+use App\Http\Requests\Admin\ServiceUpdateRequest;
 use App\Models\Service;
 use Auth;
 use Illuminate\Http\Request;
@@ -71,9 +72,61 @@ class TreatmentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ServiceUpdateRequest $request, string $id)
     {
-        //
+        $service = Service::findOrFail($id);
+
+        // Update service details
+        $service->update([
+            'name' => $request->name,
+            'status' => $request->status,
+            'category' => $request->category,
+            'service_type' => $request->service_type,
+            'slug' => Str::slug($request->name),
+            'description' => $request->description,
+        ]);
+
+        // Decode the price JSON from the request
+        $prices = json_decode($request->price, true);
+
+        // Calculate total price and update variants
+        $totalPrice = 0;
+
+        foreach ($prices as $priceData) {
+            $variantId = $priceData['id'] ?? null;
+            $price = $priceData['type'] !== 'Free' ? floatval($priceData['price']) : 0;
+            $totalPrice += $price;
+
+            $variantData = [
+                'name' => $priceData['name'],
+                'description' => $priceData['description'],
+                'duration' => $priceData['duration'],
+                'price_type' => $priceData['type'],
+                'price' => $price,
+            ];
+
+            if ($variantId) {
+                // Update existing variant
+                $service->priceVariants()->where('id', $variantId)->update($variantData);
+            } else {
+                // Create new variant
+                $service->priceVariants()->create($variantData);
+            }
+        }
+
+        // Update total price
+        $service->update(['total_price' => $totalPrice]);
+
+        // Remove variants that are not in the updated data
+        $updatedVariantIds = array_column($prices, 'id');
+        $service->priceVariants()
+            ->whereNotIn('id', $updatedVariantIds)
+            ->delete();
+
+        // Return success message
+        return response()->json([
+            'message' => 'Treatment updated successfully'
+        ], 200);
     }
 
     /**

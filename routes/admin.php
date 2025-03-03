@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ListingController;
 use App\Http\Controllers\Admin\ListingImageGalleryController;
+use App\Http\Controllers\Admin\ListingPackageController;
 use App\Http\Controllers\Admin\ListingScheduleController;
 use App\Http\Controllers\Admin\ListingVideoGalleryController;
 use App\Http\Controllers\Admin\LocationController;
@@ -88,4 +89,8 @@ Route::group([
     /** Blog Route*/
     Route::resource('/blog-category', BlogCategoryController::class);
     Route::resource('/blog', BlogController::class);
+
+    /**Listing Packages Route */
+
+    Route::resource('/listing-package', ListingPackageController::class);
 });

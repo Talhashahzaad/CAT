@@ -179,6 +179,7 @@ namespace App\Models{
  * @property string $phone
  * @property string $email
  * @property string $address
+ * @property string $service_capacity
  * @property string|null $website
  * @property string|null $facebook_link
  * @property string|null $tiktok_link
@@ -225,6 +226,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Listing wherePhone($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Listing whereSeoDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Listing whereSeoTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Listing whereServiceCapacity($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Listing whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Listing whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Listing whereThumbnailImage($value)
@@ -314,6 +316,53 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ListingImageGallery whereUpdatedAt($value)
  */
 	class ListingImageGallery extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string $type
+ * @property string $name
+ * @property float $price
+ * @property int $status
+ * @property int $number_of_days
+ * @property int $num_of_listing
+ * @property int $cat_ecommarce
+ * @property int $cat_pro_social_media
+ * @property int $social_media_post
+ * @property int $live_chat
+ * @property int $multiple_locations
+ * @property int $featured_listing
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\TFactory|null $use_factory
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ListingPackage newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ListingPackage newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ListingPackage onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ListingPackage query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ListingPackage whereCatEcommarce($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ListingPackage whereCatProSocialMedia($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ListingPackage whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ListingPackage whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ListingPackage whereFeaturedListing($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ListingPackage whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ListingPackage whereLiveChat($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ListingPackage whereMultipleLocations($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ListingPackage whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ListingPackage whereNumOfListing($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ListingPackage whereNumberOfDays($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ListingPackage wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ListingPackage whereSocialMediaPost($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ListingPackage whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ListingPackage whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ListingPackage whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ListingPackage withTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ListingPackage withoutTrashed()
+ */
+	class ListingPackage extends \Eloquent {}
 }
 
 namespace App\Models{
@@ -443,6 +492,7 @@ namespace App\Models{
  * 
  *
  * @property int $id
+ * @property string $user_id
  * @property string $name
  * @property string $slug
  * @property bool $status
@@ -476,6 +526,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Package whereTotalPrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Package whereTotalTime($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Package whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Package whereUserId($value)
  */
 	class Package extends \Eloquent {}
 }
@@ -570,6 +621,7 @@ namespace App\Models{
  * 
  *
  * @property int $id
+ * @property string $user_id
  * @property string $name
  * @property string $slug
  * @property int $status
@@ -595,6 +647,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Service whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Service whereTotalPrice($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Service whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Service whereUserId($value)
  */
 	class Service extends \Eloquent {}
 }
@@ -672,6 +725,13 @@ namespace App\Models{
  * @property string $email
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
+ * @property string|null $heard_about_options
+ * @property string|null $treatment_categories
+ * @property string|null $business_location
+ * @property string|null $business_size
+ * @property string|null $premises_count
+ * @property string|null $main_location
+ * @property string|null $age_group
  * @property string|null $google_id
  * @property string|null $facebook_id
  * @property string|null $facebook_token
@@ -699,8 +759,11 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereAbout($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereAddress($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereAgeGroup($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereAvatar($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereBanner($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereBusinessLocation($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereBusinessSize($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmailVerifiedAt($value)
@@ -708,15 +771,19 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereFacebookToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereFbLink($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereGoogleId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereHeardAboutOptions($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereIgLink($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereMainLocation($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePassword($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePhone($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePremisesCount($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereProfilePicture($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRole($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereTreatmentCategories($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereTtLink($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereWebsite($value)

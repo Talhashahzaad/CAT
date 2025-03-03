@@ -207,7 +207,7 @@
 
                 </ul>
             </li>
-            {{-- 
+            {{--
             <li class="{{ setSidebarActive(['admin.dashboard.index']) }}"><a
                     href="{{ route('admin.dashboard.index') }}" class="nav-link"><i class="far fa-file-alt"></i>
                     <span>Contact Form</span></a></li> --}}
@@ -228,6 +228,15 @@
                             href="{{ route('admin.blog.index') }}">Blog</a></li>
                     <li class="{{ setSidebarActive(['admin.blog-category.*']) }}"><a class="nav-link"
                             href="{{ route('admin.blog-category.index') }}">Category</a></li>
+                </ul>
+            </li>
+            <li class="dropdown {{ setSidebarActive(['admin.listing-package.*']) }}">
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
+                        class="fas fa-dollar-sign"></i>
+                    <span>Manage Packages</span></a>
+                <ul class="dropdown-menu">
+                    <li class="{{ setSidebarActive(['admin.listing-package.*']) }}"><a class="nav-link"
+                            href="{{ route('admin.listing-package.index') }}">Packages</a></li>
                 </ul>
             </li>
             <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Blank

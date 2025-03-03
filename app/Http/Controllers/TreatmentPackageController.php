@@ -1,46 +1,35 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\DataTables\PackageDataTable;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\PackageStoreRequest;
-use App\Models\Category;
-use App\Models\Service;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
+use App\Http\Requests\Admin\PackageUpdateRequest;
 use App\Models\Package;
 use App\Models\PackageServiceVariant;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Str;
-use App\Http\Requests\Admin\PackageUpdateRequest;
 use Auth;
+use Illuminate\Http\Request;
+use Str;
 
-class PackageController extends Controller
+class TreatmentPackageController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(PackageDataTable $dataTable): View | JsonResponse
+    public function index()
     {
-        return $dataTable->render('admin.package.index');
-    }
+        $package = Package::all();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(): View
-    {
-        $services = Service::with('priceVariants')->get();
-        $category = Category::all();
-        return view('admin.package.create', compact('services', 'category'));
+        if ($package->isEmpty()) {
+            return response()->json([
+                'message' => 'No package found'
+            ], 404);
+        }
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(PackageStoreRequest $request): RedirectResponse
+    public function store(PackageStoreRequest $request)
     {
         // dd($request->all());
         $validated = $request->validated();
@@ -72,34 +61,17 @@ class PackageController extends Controller
             $packageServiceVariant->save();
         }
 
-        toastr()->success('Created Successfully');
-
-        return to_route('admin.package.index');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id): View
-    {
-        $package = Package::with('packageServiceVariants')->findOrFail($id);
-        $categories = Category::all();
-        $services = Service::with('priceVariants')->get();
-        return view('admin.package.edit', compact('package', 'categories', 'services'));
+        // Return a success response
+        return response()->json([
+            'message' => 'Package created successfully',
+            'package' => $package // Optionally return the created package
+        ], 201);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(PackageUpdateRequest $request, string $id): RedirectResponse
+    public function update(PackageUpdateRequest $request, string $id)
     {
         $validated = $request->validated();
 
@@ -147,9 +119,7 @@ class PackageController extends Controller
         $variantsToDelete = array_diff($existingVariants, $updatedVariantIds);
         PackageServiceVariant::destroy($variantsToDelete);
 
-        toastr()->success('Updated Successfully');
-
-        return to_route('admin.package.index');
+        return response()->json(['status' => 'success', 'message' => 'Updated Successfully', 'data' => $package]);
     }
 
     /**
@@ -165,6 +135,11 @@ class PackageController extends Controller
         // Delete the package
         $package->delete();
 
-        return response(['status' => 'success', 'message' => 'Package deleted successfully!']);
+        // Updated response for API
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Package deleted successfully!',
+            'data' => null // Optional: include data if needed
+        ], 200);
     }
 }

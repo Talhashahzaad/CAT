@@ -48,6 +48,12 @@ Route::post('login', [AuthController::class, 'login']);
 
 /** Blog Route */
 Route::get('blog/{slug}', [FrontendController::class, 'blogShow']);
+Route::get('blog', [FrontendController::class, 'blog']);
+Route::get('blog-category', [FrontendController::class, 'blogCategory']);
+
+/**Listing Package Route */
+
+Route::get('listing-packages', [FrontendController::class, 'listingPackage']);
 
 /** Contact Route */
 Route::post('contact-store', [ContactController::class, 'store']);
