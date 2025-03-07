@@ -16,7 +16,7 @@ class FrontendController extends Controller
         $blog = Blog::where(['slug' => $slug, 'status' => 1])->firstOrFail();
 
         // If the blog doesn't exist, return a 404 error
-        if ($blog->isEmpty()) {
+        if ($blog === null) {
             return response()->json(['error' => 'Blog not found'], 404);
         }
         return response()->json($blog);
@@ -24,7 +24,9 @@ class FrontendController extends Controller
 
     public function blog()
     {
-        $blog = Blog::where('status', 1)->get();
+        $blog = Blog::with('user')->where('status', 1)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         // If the blog doesn't exist, return a 404 error
         if ($blog->isEmpty()) {
@@ -43,17 +45,6 @@ class FrontendController extends Controller
         return response()->json($category);
     }
 
-    // public function blogCategory()
-    // {
-    //     dd('Reached blogCategory method');
-
-    //     if (!BlogCategory::where('status', 1)->exists()) {
-    //         return response()->json(['error' => 'Blog Category not Available'], 404);
-    //     }
-
-    //     $category = BlogCategory::where('status', 1)->get();
-    //     return response()->json($category);
-    // }
 
 
 

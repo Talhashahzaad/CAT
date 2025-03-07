@@ -119,6 +119,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\TFactory|null $use_factory
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Category> $users
+ * @property-read int|null $users_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Category newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Category newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Category query()
@@ -726,7 +728,6 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
  * @property string|null $heard_about_options
- * @property string|null $treatment_categories
  * @property string|null $business_location
  * @property string|null $business_size
  * @property string|null $premises_count
@@ -748,6 +749,8 @@ namespace App\Models{
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Category> $categories
+ * @property-read int|null $categories_count
  * @property-read \App\Models\TFactory|null $use_factory
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
@@ -783,12 +786,32 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRole($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereStatus($value)
- * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereTreatmentCategories($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereTtLink($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereWebsite($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereYtLink($value)
  */
 	class User extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property int $user_id
+ * @property int $category_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserBusinessCategory newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserBusinessCategory newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserBusinessCategory query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserBusinessCategory whereCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserBusinessCategory whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserBusinessCategory whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserBusinessCategory whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|UserBusinessCategory whereUserId($value)
+ */
+	class UserBusinessCategory extends \Eloquent {}
 }
 

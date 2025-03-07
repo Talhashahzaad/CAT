@@ -19,7 +19,7 @@ class ServiceStoreRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'status' => 'required|boolean',
-            'category' => 'required|string|max:255',
+            'category' => 'required|max:255',
             'service_type' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'duration' => 'required|array',

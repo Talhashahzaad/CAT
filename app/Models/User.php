@@ -22,6 +22,12 @@ class User extends Authenticatable
         'email',
         'password',
         'facebook_id',
+        'role',
+        'heard_about_options',
+        'business_location',
+        'business_size',
+        'premises_count',
+        'phone'
     ];
 
     /**
@@ -45,5 +51,9 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'user_business_categories');
     }
 }

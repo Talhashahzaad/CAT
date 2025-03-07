@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->after('password', function (Blueprint $table) {
                 $table->string('heard_about_options')->nullable();
-                $table->string('treatment_categories')->nullable();
                 $table->string('business_location')->nullable();
                 $table->string('business_size')->nullable();
                 $table->string('premises_count')->nullable();
