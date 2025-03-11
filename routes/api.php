@@ -10,14 +10,15 @@ use App\Http\Controllers\Api\TreatmentController;
 use Illuminate\Support\Facades\Route;
 
 
-
-Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
-
+Route::middleware(['auth:sanctum'])->group(function () {
     /**Auth Route */
     Route::get('user-profile', [ProfileController::class, 'index']);
     Route::post('user-profile-update', [ProfileController::class, 'update']);
     Route::post('user-password-update', [ProfileController::class, 'passwordUpdate']);
     Route::post('logout', [AuthController::class, 'logout']);
+});
+
+Route::middleware(['auth:sanctum', 'role:agent,admin'])->group(function () {
 
     /**Listing Route */
     Route::post('listing-store', [ListingController::class, 'store']);

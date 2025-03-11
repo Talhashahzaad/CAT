@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
             $table->string('user_id');
-            $table->string('name');
+            $table->string('name')->default('service');
             $table->string('slug');
             $table->string('status');
             $table->string('category');
