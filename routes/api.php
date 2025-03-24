@@ -54,3 +54,7 @@ Route::get('listing-packages', [FrontendController::class, 'listingPackage']);
 
 /** Contact Route */
 Route::post('contact-store', [ContactController::class, 'store']);
+
+/** Category Route */
+
+Route::get('category', [FrontendController::class, 'category'])->name('category');

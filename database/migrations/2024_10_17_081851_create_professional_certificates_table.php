@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('professional_certificates', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
+            $table->string('user_id');
             $table->string('name');
             $table->string('slug');
             $table->text('description')->nullable();

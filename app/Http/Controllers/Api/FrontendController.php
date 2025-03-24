@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
 use App\Models\BlogCategory;
+use App\Models\Category;
 use App\Models\ListingPackage;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -54,5 +55,14 @@ class FrontendController extends Controller
         }
 
         return response()->json($package);
+    }
+
+    public function category()
+    {
+        $category = Category::where('status', 1)->get();
+        if ($category->count() === 0) {
+            return response()->json(['error' => 'No Category Found!'], 404);
+        }
+        return response()->json($category);
     }
 }

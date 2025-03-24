@@ -40,13 +40,13 @@ class ProfessionalCertificateController extends Controller
 
         $validated = $request->validated();
 
-        // Create the package
-        $package = new ProfessionalCertificate();
-        $package->name = $validated['name'];
-        $package->user_id = Auth::user()->id;
-        $package->slug = Str::slug($validated['name']);
-        $package->description = $validated['description'];
-        $package->save();
+        // Create the certificate
+        $certificate = new ProfessionalCertificate();
+        $certificate->name = $validated['name'];
+        $certificate->user_id = Auth::user()->id;
+        $certificate->slug = Str::slug($validated['name']);
+        $certificate->description = $validated['description'];
+        $certificate->save();
         toastr()->success('Created Successfully');
         return redirect()->route('admin.certificate.index');
     }
@@ -70,6 +70,7 @@ class ProfessionalCertificateController extends Controller
 
         $validated = $request->validated();
         $certificate->name = $validated['name'];
+        $certificate->slug = Str::slug($validated['name']);
         $certificate->description = $validated['description'];
         $certificate->save();
         toastr()->success('Updated Successfully');

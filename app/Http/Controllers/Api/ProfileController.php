@@ -18,7 +18,7 @@ class ProfileController extends Controller
 {
     //
 
-    use ChecksOwnership;
+
     use FileUploadTrait;
 
     public function index(Request $request)
