@@ -3,33 +3,60 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\ListingStoreRequest;
-use App\Http\Requests\Admin\ListingUpdateRequest;
-use App\Http\Requests\Admin\PractitionerStoreRequest;
-use App\Models\Amenity;
-use App\Models\Category;
+use App\Http\Requests\Api\ListingStoreApiRequest;
+use App\Http\Requests\Api\ListingUpdateApiRequest;
 use App\Models\Listing;
 use App\Models\ListingAmenity;
-use App\Models\ListingCategory;
 use App\Models\ListingCertificate;
 use App\Models\ListingPractitioner;
 use App\Models\ListingTag;
-use App\Models\Location;
-use App\Models\Practitioner;
-use App\Models\ProfessionalCertificate;
-use App\Models\Tag;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
 use App\Traits\FileUploadTrait;
 use Auth;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Str;
 
 class ListingController extends Controller
 {
+
     use FileUploadTrait;
-    public function store(ListingStoreRequest $request)
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'User not authenticated'
+            ], 401);
+        }
+
+        $listing = Listing::with('Category')->with('Practitioner')->with('Location')->with('User')
+            ->where('status', 1)
+            ->where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        if ($listing->isEmpty()) {
+            return response()->json([
+                'message' => 'No treatment found'
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'All Listing Data.',
+            'treatment' => $listing
+        ], 200);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(ListingStoreApiRequest $request)
     {
 
         $imagePath = $this->uploadImage($request, 'image');
@@ -54,6 +81,7 @@ class ListingController extends Controller
         $listing->website = $request->website;
         $listing->facebook_link = $request->facebook_link;
         $listing->tiktok_link = $request->tiktok_link;
+        $listing->service_capacity = $request->service_capacity;
         $listing->instagram_link = $request->instagram_link;
         $listing->youtube_link = $request->youtube_link;
         $listing->is_verified = $request->is_verified;
@@ -104,18 +132,130 @@ class ListingController extends Controller
             $practitioner->save();
         }
 
-        return response()->json(['success' => 'Listing created successfully'], 200);
+        return response()->json(['success' => true, 'success' => 'Listing created successfully', 'data' => $listing], 200);
     }
 
-    public function storePractitioner(PractitionerStoreRequest $request)
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(ListingUpdateApiRequest $request, $id)
     {
-        $practitioner = new Practitioner();
-        $practitioner->user_id = Auth::user()->id;
-        $practitioner->slug = Str::slug($request->name);
-        $practitioner->name = $request->name;
-        $practitioner->qualification = $request->qualification;
-        $practitioner->certificate = $request->certificate;
-        $practitioner->save();
-        return response()->json(['success' => 'Practitioner created successfully'], 200);
+        $user = Auth::user();
+        $listing = Listing::find($id);
+        if ($listing->user_id != $user->id) {
+            return response()->json(['message' => 'You are not authorized to perform this action.'], 403);
+        }
+        if (!$listing) {
+            return response()->json(['error' => 'Listing not found'], 404);
+        }
+
+        // Handle image uploads (only update if a new file is provided)
+        $imagePath = $request->hasFile('image') ? $this->uploadImage($request, 'image') : $listing->image;
+        $thumbnailPath = $request->hasFile('thumbnail_image') ? $this->uploadImage($request, 'thumbnail_image') : $listing->thumbnail_image;
+        $attachmentPath = $request->hasFile('attachment') ? $this->uploadImage($request, 'attachment') : $listing->file;
+
+        // Manually update fields
+        $listing->title = $request->title;
+        $listing->category_id = $request->category;
+        $listing->location_id = $request->location;
+        $listing->description = $request->description;
+        $listing->status = $request->status;
+        $listing->slug = Str::slug($request->title);
+        $listing->phone = $request->phone;
+        $listing->email = $request->email;
+        $listing->address = $request->address;
+        $listing->website = $request->website;
+        $listing->facebook_link = $request->facebook_link;
+        $listing->instagram_link = $request->instagram_link;
+        $listing->tiktok_link = $request->tiktok_link;
+        $listing->youtube_link = $request->youtube_link;
+        $listing->is_verified = $request->is_verified;
+        $listing->is_featured = $request->is_featured;
+        $listing->seo_title = $request->seo_title;
+        $listing->seo_description = $request->seo_description;
+        $listing->google_map_embed_code = $request->google_map_embed_code;
+        $listing->image = $imagePath;
+        $listing->thumbnail_image = $thumbnailPath;
+        $listing->file = $attachmentPath;
+
+        $listing->save(); // Ensure the data is saved
+
+        ListingAmenity::where('listing_id', $listing->id)->delete();
+
+        /** amenity store */
+        foreach ($request->amenities as $amenityId) {
+            $amenity = new ListingAmenity();
+            $amenity->listing_id = $listing->id;
+            $amenity->amenity_id = $amenityId;
+            $amenity->save();
+        }
+
+        // Remove previous professional certificates
+        ListingCertificate::where('listing_id', $listing->id)->delete();
+
+        /** professional certificate store */
+        foreach ($request->professional_certificates as $certificateId) {
+            $amenity = new ListingCertificate();
+            $amenity->listing_id = $listing->id;
+            $amenity->certificates_id = $certificateId;
+            $amenity->save();
+        }
+
+        // Remove previous tags
+        ListingTag::where('listing_id', $listing->id)->delete();
+
+        /** Tag store */
+        foreach ($request->tag as $tagId) {
+            $amenity = new ListingTag();
+            $amenity->listing_id = $listing->id;
+            $amenity->tag_id = $tagId;
+            $amenity->save();
+        }
+
+        // Remove previous practitioners
+        ListingPractitioner::where('listing_id', $listing->id)->delete();
+
+        /** Practitioner store */
+        foreach ($request->practitioner as $practitionerId) {
+            $amenity = new ListingPractitioner();
+            $amenity->listing_id = $listing->id;
+            $amenity->practitioner_id = $practitionerId;
+            $amenity->save();
+        }
+
+        // Debugging log
+        \Log::info('Updated Listing:', $listing->toArray());
+
+        return response()->json(['success' => true, 'message' => 'Listing updated successfully', 'data' => $listing->fresh()]);
+    }
+
+
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        try {
+            $user = Auth::user();
+            $listing = Listing::findOrFail($id);
+            if ($listing->user_id != $user->id) {
+                return response()->json(['message' => 'You are not authorized to perform this action.'], 403);
+            }
+            // Delete all related data before deleting the listing
+            $listing->listingAmenities()->delete();
+            $listing->listingTags()->delete();
+            $listing->listingCertificates()->delete();
+            $listing->listingPractitioners()->delete();
+
+            // Now delete the listing itself
+            $listing->delete();
+
+            return response()->json(['status' => 'success', 'message' => 'Listing and related data deleted successfully!']);
+        } catch (\Exception $e) {
+            \Log::error($e);
+            return response()->json(['status' => 'error', 'message' => 'Failed to delete listing: ' . $e->getMessage()]);
+        }
     }
 }

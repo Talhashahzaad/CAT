@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\ProfessionalCertificateStoreRequest;
 use App\Http\Requests\Admin\ProfessionalCertificateUpdateRequest;
 use App\Models\ProfessionalCertificate;
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Http\JsonResponse;
@@ -42,6 +43,7 @@ class ProfessionalCertificateController extends Controller
         // Create the package
         $package = new ProfessionalCertificate();
         $package->name = $validated['name'];
+        $package->user_id = Auth::user()->id;
         $package->slug = Str::slug($validated['name']);
         $package->description = $validated['description'];
         $package->save();

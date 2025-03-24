@@ -20,6 +20,12 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('heard_about_options')->nullable();
+            $table->string('business_location')->nullable();
+            $table->string('business_size')->nullable();
+            $table->string('premises_count')->nullable();
+            $table->string('main_location')->nullable();
+            $table->string('age_group')->nullable();
             $table->string('google_id')->nullable();
             $table->string('facebook_id')->nullable(); // Store the Facebook user ID
             $table->string('facebook_token')->nullable(); // Store the Facebook access token

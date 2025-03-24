@@ -35,7 +35,7 @@ class Package extends Model
 
     public function packageServiceVariants()
     {
-        return $this->hasMany(PackageServiceVariant::class);
+        return $this->hasMany(PackageServiceVariant::class, 'package_id');
     }
 
     public function services(): BelongsToMany

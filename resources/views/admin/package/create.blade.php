@@ -175,7 +175,7 @@
                                     data-service-duration="{{ $variant->duration }}">
                                     <strong>{{ $service->name }}</strong> - {{ $variant->name }}
                                     <br>
-                                    <small>
+                                    {{-- <small>
                                         @if (floor($variant->duration / 60) == 0)
                                             {{ $variant->duration }}min
                                         @elseif($variant->duration % 60 == 0)
@@ -188,6 +188,32 @@
                                             Free
                                         @else
                                             ₹{{ $variant->price }}
+                                        @endif
+                                    </small> --}}
+                                    <small>
+                                        @php
+                                            $duration = $variant->duration;
+                                            $price = $variant->price;
+                                        @endphp
+
+                                        @if (is_numeric($duration))
+                                            @if (floor($duration / 60) == 0)
+                                                {{ $duration }}min
+                                            @elseif($duration % 60 == 0)
+                                                {{ floor($duration / 60) }}h
+                                            @else
+                                                {{ floor($duration / 60) }}h {{ $duration % 60 }}min
+                                            @endif
+                                        @else
+                                            Invalid duration
+                                        @endif
+                                        -
+                                        @if ($price === null || $price === 'free')
+                                            Free
+                                        @elseif (is_numeric($price))
+                                            ₹{{ $price }}
+                                        @else
+                                            Invalid price
                                         @endif
                                     </small>
                                 </li>

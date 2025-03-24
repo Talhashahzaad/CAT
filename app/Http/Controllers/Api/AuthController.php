@@ -60,7 +60,7 @@ class AuthController extends Controller
         }
         return response()->json([
             'status' => true,
-            'message' => 'User created successfully',
+            'message' => $user->role . ' created successfully',
             'user' => $user,
 
         ], 200);
@@ -95,6 +95,7 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'role' => 'user',
             'password' => $request->password,
             'heard_about_options' => $request->heard_about_options,
             'main_location' => $request->main_location,
@@ -105,7 +106,7 @@ class AuthController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'User created successfully',
+            'message' => $user->role . ' created successfully',
             'user' => $user,
 
         ], 200);
@@ -132,10 +133,11 @@ class AuthController extends Controller
         }
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $authUser = Auth::user();
+            $role = Auth::user()->role;
 
             return response()->json([
                 'status' => true,
-                'message' => 'User Logged in successfully',
+                'message' => $role . ' Logged in successfully',
                 'token' => $authUser->createToken("API Token")->plainTextToken,
                 'token_type' => 'Bearer',
             ], 200);

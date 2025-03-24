@@ -156,7 +156,7 @@
                 </a>
                 <div class="dropdown-divider"></div>
 
-                <form method="POST" action="{{ route('logout') }}">
+                <form method="POST" action="{{ route('admin.logout') }}">
                     @csrf
                     <a href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();"
                         class="dropdown-item has-icon text-danger">

@@ -4,6 +4,8 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Validation\Rule;
+use Auth;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class PractitionerStoreRequest extends FormRequest
@@ -17,7 +19,14 @@ class PractitionerStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
+            'name' =>  [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('practitioners', 'name')->where(function ($query) {
+                    return $query->where('user_id', Auth::id());
+                })->ignore($this->route('id'))
+            ],
             'qualification' => 'nullable|string',
             'certificate' => 'nullable|string',
         ];

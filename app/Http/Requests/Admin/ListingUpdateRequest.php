@@ -23,6 +23,7 @@ class ListingUpdateRequest extends FormRequest
             'address' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
+            'service_capacity' => ['nullable'],
             'website' => ['nullable'],
             'facebook_link' => ['nullable'],
             'instagram_link' => ['nullable'],

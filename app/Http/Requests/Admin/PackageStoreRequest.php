@@ -41,5 +41,34 @@ class PackageStoreRequest extends FormRequest
             'discount_percentage' => 'nullable|string',
             'available_for' => 'required',
         ];
+
+
+        // 'name' => [
+        //     'required',
+        //     'string',
+        //     'max:255',
+        //     Rule::unique('packages', 'name')->where(function ($query) {
+        //         return $query->where('user_id', Auth::id());
+        //     })->ignore($this->route('id'))
+        // ],
+        // 'status' => 'required|in:0,1',
+        // 'category' => 'required',
+        // 'description' => 'nullable|string',
+        // 'services' => 'required|array',
+        // 'services.*' => 'required|string',
+
+        // // 🔍 Change this from 'string' to 'array'
+        // 'variants' => 'required|array',
+        // 'variants.*' => 'required|array', // Accepting each variant as an array
+
+        // 'service_prices' => 'required|array',
+        // 'service_prices.*' => 'required|numeric',
+        // 'service_durations' => 'required|array',
+        // 'service_durations.*' => 'required|numeric',
+        // 'price_type' => 'required|string',
+        // 'retail_price' => 'required|numeric',
+        // 'total_duration' => 'required|numeric',
+        // 'discount_percentage' => 'nullable|numeric',
+        // 'available_for' => 'required|string',
     }
 }

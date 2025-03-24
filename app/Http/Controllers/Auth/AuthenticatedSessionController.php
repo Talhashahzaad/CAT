@@ -39,21 +39,6 @@ class AuthenticatedSessionController extends Controller
     }
 
 
-    // public function loginApi(Request $request)
-    // {
-    //     $incomingFields = $request->validate([
-    //         'email' => ['required', 'email'],
-    //         'password' => ['required']
-    //     ]);
-
-    //     if (Auth::attempt($incomingFields)) {
-    //         $user = User::where('email', $incomingFields['email'])->first();
-    //         $token = $user->createToken('ourapptoken')->plainTextToken;
-    //         return response()->json(['token' => $token], 200); // Return the token on success
-    //     }
-    //     return response()->json(['error' => 'Unauthorized'], 401); // Return error on failure
-    // }
-
     /**
      * Destroy an authenticated session.
      */
@@ -65,6 +50,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect('admin/login');
     }
 }

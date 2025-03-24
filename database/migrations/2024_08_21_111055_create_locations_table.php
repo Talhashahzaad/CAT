@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug');
-            $table->string('location_image')->nullable();
+            $table->string('location_image')->default('default/location.webp')->nullable();
             $table->boolean('show_at_home')->default(0);
             $table->boolean('status')->default(1);
             $table->string('parent_location')->default('None');

@@ -91,29 +91,13 @@
                                                             <label for="duration">Duration <span
                                                                     class="text-danger">*</span></label>
                                                             <select class="form-control duration" name="duration[]">
-                                                                {{-- @foreach (['15 min', '30 min', '45 min', '1 hour'] as $duration)
+                                                                @foreach (['15 min', '30 min', '45 min', '1 hour'] as $duration)
                                                                     <option value="{{ $duration }}"
                                                                         {{ $variant->duration == $duration ? 'selected' : '' }}>
                                                                         {{ $duration }}
                                                                     </option>
-                                                                @endforeach --}}
-                                                                @foreach ([15, 30, 45, 60, 120, 180, 240, 300, 360] as $minutes)
-                                                                    @php
-                                                                        $hours = floor($minutes / 60); // Get the whole hours
-                                                                        $remainingMinutes = $minutes % 60; // Get the remaining minutes
-                                                                        $formattedDuration =
-                                                                            $hours > 0
-                                                                                ? ($remainingMinutes > 0
-                                                                                    ? "{$hours} Hours {$remainingMinutes} Minutes"
-                                                                                    : "{$hours} Hours")
-                                                                                : "{$remainingMinutes} Minutes";
-                                                                    @endphp
-
-                                                                    <option value="{{ $minutes }}"
-                                                                        {{ isset($variant) && $variant->duration == $minutes ? 'selected' : '' }}>
-                                                                        {{ $formattedDuration }}
-                                                                    </option>
                                                                 @endforeach
+
                                                             </select>
                                                         </div>
                                                         <div class="col-md-2">

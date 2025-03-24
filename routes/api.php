@@ -1,14 +1,15 @@
 <?php
 
+use App\Http\Controllers\Api\ProfessionalCertificateController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\FrontendController;
 use App\Http\Controllers\Api\ListingController;
 use App\Http\Controllers\Api\PractitionerController;
-use App\Http\Controllers\API\ProfileController;
+use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\TreatmentController;
+use App\Http\Controllers\Api\TreatmentPackage;
 use Illuminate\Support\Facades\Route;
-
 
 Route::middleware(['auth:sanctum'])->group(function () {
     /**Auth Route */
@@ -18,23 +19,28 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('logout', [AuthController::class, 'logout']);
 });
 
-Route::middleware(['auth:sanctum', 'role:agent,admin'])->group(function () {
+Route::middleware(['auth:sanctum', 'role:agent'])->group(function () {
 
     /**Listing Route */
-    Route::post('listing-store', [ListingController::class, 'store']);
+    Route::apiResource('listing', ListingController::class);
 
     /**Practitioner Route */
     Route::apiResource('/practitioner', PractitionerController::class);
 
     /** Treatment Route */
     Route::apiResource('/treatment', TreatmentController::class);
+
+    /**Treatment Package Route */
+    Route::apiResource('/treatment-package', TreatmentPackage::class);
+
+    /** Professional Certificate Route */
+    Route::apiResource('/professional-certificate', ProfessionalCertificateController::class);
 });
 
 /** Auth Route */
 Route::post('signup', [AuthController::class, 'signup']);
 Route::post('user-signup', [AuthController::class, 'signupUser']);
 Route::post('login', [AuthController::class, 'login']);
-
 
 
 /** Blog Route */

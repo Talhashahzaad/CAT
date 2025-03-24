@@ -45,9 +45,6 @@ class FrontendController extends Controller
         return response()->json($category);
     }
 
-
-
-
     public function listingPackage()
     {
         $package = ListingPackage::where('status', 1)->get();

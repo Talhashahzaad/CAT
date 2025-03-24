@@ -38,7 +38,7 @@
 
                                 <div class="form-group">
                                     <label for="">Title <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" name="title" value="{{ old('name') }}">
+                                    <input type="text" class="form-control" name="title" value="{{ old('title') }}">
                                 </div>
 
                                 <div class="form-group">

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Admin\ProfileUpdateRequest;
 use App\Traits\FileUploadTrait;
 use App\Models\User;
+use App\Traits\ChecksOwnership;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -17,6 +18,7 @@ class ProfileController extends Controller
 {
     //
 
+    use ChecksOwnership;
     use FileUploadTrait;
 
     public function index(Request $request)
@@ -33,6 +35,7 @@ class ProfileController extends Controller
     {
 
         $user = Auth::user();
+
         if ($user) {
 
             $avatarPath = $this->uploadImage($request, 'avatar', $request->old_avatar);

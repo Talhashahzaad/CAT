@@ -7,15 +7,6 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\FacebookController;
 use App\Http\Controllers\Auth\GoogleController;
-// use App\Http\Controllers\Admin\AdminAuthController;
-
-
-
-// Route::middleware('guest')->group(function () {
-//     Route::get('admin/login', [AdminAuthController::class, 'login'])->name('admin.login');
-//     Route::get('admin/forgot-password', [AdminAuthController::class, 'PasswordRequest'])->name('admin.password.request');
-// });
-
 
 Route::get('business/login', [BusinessAuthController::class, 'login'])->name('business.login');
 Route::get('business/forgot-password', [BusinessAuthController::class, 'forgotPassword'])->name('business.forgotPassword');

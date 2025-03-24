@@ -42,7 +42,7 @@ class PackageController extends Controller
      */
     public function store(PackageStoreRequest $request): RedirectResponse
     {
-        // dd($request->all());
+
         $validated = $request->validated();
 
         // Create the package

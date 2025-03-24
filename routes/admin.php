@@ -36,6 +36,7 @@ Route::group([
 ], function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
 
     /** Profile Routes */
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('views')->default(0);
             $table->string('slug');
-            $table->text('description');
+            $table->longText('description');
             $table->boolean('status');
             $table->boolean('is_popular');
             $table->timestamps();

@@ -57,7 +57,7 @@
 
                                 <div class="form-group">
                                     <label for="">Description </label>
-                                    <textarea name="description" class="summernote" class="form-control"> {!! $blog->description !!}</textarea>
+                                    <textarea name="description" class="summernote" class="form-control"> {{ $blog->description }}</textarea>
                                 </div>
 
                                 <div class="form-group">

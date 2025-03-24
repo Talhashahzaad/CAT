@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\ServiceStoreRequest;
-use App\Http\Requests\Admin\ServiceUpdateRequest;
+use App\Http\Requests\Api\ServiceStoreApiRequest;
+use App\Http\Requests\Api\ServiceUpdateApiRequest;
 use App\Models\Service;
+use App\Traits\ChecksOwnership;
 use Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -13,87 +14,49 @@ use Str;
 
 class TreatmentController extends Controller
 {
+
+    use ChecksOwnership;
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $treatment = Service::all();
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'User not authenticated'
+            ], 401);
+        }
+
+        $treatment = Service::with('priceVariants')
+            ->where('status', 1)
+            ->where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         if ($treatment->isEmpty()) {
             return response()->json([
                 'message' => 'No treatment found'
             ], 404);
         }
+
+        if ($treatment->user_id != $user->id) {
+            return response()->json(['message' => 'You are not authorized to perform this action.'], 403);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'All Treatment Data.',
+            'treatment' => $treatment
+        ], 200);
     }
-    // public function store(ServiceStoreRequest $request)
-    // {
-    //     try {
-    //         // Ensure prices is an array
-    //         $prices = is_array($request->price) ? $request->price : json_decode($request->price, true);
-
-    //         if (!is_array($prices)) {
-    //             return response()->json([
-    //                 'success' => false,
-    //                 'message' => 'Invalid price format. Expected an array.',
-    //             ], 400);
-    //         }
-
-    //         // Calculate the total price
-    //         $totalPrice = 0;
-    //         foreach ($prices as $priceData) {
-    //             // If priceData is a number, add it directly
-    //             if (is_numeric($priceData)) {
-    //                 $totalPrice += floatval($priceData);
-    //             }
-    //             // If priceData is an associative array, check for 'price' key
-    //             elseif (is_array($priceData) && isset($priceData['price']) && (!isset($priceData['type']) || $priceData['type'] !== 'Free')) {
-    //                 $totalPrice += floatval($priceData['price']);
-    //             }
-    //         }
-
-    //         // Store the service
-    //         $service = new Service();
-    //         $service->user_id = Auth::user()->id;
-    //         $service->name = $request->name;
-    //         $service->status = $request->status;
-    //         $service->total_price = ceil($totalPrice);
-    //         $service->category = $request->category;
-    //         $service->service_type = $request->service_type;
-    //         $service->slug = Str::slug($request->name);
-    //         $service->description = $request->description;
-    //         $service->save();
-
-    //         // Save price variants
-    //         foreach ($prices as $priceData) {
-    //             if (is_array($priceData)) { // Ensure it's an array before accessing keys
-    //                 $service->priceVariants()->create([
-    //                     'name' => $priceData['name'] ?? 'Default Name',  // Use default value if key is missing
-    //                     'description' => $priceData['description'] ?? '',
-    //                     'duration' => $priceData['duration'] ?? 0,
-    //                     'price_type' => $priceData['type'] ?? 'Paid',
-    //                     'price' => ($priceData['type'] ?? 'Paid') !== 'Free' ? ($priceData['price'] ?? 0) : null,
-    //                 ]);
-    //             }
-    //         }
-
-    //         return response()->json([
-    //             'message' => 'Treatment created successfully',
-    //             'success' => true,
-    //         ], 200);
-    //     } catch (\Exception $e) {
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'An error occurred while creating the service.',
-    //             'error' => $e->getMessage(),
-    //         ], 500);
-    //     }
-    // }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(ServiceStoreRequest $request): JsonResponse
+    public function store(ServiceStoreApiRequest $request): JsonResponse
     {
         $validatedData = $request->validated();
 
@@ -151,7 +114,7 @@ class TreatmentController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Service created successfully',
+            'message' => 'Treatment created successfully',
             'data' => $service
         ], 201);
     }
@@ -161,32 +124,22 @@ class TreatmentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id): JsonResponse
+    public function update(ServiceUpdateApiRequest $request, string $id): JsonResponse
     {
         try {
             // Find the service
+            $user = Auth::user();
+
             $service = Service::findOrFail($id);
+            if ($service->user_id != $user->id) {
+                return response()->json(['message' => 'You are not authorized to perform this action.'], 403);
+            }
+
 
             // Validate request
-            $validatedData = $request->validate([
-                'name' => 'required|string|max:255',
-                'status' => 'required|integer',
-                'category' => 'required|integer',
-                'service_type' => 'required|string|max:255',
-                'description' => 'nullable|string',
-                'duration' => 'required|array',
-                'duration.*' => 'string',
-                'price_type' => 'required|array',
-                'price_type.*' => 'string',
-                'price' => 'required|array',
-                'price.*' => 'numeric',
-                'variant_name' => 'required|array',
-                'variant_name.*' => 'string',
-                'variant_description' => 'required|array',
-                'variant_description.*' => 'string',
-                'variant_id' => 'nullable|array',
-                'variant_id.*' => 'nullable|integer|exists:price_variants,id',
-            ]);
+            $validatedData = $request->validated();
+
+
 
             // Extract arrays
             $durations = $validatedData['duration'];
@@ -266,99 +219,16 @@ class TreatmentController extends Controller
         }
     }
 
-
-    // public function update(Request $request, string $id): JsonResponse
-    // {
-    //     // Find the service by ID
-    //     $service = Service::find($id);
-    //     if (!$service) {
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'Service not found.'
-    //         ], 404);
-    //     }
-
-    //     // Validate request
-    //     $validatedData = $request->validate([
-    //         'name' => 'required|string|max:255',
-    //         'status' => 'required|integer',
-    //         'category' => 'required|integer',
-    //         'service_type' => 'required|string',
-    //         'description' => 'required|string',
-    //         'duration' => 'required|array',
-    //         'price_type' => 'required|array',
-    //         'price' => 'required|array',
-    //         'variant_name' => 'required|array',
-    //         'variant_description' => 'required|array',
-    //     ]);
-
-    //     // Extract arrays from request
-    //     $durations = $validatedData['duration'];
-    //     $priceTypes = $validatedData['price_type'];
-    //     $prices = $validatedData['price'];
-    //     $variantNames = $validatedData['variant_name'];
-    //     $variantDescriptions = $validatedData['variant_description'];
-
-    //     // Ensure all arrays have the same length
-    //     $totalVariants = count($prices);
-    //     if (
-    //         count($durations) !== $totalVariants ||
-    //         count($priceTypes) !== $totalVariants ||
-    //         count($variantNames) !== $totalVariants ||
-    //         count($variantDescriptions) !== $totalVariants
-    //     ) {
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'All variant-related fields must have the same number of elements.'
-    //         ], 400);
-    //     }
-
-    //     // Calculate the total price
-    //     $totalPrice = 0;
-    //     foreach ($prices as $index => $price) {
-    //         if ($priceTypes[$index] !== 'Free') {
-    //             $totalPrice += floatval($price);
-    //         }
-    //     }
-
-    //     // Update service details
-    //     $service->update([
-    //         'name' => $validatedData['name'],
-    //         'status' => $validatedData['status'],
-    //         'category' => $validatedData['category'],
-    //         'service_type' => $validatedData['service_type'],
-    //         'slug' => Str::slug($validatedData['name']),
-    //         'description' => $validatedData['description'],
-    //         'total_price' => $totalPrice,
-    //     ]);
-
-    //     // Delete existing price variants before updating
-    //     $service->priceVariants()->delete();
-
-    //     // Store new price variants
-    //     for ($i = 0; $i < $totalVariants; $i++) {
-    //         $service->priceVariants()->create([
-    //             'name' => $variantNames[$i],
-    //             'description' => $variantDescriptions[$i],
-    //             'duration' => $durations[$i],
-    //             'price_type' => $priceTypes[$i],
-    //             'price' => $priceTypes[$i] !== 'Free' ? $prices[$i] : null,
-    //         ]);
-    //     }
-
-    //     return response()->json([
-    //         'success' => true,
-    //         'message' => 'Service updated successfully',
-    //         'data' => $service
-    //     ], 200);
-    // }
-
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
+        $user = Auth::user();
         $service = Service::findOrFail($id);
+        if ($service->user_id != $user->id) {
+            return response()->json(['message' => 'You are not authorized to perform this action.'], 403);
+        }
         $service->delete();
         return response()->json(['success' => 'Treatment deleted successfully!'], 200);
     }

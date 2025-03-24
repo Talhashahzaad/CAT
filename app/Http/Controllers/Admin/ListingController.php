@@ -44,12 +44,15 @@ class ListingController extends Controller
      */
     public function create(): View
     {
-        $categories = Category::all();
-        $locations = Location::all();
-        $amenities = Amenity::all();
-        $tags = Tag::all();
-        $certificates = ProfessionalCertificate::all();
-        $practitioners = Practitioner::all();
+        $user = Auth::user();
+        $categories = Category::where('status', 1)->get();
+        $locations = Location::where('status', 1)->get();
+        $amenities = Amenity::where('status', 1)->get();
+        $tags = Tag::where('status', 1)->get();
+        $certificates = ProfessionalCertificate::where('user_id', $user->id)
+            ->get();
+        $practitioners = Practitioner::where('user_id', $user->id)
+            ->get();
         return view('admin.listing.create', compact('categories', 'locations', 'amenities', 'tags', 'certificates', 'practitioners'));
     }
 
@@ -77,6 +80,7 @@ class ListingController extends Controller
             $listing->status = $request->status;
             $listing->file = $attachmentPath;
             $listing->phone = $request->phone;
+            $listing->service_capacity = $request->service_capacity;
             $listing->email = $request->email;
             $listing->address = $request->address;
             $listing->website = $request->website;
@@ -91,8 +95,6 @@ class ListingController extends Controller
             $listing->google_map_embed_code = $request->google_map_embed_code;
             $listing->expire_date = date('Y-m-d');
             $listing->save();
-
-
 
             /** amenity store */
 
@@ -169,6 +171,7 @@ class ListingController extends Controller
     public function update(ListingUpdateRequest $request, string $id): RedirectResponse
     {
 
+
         try {
             $listing =  Listing::findOrFail($id);
             $imagePath = $this->uploadImage($request, 'image', $request->old_image);
@@ -176,7 +179,7 @@ class ListingController extends Controller
             $attachmentPath = $this->uploadImage($request, 'attachment', $request->old_attachment);
 
 
-            $listing->user_id = Auth::user()->id;
+            // $listing->user_id = Auth::user()->id;
             $listing->package_id = 0;
             $listing->image = !empty($imagePath) ? $imagePath : $request->old_image;
             $listing->thumbnail_image =  !empty($thumbnailPath) ? $thumbnailPath : $request->old_thumbnail_image;
@@ -189,6 +192,7 @@ class ListingController extends Controller
             $listing->file =  !empty($attachmentPath) ? $attachmentPath : $request->old_attachment;
             $listing->phone = $request->phone;
             $listing->email = $request->email;
+            $listing->service_capacity = $request->service_capacity;
             $listing->address = $request->address;
             $listing->website = $request->website;
             $listing->facebook_link = $request->facebook_link;
@@ -262,7 +266,17 @@ class ListingController extends Controller
     public function destroy(string $id)
     {
         try {
-            Listing::findOrFail($id)->delete();
+            $listing = Listing::findOrFail($id);
+
+            // Delete all related data before deleting the listing
+            $listing->listingAmenities()->delete();
+            $listing->listingTags()->delete();
+            $listing->listingCertificates()->delete();
+            $listing->listingPractitioners()->delete();
+
+            // Now delete the listing itself
+            $listing->delete();
+
 
             return response(['status' => 'success', 'message' => 'Deleted successfully!']);
         } catch (\Exception $e) {
