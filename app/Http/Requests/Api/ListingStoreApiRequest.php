@@ -28,7 +28,7 @@ class ListingStoreApiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'image' => ['required', 'image', 'max:3000'],
+            'image' => ['required', 'image', 'max:3000', 'unique:listings,name'],
             'thumbnail_image' => ['required', 'image', 'max:3000'],
             'title' => ['required', 'string', 'max:255'],
             'category' => ['required', 'integer'],

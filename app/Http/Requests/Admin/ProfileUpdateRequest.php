@@ -23,10 +23,8 @@ class ProfileUpdateRequest extends FormRequest
             'email' =>  [
                 'required',
                 'string',
-                'max:255',
-                Rule::unique('users', 'email')->where(function ($query) {
-                    return $query->where('user_id', Auth::id());
-                })->ignore($this->route('id'))
+                'max:255'
+
             ],
             'phone' => ['required', 'max:50'],
             'address' => ['required', 'max:300'],

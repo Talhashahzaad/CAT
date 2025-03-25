@@ -19,7 +19,7 @@ class ServiceUpdateApiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:services,name,$this->service',
             'status' => 'required|boolean',
             'category' => 'required|integer|exists:categories,id', // Ensure category exists
             'service_type' => 'required|string|max:255', // Service type should be required

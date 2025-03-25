@@ -20,10 +20,8 @@ class ProfessionalCertificateStoreRequest extends FormRequest
             'name' =>  [
                 'required',
                 'string',
-                'max:255',
-                Rule::unique('professional_certificates', 'name')->where(function ($query) {
-                    return $query->where('user_id', Auth::id());
-                })->ignore($this->route('id'))
+                'max:255'
+
             ],
             'description' => ['nullable', 'string', 'max:255'],
         ];

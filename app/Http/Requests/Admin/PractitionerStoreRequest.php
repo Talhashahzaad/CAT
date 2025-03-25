@@ -23,9 +23,7 @@ class PractitionerStoreRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('practitioners', 'name')->where(function ($query) {
-                    return $query->where('user_id', Auth::id());
-                })->ignore($this->route('id'))
+
             ],
             'qualification' => 'nullable|string',
             'certificate' => 'nullable|string',
