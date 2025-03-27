@@ -23,7 +23,7 @@ class ListingUpdateApiRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('listings', 'title')->ignore($this->listing)
+                Rule::unique('listings', 'title')->ignore($this->id),
             ],
             'category' => [
                 'required',
@@ -58,7 +58,7 @@ class ListingUpdateApiRequest extends FormRequest
             'google_map_embed_code' => ['nullable', 'string'],
             'seo_title' => ['nullable', 'string', 'max:255'],
             'seo_description' => ['nullable', 'string', 'max:255'],
-            'status' => ['required', 'boolean'],
+            'status' => ['required', 'integer', 'in:0,1'],
             'is_featured' => ['required', 'boolean'],
             'is_verified' => ['required', 'boolean'],
             'professional_certificates' => ['nullable', 'array'],

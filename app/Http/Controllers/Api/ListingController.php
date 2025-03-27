@@ -14,6 +14,7 @@ use App\Traits\FileUploadTrait;
 use Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Log;
 use Str;
 
 class ListingController extends Controller
@@ -141,6 +142,8 @@ class ListingController extends Controller
      */
     public function update(ListingUpdateApiRequest $request, $id)
     {
+        \Log::info("All Request Data: " . json_encode($request->all()));
+        \Log::info("Files: " . json_encode($request->file()));
         $user = Auth::user();
         $listing = Listing::find($id);
         if ($listing->user_id != $user->id) {
@@ -239,7 +242,18 @@ class ListingController extends Controller
 
         return response()->json(['success' => true, 'message' => 'Listing updated successfully', 'data' => $listing->fresh()]);
     }
+    // public function update(Request $request)
+    // {
+    //     Log::info("Title: " . $request->input('title'));
+    //     Log::info("Category: " . $request->input('category'));
+    //     Log::info("Image: " . json_encode($request->file('image')));
 
+    //     return response()->json([
+    //         'title' => $request->input('title'),
+    //         'category' => $request->input('category'),
+    //         'image' => $request->file('image'),
+    //     ]);
+    // }
 
 
     /**
