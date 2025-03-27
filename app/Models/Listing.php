@@ -40,6 +40,7 @@ class Listing extends Model
         return $this->hasMany(ListingCertificate::class, 'listing_id');
     }
 
+
     public function listingPractitioners()
     {
         return $this->hasMany(ListingPractitioner::class, 'listing_id');

@@ -201,6 +201,14 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Category $category
  * @property-read \App\Models\TFactory|null $use_factory
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ListingAmenity> $listingAmenities
+ * @property-read int|null $listing_amenities_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ListingCertificate> $listingCertificates
+ * @property-read int|null $listing_certificates_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ListingPractitioner> $listingPractitioners
+ * @property-read int|null $listing_practitioners_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ListingTag> $listingTags
+ * @property-read int|null $listing_tags_count
  * @property-read \App\Models\Location $location
  * @property-read \App\Models\Practitioner|null $practitioner
  * @property-read \App\Models\User $user
@@ -599,6 +607,7 @@ namespace App\Models{
  * 
  *
  * @property int $id
+ * @property int $user_id
  * @property string $name
  * @property string $slug
  * @property string|null $description
@@ -614,6 +623,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ProfessionalCertificate whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ProfessionalCertificate whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ProfessionalCertificate whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|ProfessionalCertificate whereUserId($value)
  */
 	class ProfessionalCertificate extends \Eloquent {}
 }

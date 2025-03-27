@@ -34,7 +34,11 @@ class ListingUpdateApiRequest extends FormRequest
                 Rule::unique('listings', 'title')->ignore($this->listing)
             ],
             'category' => ['required', 'integer'],
-            'location' => ['required', 'integer'],
+            'location' => [
+                'required',
+                'integer',
+                Rule::exists('locations', 'id')
+            ],
             'address' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],

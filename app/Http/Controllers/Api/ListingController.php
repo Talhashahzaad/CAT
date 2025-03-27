@@ -34,7 +34,7 @@ class ListingController extends Controller
             ], 401);
         }
 
-        $listing = Listing::with('Category')->with('Practitioner')->with('Location')->with('User')
+        $listing = Listing::with('Category')->with('listingTags')->with('listingCertificates')->with('listingPractitioners')->with('Location')->with('User')->with('listingAmenities')
             ->where('status', 1)
             ->where('user_id', $user->id)
             ->orderBy('created_at', 'desc')

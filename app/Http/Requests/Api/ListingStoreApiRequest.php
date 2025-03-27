@@ -37,7 +37,11 @@ class ListingStoreApiRequest extends FormRequest
                 Rule::unique('listings', 'title')
             ],
             'category' => ['required', 'integer'],
-            'location' => ['required', 'integer'],
+            'location' => [
+                'required',
+                'integer',
+                Rule::exists('locations', 'id')
+            ],
             'address' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
@@ -47,8 +51,14 @@ class ListingStoreApiRequest extends FormRequest
             'tiktok_link' => ['nullable', 'url'],
             'youtube_link' => ['nullable', 'url'],
             'attachment' => ['nullable', 'mimes:png,jpg,csv,pdf'],
-            'amenities.*' => ['nullable', 'integer'],
-            'tag.*' => ['nullable', 'integer'],
+            'amenities.*' => [
+                'integer',
+                Rule::exists('amenities', 'id')
+            ],
+            'tag.*' => [
+                'integer',
+                Rule::exists('tags', 'id')
+            ],
             'description' => ['required'],
             'google_map_embed_code' => ['nullable'],
             'seo_title' => ['nullable', 'string', 'max:255'],
