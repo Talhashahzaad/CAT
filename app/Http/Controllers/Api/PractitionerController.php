@@ -34,10 +34,6 @@ class PractitionerController extends Controller
             return response()->json(['message' => 'No practitioners found'], 404);
         }
 
-        if ($practitioners->user_id != $user->id) {
-            return response()->json(['message' => 'You are not authorized to perform this action.'], 403);
-        }
-
         return response()->json($practitioners);
     }
 
