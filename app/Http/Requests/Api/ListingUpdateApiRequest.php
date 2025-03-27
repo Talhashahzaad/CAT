@@ -10,14 +10,6 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 class ListingUpdateApiRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
-     */
-    // public function authorize(): bool
-    // {
-    //     return false;
-    // }
-
-    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
@@ -25,15 +17,19 @@ class ListingUpdateApiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'image' => ['required', 'image', 'max:3000'],
-            'thumbnail_image' => ['required', 'image', 'max:3000'],
+            'image' => ['sometimes', 'image', 'max:3000'], // Changed to sometimes
+            'thumbnail_image' => ['sometimes', 'image', 'max:3000'], // Changed to sometimes
             'title' => [
                 'required',
                 'string',
                 'max:255',
                 Rule::unique('listings', 'title')->ignore($this->listing)
             ],
-            'category' => ['required', 'integer'],
+            'category' => [
+                'required',
+                'integer',
+                Rule::exists('categories', 'id')
+            ],
             'location' => [
                 'required',
                 'integer',
@@ -47,18 +43,38 @@ class ListingUpdateApiRequest extends FormRequest
             'instagram_link' => ['nullable', 'url'],
             'tiktok_link' => ['nullable', 'url'],
             'youtube_link' => ['nullable', 'url'],
-            'attachment' => ['nullable', 'mimes:png,jpg,csv,pdf'],
-            'amenities.*' => ['nullable', 'integer'],
-            'tag.*' => ['nullable', 'integer'],
+            'attachment' => ['nullable', 'mimes:png,jpg,jpeg,csv,pdf', 'max:5000'],
+            'amenities' => ['nullable', 'array'],
+            'amenities.*' => [
+                'integer',
+                Rule::exists('amenities', 'id')
+            ],
+            'tag' => ['nullable', 'array'],
+            'tag.*' => [
+                'integer',
+                Rule::exists('tags', 'id')
+            ],
             'description' => ['required'],
-            'google_map_embed_code' => ['nullable'],
+            'google_map_embed_code' => ['nullable', 'string'],
             'seo_title' => ['nullable', 'string', 'max:255'],
             'seo_description' => ['nullable', 'string', 'max:255'],
             'status' => ['required', 'boolean'],
             'is_featured' => ['required', 'boolean'],
             'is_verified' => ['required', 'boolean'],
+            'professional_certificates' => ['nullable', 'array'],
+            'professional_certificates.*' => [
+                'integer',
+                Rule::exists('professional_certificates', 'id')
+            ],
+            'practitioner' => ['nullable', 'array'],
+            'practitioner.*' => [
+                'integer',
+                Rule::exists('practitioners', 'id')
+            ],
+            'service_capacity' => ['nullable', 'integer', 'min:1']
         ];
     }
+
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(

@@ -181,6 +181,16 @@ class ListingController extends Controller
 
         $listing->save(); // Ensure the data is saved
 
+        if ($request->hasFile('image')) {
+            $updateData['image'] = $this->uploadImage($request, 'image');
+        }
+        if ($request->hasFile('thumbnail_image')) {
+            $updateData['thumbnail_image'] = $this->uploadImage($request, 'thumbnail_image');
+        }
+        if ($request->hasFile('attachment')) {
+            $updateData['file'] = $this->uploadImage($request, 'attachment');
+        }
+
         ListingAmenity::where('listing_id', $listing->id)->delete();
 
         /** amenity store */
@@ -240,10 +250,19 @@ class ListingController extends Controller
         try {
             $user = Auth::user();
             $listing = Listing::findOrFail($id);
+            if (!$listing) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Listing not found'
+                ], 404);
+            }
             if ($listing->user_id != $user->id) {
                 return response()->json(['message' => 'You are not authorized to perform this action.'], 403);
             }
             // Delete all related data before deleting the listing
+            $this->deleteFile($listing->image);
+            $this->deleteFile($listing->thumbnail_image);
+            $this->deleteFile($listing->file);
             $listing->listingAmenities()->delete();
             $listing->listingTags()->delete();
             $listing->listingCertificates()->delete();
