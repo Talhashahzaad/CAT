@@ -19,6 +19,6 @@ class UserTypeMiddleware
         if ($request->user()->role === $role) {
             return $next($request);
         }
-        return to_route('dashboard');
+        return to_route('/');
     }
 }

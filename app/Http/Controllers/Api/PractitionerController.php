@@ -12,8 +12,6 @@ use Str;
 
 class PractitionerController extends Controller
 {
-
-
     /**
      * Display a listing of the resource.
      */

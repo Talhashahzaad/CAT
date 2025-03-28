@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\Api\ListingScheduleController;
+use App\Http\Controllers\Api\ListingImageGalleryController;
 use App\Http\Controllers\Api\ProfessionalCertificateController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\FrontendController;
 use App\Http\Controllers\Api\ListingController;
+use App\Http\Controllers\Api\ListingVideoGalleryController;
 use App\Http\Controllers\Api\PractitionerController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\TreatmentController;
@@ -35,6 +38,19 @@ Route::middleware(['auth:sanctum', 'role:agent'])->group(function () {
 
     /** Professional Certificate Route */
     Route::apiResource('/professional-certificate', ProfessionalCertificateController::class);
+
+
+    /**Listing Image Gallery */
+    Route::apiResource('/listing-image-gallery', ListingImageGalleryController::class);
+
+    /**Listing Video Gallery */
+    Route::apiResource('/listing-video-gallery', ListingVideoGalleryController::class);
+
+    /**Listing Schedule Route */
+    Route::get('/listing-schedule/{listing_id}', [ListingScheduleController::class, 'index'])->name('listing-schedule.index');
+    Route::post('/listing-schedule/{listing_id}', [ListingScheduleController::class, 'store'])->name('listing-schedule.store');
+    Route::put('/listing-schedule/{id}', [ListingScheduleController::class, 'update'])->name('listing-schedule.update');
+    Route::delete('/listing-schedule/{id}', [ListingScheduleController::class, 'destroy'])->name('listing-schedule.destroy');
 });
 
 /** Auth Route */

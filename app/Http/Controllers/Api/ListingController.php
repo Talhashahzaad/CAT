@@ -22,37 +22,48 @@ class ListingController extends Controller
 
     use FileUploadTrait;
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $user = Auth::user();
 
         if (!$user) {
             return response()->json([
+                'status' => false,
                 'message' => 'User not authenticated'
             ], 401);
         }
 
-        $listing = Listing::with('Category')->with('listingTags')->with('listingCertificates')->with('listingPractitioners')->with('Location')->with('User')->with('listingAmenities')
-            ->where('status', 1)
-            ->where('user_id', $user->id)
-            ->orderBy('created_at', 'desc')
+        // Fetch listings **only for the authenticated user** with active status
+        $listings = Listing::with([
+            'Category',
+            'listingTags',
+            'listingCertificates',
+            'listingPractitioners',
+            'Location',
+            'User',
+            'listingAmenities'
+        ])
+            ->where([
+                ['status', 1],
+                ['user_id', $user->id]
+            ])
+            ->latest()
             ->get();
 
-        if ($listing->isEmpty()) {
+        if ($listings->isEmpty()) {
             return response()->json([
-                'message' => 'No treatment found'
+                'status' => false,
+                'message' => 'No listings found'
             ], 404);
         }
 
         return response()->json([
             'status' => true,
-            'message' => 'All Listing Data.',
-            'treatment' => $listing
+            'message' => 'All Listing Data',
+            'listings' => $listings
         ], 200);
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -142,8 +153,7 @@ class ListingController extends Controller
      */
     public function update(ListingUpdateApiRequest $request, $id)
     {
-        \Log::info("All Request Data: " . json_encode($request->all()));
-        \Log::info("Files: " . json_encode($request->file()));
+
         $user = Auth::user();
         $listing = Listing::find($id);
         if ($listing->user_id != $user->id) {
@@ -175,6 +185,7 @@ class ListingController extends Controller
         $listing->youtube_link = $request->youtube_link;
         $listing->is_verified = $request->is_verified;
         $listing->is_featured = $request->is_featured;
+        $listing->service_capacity = $request->service_capacity;
         $listing->seo_title = $request->seo_title;
         $listing->seo_description = $request->seo_description;
         $listing->google_map_embed_code = $request->google_map_embed_code;
@@ -242,18 +253,7 @@ class ListingController extends Controller
 
         return response()->json(['success' => true, 'message' => 'Listing updated successfully', 'data' => $listing->fresh()]);
     }
-    // public function update(Request $request)
-    // {
-    //     Log::info("Title: " . $request->input('title'));
-    //     Log::info("Category: " . $request->input('category'));
-    //     Log::info("Image: " . json_encode($request->file('image')));
 
-    //     return response()->json([
-    //         'title' => $request->input('title'),
-    //         'category' => $request->input('category'),
-    //         'image' => $request->file('image'),
-    //     ]);
-    // }
 
 
     /**
