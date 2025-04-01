@@ -30,8 +30,10 @@ class ProfessionalCertificateController extends Controller
             ], 401);
         }
 
-        $certificate = ProfessionalCertificate::where('user_id', $user->id)
-            ->orderBy('created_at', 'desc')
+        // $certificate = ProfessionalCertificate::where('user_id', $user->id)
+        //     ->orderBy('created_at', 'desc')
+        //     ->get();
+        $certificate = ProfessionalCertificate::orderBy('created_at', 'desc')
             ->get();
 
         if ($certificate->isEmpty()) {
@@ -94,9 +96,9 @@ class ProfessionalCertificateController extends Controller
     {
         $certificate = ProfessionalCertificate::find($id);
         $user = Auth::user();
-        if ($certificate->user_id != $user->id) {
-            return response()->json(['message' => 'You are not authorized to perform this action.'], 403);
-        }
+        // if ($certificate->user_id != $user->id) {
+        //     return response()->json(['message' => 'You are not authorized to perform this action.'], 403);
+        // }
         $certificate->delete();
 
         return response()->json([

@@ -23,7 +23,7 @@ class ListingScheduleController extends Controller
         $user = Auth::user();
 
         $listing = Listing::where('id', $validated['id'])
-            ->where('user_id', $user->id)
+            // ->where('user_id', $user->id)
             ->select('id', 'title')
             ->firstOrFail();
 
@@ -56,7 +56,7 @@ class ListingScheduleController extends Controller
         $user = Auth::user();
 
         $listing = Listing::where('id', $listingId)
-            ->where('user_id', $user->id)
+            // ->where('user_id', $user->id)
             ->first();
 
         if (!$listing) {
@@ -100,7 +100,7 @@ class ListingScheduleController extends Controller
         $user = Auth::user();
 
         $listing = Listing::where('id', $schedule->listing_id)
-            ->where('user_id', $user->id)
+            // ->where('user_id', $user->id)
             ->first();
 
         if (!$listing) {
@@ -127,7 +127,7 @@ class ListingScheduleController extends Controller
             $schedule = ListingSchedule::findOrFail($id);
 
             $listing = Listing::where('id', $schedule->listing_id)
-                ->where('user_id', $user->id)
+                // ->where('user_id', $user->id)
                 ->first();
 
             if (!$listing) {

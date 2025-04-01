@@ -31,7 +31,7 @@ class TreatmentPackage extends Controller
         $services = Service::with('priceVariants')->where('status', 1)->get();
         $category = Category::where('status', 1)->get();
         $package = Package::where('status', 1)
-            ->where('user_id', $user->id)
+            // ->where('user_id', $user->id)
             ->get();
 
         if ($package->isEmpty()) {
@@ -55,9 +55,9 @@ class TreatmentPackage extends Controller
         $validated = $request->validated();
         $user = Auth::user();
 
-        if (!$user) {
-            return response()->json(['message' => 'User not authenticated'], 401);
-        }
+        // if (!$user) {
+        //     return response()->json(['message' => 'User not authenticated'], 401);
+        // }
 
         // Create the package
         $package = new Package();
@@ -110,14 +110,14 @@ class TreatmentPackage extends Controller
 
 
         $user = Auth::user();
-        if (!$user) {
-            return response()->json(['message' => 'User not authenticated'], 401);
-        }
+        // if (!$user) {
+        //     return response()->json(['message' => 'User not authenticated'], 401);
+        // }
 
         $package = Package::findOrFail($id);
-        if ($package->user_id != $user->id) {
-            return response()->json(['message' => 'You are not authorized to perform this action.'], 403);
-        }
+        // if ($package->user_id != $user->id) {
+        //     return response()->json(['message' => 'You are not authorized to perform this action.'], 403);
+        // }
 
         // Update package details
         $package->update([
@@ -182,10 +182,10 @@ class TreatmentPackage extends Controller
         $package = Package::findOrFail($id);
 
         // Delete associated PackageServiceVariant records
-        $package->packageServiceVariants()->delete();
-        if ($package->user_id != $user->id) {
-            return response()->json(['message' => 'You are not authorized to perform this action.'], 403);
-        }
+        // $package->packageServiceVariants()->delete();
+        // if ($package->user_id != $user->id) {
+        //     return response()->json(['message' => 'You are not authorized to perform this action.'], 403);
+        // }
         // Delete the package
         $package->delete();
 
