@@ -22,7 +22,7 @@ class ListingVideoGalleryController extends Controller
         $user = $request->user();
 
         $listing = Listing::where('id', $validated['id'])
-            // ->where('user_id', $user->id) // Ensures only owner can access
+            ->where('user_id', $user->id) // Ensures only owner can access
             ->select('id', 'title')
             ->first();
 

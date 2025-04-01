@@ -24,9 +24,9 @@ class PractitionerController extends Controller
                 'message' => 'User not authenticated'
             ], 401);
         }
-        // $practitioners = Practitioner::where('user_id', $user->id)
-        //     ->orderBy('created_at', 'desc')
-        //     ->get();
+        $practitioners = Practitioner::where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         $practitioners = Practitioner::orderBy('created_at', 'desc')->get();
 
@@ -60,9 +60,9 @@ class PractitionerController extends Controller
     {
         $practitioner = Practitioner::findOrFail($id);
         $user = Auth::user();
-        // if ($practitioner->user_id != $user->id) {
-        //     return response()->json(['message' => 'You are not authorized to perform this action.'], 403);
-        // }
+        if ($practitioner->user_id != $user->id) {
+            return response()->json(['message' => 'You are not authorized to perform this action.'], 403);
+        }
         $practitioner->name = $request->name;
         $practitioner->qualification = $request->qualification;
         $practitioner->certificate = $request->certificate;
@@ -78,9 +78,9 @@ class PractitionerController extends Controller
         $practitioner = Practitioner::findOrFail($id);
         $user = Auth::user();
 
-        // if ($practitioner->user_id != $user->id) {
-        //     return response()->json(['message' => 'You are not authorized to perform this action.'], 403);
-        // }
+        if ($practitioner->user_id != $user->id) {
+            return response()->json(['message' => 'You are not authorized to perform this action.'], 403);
+        }
         // Delete the practitioner
         $practitioner->delete();
 

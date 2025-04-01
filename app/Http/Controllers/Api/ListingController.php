@@ -12,8 +12,6 @@ use App\Models\ListingPractitioner;
 use App\Models\ListingTag;
 use App\Traits\FileUploadTrait;
 use Auth;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Log;
 use Str;
 
@@ -37,16 +35,17 @@ class ListingController extends Controller
         $listings = Listing::with([
             'Category',
             'listingTags',
-            'listingCertificates',
-            'listingPractitioners',
+            'listingCertificates' => function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            },
+            'listingPractitioners' => function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            },
             'Location',
             'User',
             'listingAmenities'
         ])
-            ->where([
-                ['status', 1],
-                // ['user_id', $user->id]
-            ])
+            ->where('status', 1)
             ->latest()
             ->get();
 
@@ -156,9 +155,9 @@ class ListingController extends Controller
 
         $user = Auth::user();
         $listing = Listing::find($id);
-        // if ($listing->user_id != $user->id) {
-        //     return response()->json(['message' => 'You are not authorized to perform this action.'], 403);
-        // }
+        if ($listing->user_id != $user->id) {
+            return response()->json(['message' => 'You are not authorized to perform this action.'], 403);
+        }
         if (!$listing) {
             return response()->json(['error' => 'Listing not found'], 404);
         }
@@ -270,9 +269,9 @@ class ListingController extends Controller
                     'message' => 'Listing not found'
                 ], 404);
             }
-            // if ($listing->user_id != $user->id) {
-            //     return response()->json(['message' => 'You are not authorized to perform this action.'], 403);
-            // }
+            if ($listing->user_id != $user->id) {
+                return response()->json(['message' => 'You are not authorized to perform this action.'], 403);
+            }
             // Delete all related data before deleting the listing
             $this->deleteFile($listing->image);
             $this->deleteFile($listing->thumbnail_image);

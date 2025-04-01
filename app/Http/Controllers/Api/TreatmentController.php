@@ -42,9 +42,9 @@ class TreatmentController extends Controller
             ], 404);
         }
 
-        // if ($treatment->user_id != $user->id) {
-        //     return response()->json(['message' => 'You are not authorized to perform this action.'], 403);
-        // }
+        if ($treatment->user_id != $user->id) {
+            return response()->json(['message' => 'You are not authorized to perform this action.'], 403);
+        }
 
         return response()->json([
             'status' => true,

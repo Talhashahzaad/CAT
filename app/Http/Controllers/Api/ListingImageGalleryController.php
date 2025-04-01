@@ -22,7 +22,7 @@ class ListingImageGalleryController extends Controller
         $user = $request->user();
 
         $listing = Listing::where('id', $validated['id'])
-            // ->where('user_id', $user->id) // Ensures only owner can access
+            ->where('user_id', $user->id) // Ensures only owner can access
             ->select('id', 'title')
             ->first();
 
@@ -58,7 +58,7 @@ class ListingImageGalleryController extends Controller
         $user = Auth::user();
 
         $listing = Listing::where('id', $request->listing_id)
-            // ->where('user_id', $user->id)
+            ->where('user_id', $user->id)
             ->first();
 
         if (!$listing) {
@@ -92,7 +92,7 @@ class ListingImageGalleryController extends Controller
 
             $image = ListingImageGallery::findOrFail($id);
             $listing = Listing::where('id', $image->listing_id)
-                // ->where('user_id', $user->id)
+                ->where('user_id', $user->id)
                 ->first();
 
             if (!$listing) {
