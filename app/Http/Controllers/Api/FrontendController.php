@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Blog;
 use App\Models\BlogCategory;
 use App\Models\Category;
+use App\Models\CatVideoUpload;
 use App\Models\ListingPackage;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -64,5 +65,14 @@ class FrontendController extends Controller
             return response()->json(['error' => 'No Category Found!'], 404);
         }
         return response()->json($category);
+    }
+
+    public function catVideoUpload()
+    {
+        $video = CatVideoUpload::where('status', 1)->get();
+        if ($video->count() === 0) {
+            return response()->json(['error' => 'No Video Found!'], 404);
+        }
+        return response()->json($video);
     }
 }

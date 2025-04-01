@@ -35,12 +35,8 @@ class ListingController extends Controller
         $listings = Listing::with([
             'Category',
             'listingTags',
-            'listingCertificates' => function ($query) use ($user) {
-                $query->where('user_id', $user->id);
-            },
-            'listingPractitioners' => function ($query) use ($user) {
-                $query->where('user_id', $user->id);
-            },
+            'listingCertificates',
+            'listingPractitioners',
             'Location',
             'User',
             'listingAmenities'

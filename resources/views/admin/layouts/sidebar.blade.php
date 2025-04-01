@@ -239,6 +239,11 @@
                             href="{{ route('admin.listing-package.index') }}">Packages</a></li>
                 </ul>
             </li>
+            <li class="{{ setSidebarActive(['admin.cat-video-upload.index']) }}">
+                <a class="nav-link" href="{{ route('admin.cat-video-upload.index') }}">
+                    <i class="far fa-file-video"></i> <span>All Videos</span>
+                </a>
+            </li>
             <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Blank
                         Page</span></a></li>
         </ul>

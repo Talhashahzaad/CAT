@@ -19,12 +19,8 @@ use App\Http\Controllers\Admin\ProfessionalCertificateController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\Admin\CatVideoUploadController;
 use Illuminate\Support\Facades\Route;
-
-// Route::middleware('guest')->group(function () {
-//     Route::get('admin/login', [AdminAuthController::class, 'login'])->name('admin.login');
-//     Route::get('admin/forgot-password', [AdminAuthController::class, 'PasswordRequest'])->name('admin.password.request');
-// });
 
 Route::get('admin/login', [AdminAuthController::class, 'login'])->middleware('guest')->name('admin.login');
 Route::get('admin/forgot-password', [AdminAuthController::class, 'PasswordRequest'])->middleware('guest')->name('admin.password.request');
@@ -92,6 +88,8 @@ Route::group([
     Route::resource('/blog', BlogController::class);
 
     /**Listing Packages Route */
-
     Route::resource('/listing-package', ListingPackageController::class);
+
+    /**Cat Video Upload Route */
+    Route::resource('/cat-video-upload', CatVideoUploadController::class);
 });

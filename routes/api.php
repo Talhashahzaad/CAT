@@ -74,3 +74,6 @@ Route::post('contact-store', [ContactController::class, 'store']);
 /** Category Route */
 
 Route::get('category', [FrontendController::class, 'category'])->name('category');
+
+/** Cat Video Route */
+Route::get('cat-video-upload', [FrontendController::class, 'catVideoUpload'])->name('cat-video-upload');
