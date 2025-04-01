@@ -23,7 +23,6 @@ class TreatmentController extends Controller
     public function index()
     {
         $user = Auth::user();
-
         if (!$user) {
             return response()->json([
                 'message' => 'User not authenticated'
@@ -35,15 +34,20 @@ class TreatmentController extends Controller
             ->where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->get();
-
         if ($treatment->isEmpty()) {
             return response()->json([
                 'message' => 'No treatment found'
             ], 404);
         }
 
-        if ($treatment->user_id != $user->id) {
-            return response()->json(['message' => 'You are not authorized to perform this action.'], 403);
+        // if ($treatment->user_id != $user->id) {
+        //     return response()->json(['message' => 'You are not authorized to perform this action.'], 403);
+        // }
+
+        foreach ($treatment as $item) {
+            if ($item->user_id != $user->id) {
+                return response()->json(['message' => 'You are not authorized to perform this action.'], 403);
+            }
         }
 
         return response()->json([
@@ -131,6 +135,7 @@ class TreatmentController extends Controller
             $user = Auth::user();
 
             $service = Service::findOrFail($id);
+
             if ($service->user_id != $user->id) {
                 return response()->json(['message' => 'You are not authorized to perform this action.'], 403);
             }
