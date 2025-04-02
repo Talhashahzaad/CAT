@@ -93,6 +93,7 @@ class ListingController extends Controller
             $listing->seo_title = $request->seo_title;
             $listing->seo_description = $request->seo_description;
             $listing->google_map_embed_code = $request->google_map_embed_code;
+            $listing->is_approved = 1;
             $listing->expire_date = date('Y-m-d');
             $listing->save();
 

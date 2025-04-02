@@ -77,3 +77,6 @@ Route::get('category', [FrontendController::class, 'category'])->name('category'
 
 /** Cat Video Route */
 Route::get('cat-video-upload', [FrontendController::class, 'catVideoUpload'])->name('cat-video-upload');
+
+/** Location Route */
+Route::get('location', [FrontendController::class, 'location'])->name('location');

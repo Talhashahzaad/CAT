@@ -182,12 +182,14 @@
                     href="{{ route('admin.dashboard.index') }}"><i class="fas fa-fire"></i> <span>Dashboard</span></a>
             </li>
             <li
-                class="dropdown {{ setSidebarActive(['admin.listing.*', 'admin.certificate.*', 'admin.practitioner.*', 'admin.service.*', 'admin.package.*', 'admin.category.*', 'admin.location.*', 'admin.amenity.*', 'admin.tag.*']) }}">
+                class="dropdown {{ setSidebarActive(['admin.listing.*', 'admin.pending-listing.*', 'admin.certificate.*', 'admin.practitioner.*', 'admin.service.*', 'admin.package.*', 'admin.category.*', 'admin.location.*', 'admin.amenity.*', 'admin.tag.*']) }}">
                 <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i
                         class="fas fa-columns"></i> <span>Listings</span></a>
                 <ul class="dropdown-menu">
                     <li class="{{ setSidebarActive(['admin.listing.*']) }}"><a class="nav-link"
                             href="{{ route('admin.listing.index') }}">All Listing</a></li>
+                    <li class="{{ setSidebarActive(['admin.pending-listing.*']) }}"><a class="nav-link"
+                            href="{{ route('admin.pending-listing.index') }}">Pending Listing</a></li>
                     <li class="{{ setSidebarActive(['admin.category.*']) }}"><a class="nav-link"
                             href="{{ route('admin.category.index') }}">Treatment Categories</a></li>
                     <li class="{{ setSidebarActive(['admin.service.*']) }}"><a class="nav-link"
@@ -242,6 +244,11 @@
             <li class="{{ setSidebarActive(['admin.cat-video-upload.index']) }}">
                 <a class="nav-link" href="{{ route('admin.cat-video-upload.index') }}">
                     <i class="far fa-file-video"></i> <span>All Videos</span>
+                </a>
+            </li>
+            <li class="{{ setSidebarActive(['admin.settings.index']) }}">
+                <a class="nav-link" href="{{ route('admin.settings.index') }}">
+                    <i class="fas fa-cogs"></i> <span>Settings</span>
                 </a>
             </li>
             <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Blank

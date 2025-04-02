@@ -108,6 +108,31 @@ namespace App\Models{
  * 
  *
  * @property int $id
+ * @property string $video_url
+ * @property string $video_title
+ * @property string|null $video_description
+ * @property int $status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CatVideoUpload newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CatVideoUpload newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CatVideoUpload query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CatVideoUpload whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CatVideoUpload whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CatVideoUpload whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CatVideoUpload whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CatVideoUpload whereVideoDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CatVideoUpload whereVideoTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|CatVideoUpload whereVideoUrl($value)
+ */
+	class CatVideoUpload extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
  * @property string $name
  * @property string $slug
  * @property string|null $image_icon
@@ -196,6 +221,7 @@ namespace App\Models{
  * @property string|null $seo_title
  * @property string|null $seo_description
  * @property int $status
+ * @property int $is_approved
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -229,6 +255,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Listing whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Listing whereImage($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Listing whereInstagramLink($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Listing whereIsApproved($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Listing whereIsFeatured($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Listing whereIsVerified($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Listing whereLocationId($value)
@@ -693,6 +720,18 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|ServicePriceVariant whereUpdatedAt($value)
  */
 	class ServicePriceVariant extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property-read \App\Models\TFactory|null $use_factory
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Setting newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Setting newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Setting query()
+ */
+	class Setting extends \Eloquent {}
 }
 
 namespace App\Models{

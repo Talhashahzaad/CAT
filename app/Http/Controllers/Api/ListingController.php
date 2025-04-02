@@ -42,6 +42,7 @@ class ListingController extends Controller
             'listingAmenities'
         ])
             ->where('status', 1)
+            ->where('is_approved', 1)
             ->latest()
             ->get();
 
@@ -100,13 +101,16 @@ class ListingController extends Controller
         $listing->save();
 
         /** amenity store */
-
-        foreach ($request->amenities as $amenityId) {
-
-            $amenity = new ListingAmenity();
-            $amenity->listing_id = $listing->id;
-            $amenity->amenity_id = $amenityId;
-            $amenity->save();
+        if ($request->has('amenities')) {
+            $amenities = is_array($request->amenities) ? $request->amenities : json_decode($request->amenities, true);
+            if (is_array($amenities)) {
+                foreach ($amenities as $amenityId) {
+                    $amenity = new ListingAmenity();
+                    $amenity->listing_id = $listing->id;
+                    $amenity->amenity_id = $amenityId;
+                    $amenity->save();
+                }
+            }
         }
 
         /** professional certificate store */
@@ -203,11 +207,16 @@ class ListingController extends Controller
         ListingAmenity::where('listing_id', $listing->id)->delete();
 
         /** amenity store */
-        foreach ($request->amenities as $amenityId) {
-            $amenity = new ListingAmenity();
-            $amenity->listing_id = $listing->id;
-            $amenity->amenity_id = $amenityId;
-            $amenity->save();
+        if ($request->has('amenities')) {
+            $amenities = is_array($request->amenities) ? $request->amenities : json_decode($request->amenities, true);
+            if (is_array($amenities)) {
+                foreach ($amenities as $amenityId) {
+                    $amenity = new ListingAmenity();
+                    $amenity->listing_id = $listing->id;
+                    $amenity->amenity_id = $amenityId;
+                    $amenity->save();
+                }
+            }
         }
 
         // Remove previous professional certificates

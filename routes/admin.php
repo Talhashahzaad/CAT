@@ -20,6 +20,8 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\CatVideoUploadController;
+use App\Http\Controllers\Admin\PendingListingController;
+use App\Http\Controllers\Admin\SettingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('admin/login', [AdminAuthController::class, 'login'])->middleware('guest')->name('admin.login');
@@ -80,6 +82,10 @@ Route::group([
     Route::put('/listing-schedule/{id}', [ListingScheduleController::class, 'update'])->name('listing-schedule.update');
     Route::delete('/listing-schedule/{id}', [ListingScheduleController::class, 'destroy'])->name('listing-schedule.destroy');
 
+    /** Pending Listing Route */
+    Route::get('/pending-listing', [PendingListingController::class, 'index'])->name('pending-listing.index');
+    Route::post('/pending-listing', [PendingListingController::class, 'update'])->name('pending-listing.update');
+
     /** Contact Form */
     Route::resource('/contact-form', ContactController::class);
 
@@ -92,4 +98,11 @@ Route::group([
 
     /**Cat Video Upload Route */
     Route::resource('/cat-video-upload', CatVideoUploadController::class);
+
+    /**Setting Route */
+    Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+    Route::post('/general-settings', [SettingController::class, 'updateGeneralSetting'])->name('general-settings.update');
+    Route::post('/pusher-settings', [SettingController::class, 'updatePusherSetting'])->name('pusher-settings.update');
+    Route::post('/logo-settings', [SettingController::class, 'logoSettings'])->name('logo-settings.update');
+    Route::post('/appearance-settings', [SettingController::class, 'appearanceSetting'])->name('appearance-settings.update');
 });

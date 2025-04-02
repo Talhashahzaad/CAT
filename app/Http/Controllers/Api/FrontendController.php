@@ -8,6 +8,7 @@ use App\Models\BlogCategory;
 use App\Models\Category;
 use App\Models\CatVideoUpload;
 use App\Models\ListingPackage;
+use App\Models\Location;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -74,5 +75,14 @@ class FrontendController extends Controller
             return response()->json(['error' => 'No Video Found!'], 404);
         }
         return response()->json($video);
+    }
+
+    public function location()
+    {
+        $location = Location::where('status', 1)->get();
+        if ($location->count() === 0) {
+            return response()->json(['error' => 'No Location Found!'], 404);
+        }
+        return response()->json($location);
     }
 }
