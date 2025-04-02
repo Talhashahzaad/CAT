@@ -67,6 +67,7 @@ Route::get('blog-category', [FrontendController::class, 'blogCategory']);
 /**Listing Package Route */
 
 Route::get('listing-packages', [FrontendController::class, 'listingPackage']);
+Route::get('checkout/{id}', [FrontendController::class, 'checkout'])->name('checkout.index');
 
 /** Contact Route */
 Route::post('contact-store', [ContactController::class, 'store']);

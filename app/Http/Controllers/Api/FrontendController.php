@@ -7,6 +7,7 @@ use App\Models\Blog;
 use App\Models\BlogCategory;
 use App\Models\Category;
 use App\Models\CatVideoUpload;
+use App\Models\Listing;
 use App\Models\ListingPackage;
 use App\Models\Location;
 use Illuminate\Http\Request;
@@ -84,5 +85,14 @@ class FrontendController extends Controller
             return response()->json(['error' => 'No Location Found!'], 404);
         }
         return response()->json($location);
+    }
+
+    public function checkout($id)
+    {
+        $listing = ListingPackage::find($id);
+        if ($listing === null) {
+            return response()->json(['error' => 'Listing Package not found'], 404);
+        }
+        return response()->json($listing);
     }
 }
