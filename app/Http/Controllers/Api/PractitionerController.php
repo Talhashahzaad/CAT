@@ -26,6 +26,9 @@ class PractitionerController extends Controller
         }
 
         $practitioners = Practitioner::where('user_id', $user->id)
+            ->with(['packages' => function ($query) {
+                $query->with('packageServiceVariants');
+            }])
             ->orderBy('created_at', 'desc')
             ->get();
 

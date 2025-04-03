@@ -635,6 +635,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\TFactory|null $use_factory
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Package> $packages
+ * @property-read int|null $packages_count
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Practitioner newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Practitioner newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Practitioner query()

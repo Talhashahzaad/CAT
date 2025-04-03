@@ -53,7 +53,7 @@ class TreatmentController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'All Treatment Data.',
-            'treatment' => $treatment
+            'data' => $treatment
         ], 200);
     }
 

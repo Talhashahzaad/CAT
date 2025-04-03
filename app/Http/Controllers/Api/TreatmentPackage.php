@@ -91,7 +91,7 @@ class TreatmentPackage extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Package created successfully',
-            'package' => $package->load('packageServiceVariants'),
+            'data' => $package->load('packageServiceVariants'),
         ], 201);
     }
 

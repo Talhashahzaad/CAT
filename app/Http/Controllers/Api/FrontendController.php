@@ -27,7 +27,7 @@ class FrontendController extends Controller
         }
         return response()->json(
             [
-                'blog' => $blog
+                'data' => $blog
             ]
         );
     }
@@ -44,7 +44,7 @@ class FrontendController extends Controller
         }
         return response()->json(
             [
-                'blog' => $blog
+                'data' => $blog
             ]
         );
     }
@@ -58,7 +58,7 @@ class FrontendController extends Controller
         }
         return response()->json(
             [
-                'category' => $category
+                'data' => $category
             ]
         );
     }
@@ -73,7 +73,7 @@ class FrontendController extends Controller
 
         return response()->json(
             [
-                'package' => $package
+                'data' => $package
             ]
         );
     }
@@ -86,7 +86,7 @@ class FrontendController extends Controller
         }
         return response()->json(
             [
-                'category' => $category
+                'data' => $category
             ]
         );
     }
@@ -99,7 +99,7 @@ class FrontendController extends Controller
         }
         return response()->json(
             [
-                'video' => $video
+                'data' => $video
             ]
         );
     }
@@ -112,7 +112,7 @@ class FrontendController extends Controller
         }
         return response()->json(
             [
-                'location' => $location
+                'data' => $location
             ]
         );
     }
@@ -125,7 +125,7 @@ class FrontendController extends Controller
         }
         return response()->json(
             [
-                'listing' => $listing
+                'data' => $listing
             ]
         );
     }
@@ -138,7 +138,7 @@ class FrontendController extends Controller
         }
         return response()->json(
             [
-                'amenity' => $amenity
+                'data' => $amenity
             ]
         );
     }
@@ -151,7 +151,7 @@ class FrontendController extends Controller
         }
         return response()->json(
             [
-                'tag' => $tag
+                'data' => $tag
             ]
         );
     }

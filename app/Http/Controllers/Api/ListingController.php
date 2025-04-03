@@ -56,7 +56,7 @@ class ListingController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'All Listing Data',
-            'listings' => $listings
+            'data' => $listings
         ], 200);
     }
 
