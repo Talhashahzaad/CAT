@@ -43,7 +43,7 @@ class ProfessionalCertificateController extends Controller
         }
 
         return response()->json([
-            'data' => $certificate
+            'certificate' => $certificate
         ], 200);
     }
 
@@ -63,7 +63,7 @@ class ProfessionalCertificateController extends Controller
 
         return response()->json([
             'message' => 'Certificate created successfully',
-            'data' => $certificate
+            'certificate' => $certificate
         ], 201);
     }
 
@@ -85,7 +85,7 @@ class ProfessionalCertificateController extends Controller
 
         return response()->json([
             'message' => 'Certificate updated successfully',
-            'data' => $certificate
+            'certificate' => $certificate
         ], 200);
     }
 

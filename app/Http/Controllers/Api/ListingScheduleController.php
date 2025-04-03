@@ -111,7 +111,7 @@ class ListingScheduleController extends Controller
 
         return response()->json([
             'message' => 'Schedule updated successfully',
-            'data' => $schedule
+            'schedule' => $schedule
         ], 200);
     }
 

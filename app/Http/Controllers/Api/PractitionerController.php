@@ -38,7 +38,7 @@ class PractitionerController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'data' => $practitioners
+            'practitioners' => $practitioners
         ], 200);
     }
 
@@ -66,7 +66,7 @@ class PractitionerController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Practitioner created successfully',
-                'data' => $practitioner
+                'practitioner' => $practitioner
             ], 201);
         }
 
