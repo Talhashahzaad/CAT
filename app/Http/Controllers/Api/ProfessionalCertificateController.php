@@ -43,7 +43,7 @@ class ProfessionalCertificateController extends Controller
         }
 
         return response()->json([
-            'certificate' => $certificate
+            'data' => $certificate
         ], 200);
     }
 
