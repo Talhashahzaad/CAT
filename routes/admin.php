@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\CatVideoUploadController;
+use App\Http\Controllers\Admin\PaymentSettingController;
 use App\Http\Controllers\Admin\PendingListingController;
 use App\Http\Controllers\Admin\SettingController;
 use Illuminate\Support\Facades\Route;
@@ -105,4 +106,10 @@ Route::group([
     Route::post('/pusher-settings', [SettingController::class, 'updatePusherSetting'])->name('pusher-settings.update');
     Route::post('/logo-settings', [SettingController::class, 'logoSettings'])->name('logo-settings.update');
     Route::post('/appearance-settings', [SettingController::class, 'appearanceSetting'])->name('appearance-settings.update');
+
+    /**Payment Setting Route */
+    Route::get('/payment-settings', [PaymentSettingController::class, 'index'])->name('payment-settings.index');
+    Route::post('/paypal-settings', [PaymentSettingController::class, 'paypalSetting'])->name('paypal-settings.update');
+    Route::post('/stripe-settings', [PaymentSettingController::class, 'stripeSetting'])->name('stripe-settings.update');
+    Route::post('/razorpay-settings', [PaymentSettingController::class, 'razorpaySetting'])->name('razorpay-settings.update');
 });

@@ -240,6 +240,10 @@
                     <li class="{{ setSidebarActive(['admin.listing-package.*']) }}"><a class="nav-link"
                             href="{{ route('admin.listing-package.index') }}">Packages</a></li>
                 </ul>
+                <ul class="dropdown-menu">
+                    <li class="{{ setSidebarActive(['admin.payment-settings.*']) }}"><a class="nav-link"
+                            href="{{ route('admin.payment-settings.index') }}">Payment Settings</a></li>
+                </ul>
             </li>
             <li class="{{ setSidebarActive(['admin.cat-video-upload.index']) }}">
                 <a class="nav-link" href="{{ route('admin.cat-video-upload.index') }}">
@@ -251,6 +255,8 @@
                     <i class="fas fa-cogs"></i> <span>Settings</span>
                 </a>
             </li>
+
+
             <li><a class="nav-link" href="blank.html"><i class="far fa-square"></i> <span>Blank
                         Page</span></a></li>
         </ul>

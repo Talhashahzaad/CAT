@@ -81,3 +81,9 @@ Route::get('cat-video-upload', [FrontendController::class, 'catVideoUpload'])->n
 
 /** Location Route */
 Route::get('location', [FrontendController::class, 'location'])->name('location');
+
+/** Amenity Route */
+Route::get('amenity', [FrontendController::class, 'amenity'])->name('amenity');
+
+/** Tag Route */
+Route::get('tag', [FrontendController::class, 'tag'])->name('tag');

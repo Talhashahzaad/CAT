@@ -24,18 +24,19 @@ class PractitionerController extends Controller
                 'message' => 'User not authenticated'
             ], 401);
         }
+
         $practitioners = Practitioner::where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->get();
-
-        $practitioners = Practitioner::orderBy('created_at', 'desc')->get();
-
 
         if ($practitioners->isEmpty()) {
             return response()->json(['message' => 'No practitioners found'], 404);
         }
 
-        return response()->json($practitioners);
+        return response()->json([
+            'status' => 'success',
+            'data' => $practitioners
+        ], 200);
     }
 
     /**
@@ -43,14 +44,33 @@ class PractitionerController extends Controller
      */
     public function store(PractitionerStoreRequest $request)
     {
+        $user = Auth::user();
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'User not authenticated'
+            ], 401);
+        }
+
         $practitioner = new Practitioner();
-        $practitioner->user_id = Auth::user()->id;
+        $practitioner->user_id = $user->id;
         $practitioner->slug = Str::slug($request->name);
         $practitioner->name = $request->name;
         $practitioner->qualification = $request->qualification;
         $practitioner->certificate = $request->certificate;
-        $practitioner->save();
-        return response()->json(['success' => 'Practitioner created successfully'], 200);
+
+        if ($practitioner->save()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Practitioner created successfully',
+                'data' => $practitioner
+            ], 201);
+        }
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Failed to create practitioner'
+        ], 500);
     }
 
     /**
@@ -58,16 +78,42 @@ class PractitionerController extends Controller
      */
     public function update(PractitionerUpdateRequest $request, string $id)
     {
-        $practitioner = Practitioner::findOrFail($id);
         $user = Auth::user();
-        if ($practitioner->user_id != $user->id) {
-            return response()->json(['message' => 'You are not authorized to perform this action.'], 403);
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'User not authenticated'
+            ], 401);
         }
+
+        $practitioner = Practitioner::where('user_id', $user->id)
+            ->where('id', $id)
+            ->first();
+
+        if (!$practitioner) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Practitioner not found or unauthorized'
+            ], 404);
+        }
+
         $practitioner->name = $request->name;
+        $practitioner->slug = Str::slug($request->name);
         $practitioner->qualification = $request->qualification;
         $practitioner->certificate = $request->certificate;
-        $practitioner->save();
-        return response()->json(['success' => 'Practitioner Updated Successfully'], 200);
+
+        if ($practitioner->save()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Practitioner updated successfully',
+                'data' => $practitioner
+            ], 200);
+        }
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Failed to update practitioner'
+        ], 500);
     }
 
     /**
@@ -75,15 +121,35 @@ class PractitionerController extends Controller
      */
     public function destroy(string $id)
     {
-        $practitioner = Practitioner::findOrFail($id);
         $user = Auth::user();
 
-        if ($practitioner->user_id != $user->id) {
-            return response()->json(['message' => 'You are not authorized to perform this action.'], 403);
+        if (!$user) {
+            return response()->json([
+                'message' => 'User not authenticated'
+            ], 401);
         }
-        // Delete the practitioner
-        $practitioner->delete();
 
-        return response()->json(['success' => 'Practitioner deleted successfully!'], 200);
+        $practitioner = Practitioner::where('user_id', $user->id)
+            ->where('id', $id)
+            ->first();
+
+        if (!$practitioner) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Practitioner not found or unauthorized'
+            ], 404);
+        }
+
+        if ($practitioner->delete()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Practitioner deleted successfully'
+            ], 200);
+        }
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Failed to delete practitioner'
+        ], 500);
     }
 }

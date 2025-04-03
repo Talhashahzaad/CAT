@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Amenity;
 use App\Models\Blog;
 use App\Models\BlogCategory;
 use App\Models\Category;
@@ -10,6 +11,7 @@ use App\Models\CatVideoUpload;
 use App\Models\Listing;
 use App\Models\ListingPackage;
 use App\Models\Location;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -23,7 +25,11 @@ class FrontendController extends Controller
         if ($blog === null) {
             return response()->json(['error' => 'Blog not found'], 404);
         }
-        return response()->json($blog);
+        return response()->json(
+            [
+                'blog' => $blog
+            ]
+        );
     }
 
     public function blog()
@@ -36,7 +42,11 @@ class FrontendController extends Controller
         if ($blog->isEmpty()) {
             return response()->json(['error' => 'Blog not Available'], 404);
         }
-        return response()->json($blog);
+        return response()->json(
+            [
+                'blog' => $blog
+            ]
+        );
     }
 
     public function blogCategory()
@@ -46,7 +56,11 @@ class FrontendController extends Controller
         if ($category->count() === 0) {
             return response()->json(['error' => 'Blog Category not Available'], 404);
         }
-        return response()->json($category);
+        return response()->json(
+            [
+                'category' => $category
+            ]
+        );
     }
 
     public function listingPackage()
@@ -57,7 +71,11 @@ class FrontendController extends Controller
             return response()->json(['error' => 'No Listing Package Found!'], 404);
         }
 
-        return response()->json($package);
+        return response()->json(
+            [
+                'package' => $package
+            ]
+        );
     }
 
     public function category()
@@ -66,7 +84,11 @@ class FrontendController extends Controller
         if ($category->count() === 0) {
             return response()->json(['error' => 'No Category Found!'], 404);
         }
-        return response()->json($category);
+        return response()->json(
+            [
+                'category' => $category
+            ]
+        );
     }
 
     public function catVideoUpload()
@@ -75,7 +97,11 @@ class FrontendController extends Controller
         if ($video->count() === 0) {
             return response()->json(['error' => 'No Video Found!'], 404);
         }
-        return response()->json($video);
+        return response()->json(
+            [
+                'video' => $video
+            ]
+        );
     }
 
     public function location()
@@ -84,7 +110,11 @@ class FrontendController extends Controller
         if ($location->count() === 0) {
             return response()->json(['error' => 'No Location Found!'], 404);
         }
-        return response()->json($location);
+        return response()->json(
+            [
+                'location' => $location
+            ]
+        );
     }
 
     public function checkout($id)
@@ -93,6 +123,36 @@ class FrontendController extends Controller
         if ($listing === null) {
             return response()->json(['error' => 'Listing Package not found'], 404);
         }
-        return response()->json($listing);
+        return response()->json(
+            [
+                'listing' => $listing
+            ]
+        );
+    }
+
+    public function amenity()
+    {
+        $amenity = Amenity::where('status', 1)->get();
+        if ($amenity->count() === 0) {
+            return response()->json(['error' => 'No Amenity Found!'], 404);
+        }
+        return response()->json(
+            [
+                'amenity' => $amenity
+            ]
+        );
+    }
+
+    public function tag()
+    {
+        $tag = Tag::where('status', 1)->get();
+        if ($tag->count() === 0) {
+            return response()->json(['error' => 'No Tag Found!'], 404);
+        }
+        return response()->json(
+            [
+                'tag' => $tag
+            ]
+        );
     }
 }

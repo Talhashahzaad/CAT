@@ -604,6 +604,28 @@ namespace App\Models{
  * 
  *
  * @property int $id
+ * @property string $key
+ * @property string|null $value
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\TFactory|null $use_factory
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|PaymentSetting newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|PaymentSetting newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|PaymentSetting query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|PaymentSetting whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|PaymentSetting whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|PaymentSetting whereKey($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|PaymentSetting whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|PaymentSetting whereValue($value)
+ */
+	class PaymentSetting extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
  * @property int $user_id
  * @property string|null $listing_id
  * @property string $name
@@ -634,7 +656,7 @@ namespace App\Models{
  * 
  *
  * @property int $id
- * @property int $user_id
+ * @property string $user_id
  * @property string $name
  * @property string $slug
  * @property string|null $description
@@ -726,10 +748,20 @@ namespace App\Models{
 /**
  * 
  *
+ * @property int $id
+ * @property string $key
+ * @property string|null $value
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\TFactory|null $use_factory
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Setting newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Setting newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Setting query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Setting whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Setting whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Setting whereKey($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Setting whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Setting whereValue($value)
  */
 	class Setting extends \Eloquent {}
 }
@@ -770,8 +802,8 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $role
- * @property string $avatar
- * @property string $banner
+ * @property string|null $avatar
+ * @property string|null $banner
  * @property string $name
  * @property string $email
  * @property \Illuminate\Support\Carbon|null $email_verified_at
