@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\FrontendController;
 use App\Http\Controllers\Api\ListingController;
 use App\Http\Controllers\Api\ListingVideoGalleryController;
+use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\PractitionerController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\TreatmentController;
@@ -51,6 +52,11 @@ Route::middleware(['auth:sanctum', 'role:agent'])->group(function () {
     Route::post('/listing-schedule/{listing_id}', [ListingScheduleController::class, 'store'])->name('listing-schedule.store');
     Route::put('/listing-schedule/{id}', [ListingScheduleController::class, 'update'])->name('listing-schedule.update');
     Route::delete('/listing-schedule/{id}', [ListingScheduleController::class, 'destroy'])->name('listing-schedule.destroy');
+
+    /** Payment Route */
+    Route::get('/paypal/payment', [PaymentController::class, 'payWithPaypal'])->name('paypal.payment');
+    Route::get('/paypal/success', [PaymentController::class, 'paySuccess'])->name('paypal.success');
+    Route::get('/paypal/cancel', [PaymentController::class, 'payCancel'])->name('paypal.cancel');
 });
 
 /** Auth Route */
@@ -87,3 +93,12 @@ Route::get('amenity', [FrontendController::class, 'amenity'])->name('amenity');
 
 /** Tag Route */
 Route::get('tag', [FrontendController::class, 'tag'])->name('tag');
+
+/** Payment Route */
+Route::get('/payment-status', function () {
+    return response()->json([
+        'paypal_status' => config('payment.paypal_status'),
+    ]);
+});
+
+Route::get('/listings', [FrontendController::class, 'searchListings']);

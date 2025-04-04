@@ -20,7 +20,8 @@ class ProfessionalCertificateStoreRequest extends FormRequest
             'name' =>  [
                 'required',
                 'string',
-                'max:255'
+                'max:255',
+                'unique:professional_certificates,name',
 
             ],
             'description' => ['nullable', 'string', 'max:255'],

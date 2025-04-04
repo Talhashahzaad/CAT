@@ -36,10 +36,7 @@ class PractitionerController extends Controller
             return response()->json(['message' => 'No practitioners found'], 404);
         }
 
-        return response()->json([
-            'status' => 'success',
-            'practitioners' => $practitioners
-        ], 200);
+        return response()->json($practitioners);
     }
 
     /**

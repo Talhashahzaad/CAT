@@ -24,7 +24,7 @@ class PractitionerUpdateRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-
+                Rule::unique('practitioners')->ignore($this->route('practitioner')),
             ],
             'qualification' => 'nullable|string',
             'certificate' => 'nullable|string',

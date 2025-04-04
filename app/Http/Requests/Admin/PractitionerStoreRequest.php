@@ -23,7 +23,7 @@ class PractitionerStoreRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-
+                'unique:practitioners,name',
             ],
             'qualification' => 'nullable|string',
             'certificate' => 'nullable|string',

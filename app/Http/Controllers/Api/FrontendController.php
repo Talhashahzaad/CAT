@@ -14,6 +14,7 @@ use App\Models\Location;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Session;
 
 class FrontendController extends Controller
 {
@@ -25,11 +26,7 @@ class FrontendController extends Controller
         if ($blog === null) {
             return response()->json(['error' => 'Blog not found'], 404);
         }
-        return response()->json(
-            [
-                'blog' => $blog
-            ]
-        );
+        return response()->json($blog);
     }
 
     public function blog()
@@ -42,11 +39,7 @@ class FrontendController extends Controller
         if ($blog->isEmpty()) {
             return response()->json(['error' => 'Blog not Available'], 404);
         }
-        return response()->json(
-            [
-                'blog' => $blog
-            ]
-        );
+        return response()->json($blog);
     }
 
     public function blogCategory()
@@ -56,11 +49,7 @@ class FrontendController extends Controller
         if ($category->count() === 0) {
             return response()->json(['error' => 'Blog Category not Available'], 404);
         }
-        return response()->json(
-            [
-                'category' => $category
-            ]
-        );
+        return response()->json($category);
     }
 
     public function listingPackage()
@@ -71,11 +60,7 @@ class FrontendController extends Controller
             return response()->json(['error' => 'No Listing Package Found!'], 404);
         }
 
-        return response()->json(
-            [
-                'package' => $package
-            ]
-        );
+        return response()->json($package);
     }
 
     public function category()
@@ -84,11 +69,7 @@ class FrontendController extends Controller
         if ($category->count() === 0) {
             return response()->json(['error' => 'No Category Found!'], 404);
         }
-        return response()->json(
-            [
-                'category' => $category
-            ]
-        );
+        return response()->json($category);
     }
 
     public function catVideoUpload()
@@ -97,11 +78,7 @@ class FrontendController extends Controller
         if ($video->count() === 0) {
             return response()->json(['error' => 'No Video Found!'], 404);
         }
-        return response()->json(
-            [
-                'video' => $video
-            ]
-        );
+        return response()->json($video);
     }
 
     public function location()
@@ -110,24 +87,28 @@ class FrontendController extends Controller
         if ($location->count() === 0) {
             return response()->json(['error' => 'No Location Found!'], 404);
         }
-        return response()->json(
-            [
-                'location' => $location
-            ]
-        );
+        return response()->json($location);
     }
 
     public function checkout($id)
     {
+        // Find the listing package
         $listing = ListingPackage::find($id);
-        if ($listing === null) {
+
+        // If not found, return an error response
+        if (!$listing) {
             return response()->json(['error' => 'Listing Package not found'], 404);
         }
-        return response()->json(
-            [
-                'listing' => $listing
-            ]
-        );
+
+        // Store the selected package ID in the session
+        // Session::put('selected_package_id', $listing->id);
+
+        // Return the listing details
+        return response()->json([
+            'message' => 'Package stored in session successfully',
+            'selected_package_id' => $listing->id,
+            'listing' => $listing
+        ]);
     }
 
     public function amenity()
@@ -136,11 +117,7 @@ class FrontendController extends Controller
         if ($amenity->count() === 0) {
             return response()->json(['error' => 'No Amenity Found!'], 404);
         }
-        return response()->json(
-            [
-                'amenity' => $amenity
-            ]
-        );
+        return response()->json($amenity);
     }
 
     public function tag()
@@ -149,10 +126,38 @@ class FrontendController extends Controller
         if ($tag->count() === 0) {
             return response()->json(['error' => 'No Tag Found!'], 404);
         }
-        return response()->json(
-            [
-                'tag' => $tag
-            ]
-        );
+        return response()->json($tag);
+    }
+
+    public function searchListings(Request $request)
+    {
+        $query = Listing::with('tags')->where('status', 1);
+
+        if ($request->has('category_id')) {
+            $query->where('category_id', $request->category_id);
+        }
+
+        if ($request->has('location_id')) {
+            $query->where('location_id', $request->location_id);
+        }
+
+        if ($request->has('search')) {
+            $searchTerm = $request->search;
+
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('description', 'like', "%{$searchTerm}%")
+                    ->orWhereHas('tags', function ($tagQuery) use ($searchTerm) {
+                        $tagQuery->where('name', 'like', "%{$searchTerm}%"); // assuming your tag table has a 'name' column
+                    });
+            });
+        }
+
+        $listings = $query->get();
+
+        if ($listings->isEmpty()) {
+            return response()->json(['error' => 'No listings found!'], 404);
+        }
+
+        return response()->json($listings);
     }
 }

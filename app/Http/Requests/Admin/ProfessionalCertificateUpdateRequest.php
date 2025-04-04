@@ -20,7 +20,7 @@ class ProfessionalCertificateUpdateRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('professional_certificates', 'name')
+                Rule::unique('professional_certificates')->ignore($this->professionalCertificate),
             ],
             'description' => ['nullable', 'string', 'max:255'],
         ];

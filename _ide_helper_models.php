@@ -237,6 +237,8 @@ namespace App\Models{
  * @property-read int|null $listing_tags_count
  * @property-read \App\Models\Location $location
  * @property-read \App\Models\Practitioner|null $practitioner
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Tag> $tags
+ * @property-read int|null $tags_count
  * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Listing newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Listing newQuery()
@@ -522,6 +524,45 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Location whereUpdatedAt($value)
  */
 	class Location extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string $order_id
+ * @property string $transaction_id
+ * @property int $user_id
+ * @property int $package_id
+ * @property string $payment_method
+ * @property string $payment_status
+ * @property float $base_amount
+ * @property string $base_currency
+ * @property float $paid_amount
+ * @property string $paid_currency
+ * @property string $purchase_date
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Order newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Order newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Order query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereBaseAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereBaseCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereOrderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Order wherePackageId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Order wherePaidAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Order wherePaidCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Order wherePaymentMethod($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Order wherePaymentStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Order wherePurchaseDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereTransactionId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereUserId($value)
+ */
+	class Order extends \Eloquent {}
 }
 
 namespace App\Models{

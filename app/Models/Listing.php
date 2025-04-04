@@ -34,7 +34,10 @@ class Listing extends Model
     {
         return $this->hasMany(ListingTag::class, 'listing_id');
     }
-
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'listing_tags', 'listing_id', 'tag_id');
+    }
     public function listingCertificates()
     {
         return $this->hasMany(ListingCertificate::class, 'listing_id');
