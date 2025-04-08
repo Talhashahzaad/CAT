@@ -12,7 +12,7 @@ use Illuminate\Queue\SerializesModels;
 
 class CreateOrder
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable, SerializesModels;
 
     public array $paymentInfo;
     /**
@@ -28,10 +28,10 @@ class CreateOrder
      *
      * @return array<int, \Illuminate\Broadcasting\Channel>
      */
-    public function broadcastOn(): array
-    {
-        return [
-            new PrivateChannel('channel-name'),
-        ];
-    }
+    // public function broadcastOn(): array
+    // {
+    //     return [
+    //         new PrivateChannel('channel-name'),
+    //     ];
+    // }
 }

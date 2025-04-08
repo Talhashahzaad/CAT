@@ -54,9 +54,11 @@ Route::middleware(['auth:sanctum', 'role:agent'])->group(function () {
     Route::delete('/listing-schedule/{id}', [ListingScheduleController::class, 'destroy'])->name('listing-schedule.destroy');
 
     /** Payment Route */
+    Route::get('/payment-success', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
+    Route::get('/payment-cancel', [PaymentController::class, 'paymentCancel'])->name('payment.cancel');
     Route::get('/paypal/payment', [PaymentController::class, 'payWithPaypal'])->name('paypal.payment');
-    Route::get('/paypal/success', [PaymentController::class, 'paySuccess'])->name('paypal.success');
-    Route::get('/paypal/cancel', [PaymentController::class, 'payCancel'])->name('paypal.cancel');
+    Route::get('/paypal/cancel', [PaymentController::class, 'paypalCancel'])->name('paypal.cancel');
+    Route::get('/paypal/success', [PaymentController::class, 'paypalSuccess'])->name('paypal.success');
 });
 
 /** Auth Route */

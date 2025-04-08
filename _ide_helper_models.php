@@ -814,6 +814,36 @@ namespace App\Models{
  * 
  *
  * @property int $id
+ * @property int $user_id
+ * @property int $package_id
+ * @property int $order_id
+ * @property string $purchase_date
+ * @property string|null $expire_date
+ * @property int $status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\TFactory|null $use_factory
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Subscription newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Subscription newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Subscription query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Subscription whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Subscription whereExpireDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Subscription whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Subscription whereOrderId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Subscription wherePackageId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Subscription wherePurchaseDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Subscription whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Subscription whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Subscription whereUserId($value)
+ */
+	class Subscription extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
  * @property string $name
  * @property string $slug
  * @property int $status

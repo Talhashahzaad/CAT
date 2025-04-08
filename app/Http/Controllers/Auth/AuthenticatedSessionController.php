@@ -31,10 +31,10 @@ class AuthenticatedSessionController extends Controller
 
         if (Auth::user()->role === 'admin') {
             return redirect()->intended(route('admin.dashboard.index', absolute: false));
-            // } elseif (auth()->user()->role === 'agent') {
-            //     return redirect()->intended(route('business.dashboard.index', absolute: false));
-            // } else {
-            //     return redirect()->intended(route('dashboard', absolute: false));
+        } elseif (auth()->user()->role === 'agent') {
+            return redirect()->intended(route('business.dashboard.index', absolute: false));
+        } else {
+            return redirect()->intended(route('dashboard', absolute: false));
         }
     }
 
