@@ -35,6 +35,7 @@ class CatVideoUploadController extends Controller
             'video_title' => 'required',
             'video_url' => 'required',
             'status' => 'required',
+            'video_description' => 'nullable|max:1000',
         ]);
 
         $video = new CatVideoUpload();

@@ -7,9 +7,6 @@ use App\Models\Order;
 use App\Models\ListingPackage;
 use App\Models\Subscription;
 use Carbon\Carbon;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
-use Session;
 
 class CreateOrderListener
 {
@@ -24,18 +21,31 @@ class CreateOrderListener
     /**
      * Handle the event.
      */
+
     public function handle(CreateOrder $event): void
     {
         \Log::info('✅ CreateOrder event triggered:', $event->paymentInfo);
 
         $info = $event->paymentInfo;
 
+        // ✅ Prevent duplicate order creation
+        $existingOrder = Order::where('transaction_id', $info['transaction_id'])->first();
+        if ($existingOrder) {
+            \Log::warning('⚠️ Order already exists with transaction ID: ' . $info['transaction_id']);
+
+            // ✅ Ensure subscription still gets created/updated for this order
+            $this->createOrUpdateSubscription($existingOrder, $info['package_id']);
+            return;
+        }
+
+        // ✅ Fetch the selected package
         $package = ListingPackage::find($info['package_id']);
         if (!$package) {
             \Log::error('❌ Package not found for ID: ' . $info['package_id']);
             return;
         }
 
+        // ✅ Create new order
         $order = new Order();
         $order->order_id = uniqid();
         $order->transaction_id = $info['transaction_id'];
@@ -53,19 +63,34 @@ class CreateOrderListener
         $order->save();
         \Log::info('✅ Order saved successfully: ID ' . $order->id);
 
-        Subscription::updateOrCreate(
-            ['user_id' => $order->user_id],
-            [
-                'package_id' => $package->id,
-                'order_id' => $order->id,
-                'purchase_date' => $order->purchase_date,
-                'expire_date' => $package->number_of_days == -1
-                    ? null
-                    : Carbon::parse($order->purchase_date)->addDays($package->number_of_days),
-                'status' => 1,
-            ]
-        );
+        // ✅ Call method to create or update subscription
+        $this->createOrUpdateSubscription($order, $package->id);
+    }
+    private function createOrUpdateSubscription(Order $order, int $packageId): void
+    {
+        try {
+            $package = ListingPackage::find($packageId);
+            if (!$package) {
+                \Log::error('❌ Package not found while creating subscription for user_id: ' . $order->user_id);
+                return;
+            }
 
-        \Log::info('✅ Subscription updated or created for user_id: ' . $order->user_id);
+            $subscription = Subscription::updateOrCreate(
+                ['user_id' => $order->user_id],
+                [
+                    'package_id' => $package->id,
+                    'order_id' => $order->id,
+                    'purchase_date' => $order->purchase_date,
+                    'expire_date' => $package->number_of_days == -1
+                        ? null
+                        : Carbon::parse($order->purchase_date)->addDays($package->number_of_days),
+                    'status' => 1,
+                ]
+            );
+
+            \Log::info('✅ Subscription updated or created for user_id: ' . $order->user_id . ', Subscription ID: ' . $subscription->id);
+        } catch (\Exception $e) {
+            \Log::error('❌ Failed to update/create subscription: ' . $e->getMessage());
+        }
     }
 }

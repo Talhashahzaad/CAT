@@ -46,5 +46,8 @@ return [
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
         'redirect' => env('GOOGLE_REDIRECT_URI'),
     ],
+    'react_app' => [
+        'url' => env('REACT_APP_URL', 'http://3.8.140.227:5173'),
+    ],
 
 ];
