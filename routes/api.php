@@ -59,6 +59,8 @@ Route::middleware(['auth:sanctum', 'role:agent'])->group(function () {
     Route::post('/paypal/payment', [PaymentController::class, 'payWithPaypal'])->name('paypal.payment');
     // Route::get('/paypal/cancel', [PaymentController::class, 'paypalCancel'])->name('paypal.cancel');
     Route::get('/paypal/success', [PaymentController::class, 'paypalSuccess'])->name('paypal.success');
+    Route::get('/paypal/session', [PaymentController::class, 'getPaypalSession']);
+
 
     // Route::post('/paypal/payment', [PaymentController::class, 'payWithPaypal']);
     // Route::post('/verify-paypal-payment', [PaymentController::class, 'verifyPaypalPayment']);

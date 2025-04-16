@@ -128,7 +128,25 @@ class PaymentController extends Controller
         ], 400);
     }
 
+    public function getPaypalSession(Request $request)
+    {
+        $token = $request->query('token');
 
+        if (!$token) {
+            return response()->json(['error' => 'Missing token'], 400);
+        }
+
+        $session = Cache::get('paypal_session_' . $token); // Just get (not pull)
+
+        if (!$session) {
+            return response()->json(['error' => 'Session expired or not found'], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'session' => $session
+        ]);
+    }
 
 
     private function capturePaypalOrder(string $token)

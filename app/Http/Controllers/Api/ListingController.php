@@ -5,11 +5,17 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ListingStoreApiRequest;
 use App\Http\Requests\Api\ListingUpdateApiRequest;
+use App\Models\Amenity;
+use App\Models\Category;
 use App\Models\Listing;
 use App\Models\ListingAmenity;
 use App\Models\ListingCertificate;
 use App\Models\ListingPractitioner;
 use App\Models\ListingTag;
+use App\Models\Location;
+use App\Models\Practitioner;
+use App\Models\ProfessionalCertificate;
+use App\Models\Tag;
 use App\Traits\FileUploadTrait;
 use Auth;
 use Log;
@@ -146,6 +152,59 @@ class ListingController extends Controller
         return response()->json(['success' => true, 'success' => 'Listing created successfully', 'data' => $listing], 200);
     }
 
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function show(string $id)
+    {
+        $user = Auth::user();
+        $listing = Listing::find($id);
+
+        if (!$listing) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Listing not found',
+            ], 404);
+        }
+
+        if ($listing->user_id != $user->id) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'You are not authorized to perform this action.',
+            ], 403);
+        }
+
+        $listingAmenities = ListingAmenity::where('listing_id', $listing->id)->pluck('amenity_id')->toArray();
+        $listingTag = ListingTag::where('listing_id', $listing->id)->pluck('tag_id')->toArray();
+        $listingCertificate = ListingCertificate::where('listing_id', $listing->id)->pluck('certificates_id')->toArray();
+        $listingPractitioner = ListingPractitioner::where('listing_id', $listing->id)->pluck('practitioner_id')->toArray();
+
+        $categories = Category::all();
+        $locations = Location::all();
+        $amenities = Amenity::all();
+        $tags = Tag::all();
+        $certificates = ProfessionalCertificate::all();
+        $practitioners = Practitioner::all();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Listing data retrieved successfully',
+            'data' => [
+                'listing' => $listing,
+                'categories' => $categories,
+                'locations' => $locations,
+                'amenities' => $amenities,
+                'tags' => $tags,
+                'certificates' => $certificates,
+                'practitioners' => $practitioners,
+                'listingAmenities' => $listingAmenities,
+                'listingTags' => $listingTag,
+                'listingCertificates' => $listingCertificate,
+                'listingPractitioners' => $listingPractitioner,
+            ],
+        ], 200);
+    }
 
     /**
      * Update the specified resource in storage.
