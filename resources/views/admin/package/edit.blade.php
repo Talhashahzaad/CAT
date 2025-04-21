@@ -219,6 +219,7 @@
                                     data-variant-name="{{ $variant->name }}" data-service-price="{{ $variant->price }}"
                                     data-service-duration="{{ $variant->duration }}">
                                     <strong>{{ $service->name }}</strong> - {{ $variant->name }}
+                                    (<b>By -{{ $service->user->name }}</b>)
                                     <br>
                                     <small>
                                         @if (floor($variant->duration / 60) == 0)

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\ServicePriceVariant;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Service extends Model
 {
@@ -23,5 +24,9 @@ class Service extends Model
     public function priceVariants()
     {
         return $this->hasMany(ServicePriceVariant::class);
+    }
+    function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

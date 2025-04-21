@@ -44,4 +44,8 @@ class Package extends Model
             ->withPivot('variant_id')
             ->withTimestamps();
     }
+    function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -41,6 +41,9 @@ class ServiceDataTable extends DataTable
                     return "<span class='badge badge-danger'>Inactive</span>";
                 }
             })
+            ->addColumn('by', function ($query) {
+                return $query->user?->name;
+            })
             ->rawColumns(['action', 'status', 'category'])
             ->setRowId('id');
     }
@@ -86,6 +89,7 @@ class ServiceDataTable extends DataTable
             Column::make('name'),
             Column::make('service_type'),
             Column::make('category'),
+            Column::make('by'),
             Column::make('status'),
             Column::computed('action')
                 ->exportable(false)

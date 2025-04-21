@@ -106,50 +106,55 @@ class ListingController extends Controller
         $listing->expire_date = date('Y-m-d');
         $listing->save();
 
-        /** amenity store */
-        if ($request->has('amenities')) {
-            $amenities = is_array($request->amenities) ? $request->amenities : json_decode($request->amenities, true);
-            if (is_array($amenities)) {
-                foreach ($amenities as $amenityId) {
-                    $amenity = new ListingAmenity();
-                    $amenity->listing_id = $listing->id;
-                    $amenity->amenity_id = $amenityId;
-                    $amenity->save();
+        if (isset($listing->id) && $listing->id != null) {
+
+            /** amenity store */
+            if ($request->has('amenities')) {
+                $amenities = is_array($request->amenities) ? $request->amenities : json_decode($request->amenities, true);
+                if (is_array($amenities)) {
+                    foreach ($amenities as $amenityId) {
+                        $amenity = new ListingAmenity();
+                        $amenity->listing_id = $listing->id;
+                        $amenity->amenity_id = $amenityId;
+                        $amenity->save();
+                    }
                 }
             }
+
+            /** professional certificate store */
+
+            foreach ($request->professional_certificates as $certificateId) {
+
+                $certificate = new ListingCertificate();
+                $certificate->listing_id = $listing->id;
+                $certificate->certificates_id = $certificateId;
+                $certificate->save();
+            }
+
+            /** Tag store */
+
+            foreach ($request->tag as $tagId) {
+
+                $tag = new ListingTag();
+                $tag->listing_id = $listing->id;
+                $tag->tag_id = $tagId;
+                $tag->save();
+            }
+
+            /** Practitioner store */
+
+            foreach ($request->practitioner as $practitionerId) {
+
+                $practitioner = new ListingPractitioner();
+                $practitioner->listing_id = $listing->id;
+                $practitioner->practitioner_id = $practitionerId;
+                $practitioner->save();
+            }
+
+            return response()->json(['success' => true, 'success' => 'Listing created successfully', 'data' => $listing], 200);
+        } else {
+            return response()->json(['status' => 'error', 'message' => 'Listing ID is not generated.'], 400);
         }
-
-        /** professional certificate store */
-
-        foreach ($request->professional_certificates as $certificateId) {
-
-            $certificate = new ListingCertificate();
-            $certificate->listing_id = $listing->id;
-            $certificate->certificates_id = $certificateId;
-            $certificate->save();
-        }
-
-        /** Tag store */
-
-        foreach ($request->tag as $tagId) {
-
-            $tag = new ListingTag();
-            $tag->listing_id = $listing->id;
-            $tag->tag_id = $tagId;
-            $tag->save();
-        }
-
-        /** Practitioner store */
-
-        foreach ($request->practitioner as $practitionerId) {
-
-            $practitioner = new ListingPractitioner();
-            $practitioner->listing_id = $listing->id;
-            $practitioner->practitioner_id = $practitionerId;
-            $practitioner->save();
-        }
-
-        return response()->json(['success' => true, 'success' => 'Listing created successfully', 'data' => $listing], 200);
     }
 
 

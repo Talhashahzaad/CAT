@@ -74,7 +74,7 @@ class ListingImageGalleryController extends Controller
         foreach ($imagePath as $path) {
             ListingImageGallery::create([
                 'listing_id' => $request->listing_id,
-                'image_path' => $path
+                'image' => $path
             ]);
         }
 

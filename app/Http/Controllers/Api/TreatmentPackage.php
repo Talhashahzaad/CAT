@@ -24,7 +24,7 @@ class TreatmentPackage extends Controller
     {
         $user = Auth::user();
 
-        $services = Service::with('priceVariants')->where('status', 1)->get();
+        $services = Service::with('priceVariants')->where('status', 1)->where('user_id', Auth::user()->id)->get();
         $category = Category::where('status', 1)->get();
         $package = Package::where('status', 1)
             ->where('user_id', $user->id)

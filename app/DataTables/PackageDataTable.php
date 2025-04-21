@@ -46,6 +46,10 @@ class PackageDataTable extends DataTable
                     return "<span class='badge badge-danger'>Inactive</span>";
                 }
             })
+            ->addColumn('by', function ($query) {
+                return $query->user?->name;
+            })
+
             ->rawColumns(['action', 'status', 'category'])
             ->setRowId('id');
     }
@@ -92,6 +96,7 @@ class PackageDataTable extends DataTable
             Column::make('category'),
             Column::make('price_type'),
             Column::make('available_for'),
+            Column::make('by'),
             Column::make('status'),
             Column::computed('action')
                 ->exportable(false)

@@ -97,49 +97,54 @@ class ListingController extends Controller
             $listing->expire_date = date('Y-m-d');
             $listing->save();
 
-            /** amenity store */
 
-            foreach ($request->amenities as $amenityId) {
+            if (isset($listing->id) && $listing->id != null) {
+                /** amenity store */
 
-                $amenity = new ListingAmenity();
-                $amenity->listing_id = $listing->id;
-                $amenity->amenity_id = $amenityId;
-                $amenity->save();
+                foreach ($request->amenities as $amenityId) {
+
+                    $amenity = new ListingAmenity();
+                    $amenity->listing_id = $listing->id;
+                    $amenity->amenity_id = $amenityId;
+                    $amenity->save();
+                }
+
+                /** professional certificate store */
+
+                foreach ($request->professional_certificates as $certificateId) {
+
+                    $amenity = new ListingCertificate();
+                    $amenity->listing_id = $listing->id;
+                    $amenity->certificates_id = $certificateId;
+                    $amenity->save();
+                }
+
+                /** Tag store */
+
+                foreach ($request->tag as $tagId) {
+
+                    $amenity = new ListingTag();
+                    $amenity->listing_id = $listing->id;
+                    $amenity->tag_id = $tagId;
+                    $amenity->save();
+                }
+
+                /** Practitioner store */
+
+                foreach ($request->practitioner as $practitionerId) {
+
+                    $amenity = new ListingPractitioner();
+                    $amenity->listing_id = $listing->id;
+                    $amenity->practitioner_id = $practitionerId;
+                    $amenity->save();
+                }
+
+                toastr()->success('Created Successfully');
+
+                return redirect()->route('admin.listing.index');
+            } else {
+                return response()->json(['status' => 'error', 'message' => 'Listing ID is not generated.'], 400);
             }
-
-            /** professional certificate store */
-
-            foreach ($request->professional_certificates as $certificateId) {
-
-                $amenity = new ListingCertificate();
-                $amenity->listing_id = $listing->id;
-                $amenity->certificates_id = $certificateId;
-                $amenity->save();
-            }
-
-            /** Tag store */
-
-            foreach ($request->tag as $tagId) {
-
-                $amenity = new ListingTag();
-                $amenity->listing_id = $listing->id;
-                $amenity->tag_id = $tagId;
-                $amenity->save();
-            }
-
-            /** Practitioner store */
-
-            foreach ($request->practitioner as $practitionerId) {
-
-                $amenity = new ListingPractitioner();
-                $amenity->listing_id = $listing->id;
-                $amenity->practitioner_id = $practitionerId;
-                $amenity->save();
-            }
-
-            toastr()->success('Created Successfully');
-
-            return redirect()->route('admin.listing.index');
         } catch (\Exception $e) {
             toastr()->error('An error occurred: ' . $e->getMessage());
             return redirect()->back()->withInput();
