@@ -59,6 +59,12 @@ class CreateOrderListener
         $order->paid_currency = $info['paid_currency'];
         $order->purchase_date = now();
 
+        // ✅ Add coupon data if available
+
+        $order->coupon_code = $info['coupon_code'] ?? null;
+        $order->discount_type = $info['discount_type'] ?? null;
+        $order->discount_amount = $info['discount_amount'] ?? 0;
+
         \Log::info('Saving order data:', $order->toArray());
         $order->save();
         \Log::info('✅ Order saved successfully: ID ' . $order->id);

@@ -47,6 +47,7 @@ class ListingController extends Controller
             'User',
             'listingAmenities'
         ])
+            ->where('user_id', $user->id)
             ->where('status', 1)
             ->where('is_approved', 1)
             ->latest()

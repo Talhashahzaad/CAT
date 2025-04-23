@@ -2,17 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\CreateOrder;
 use App\Http\Controllers\Controller;
 use App\Models\Amenity;
 use App\Models\Blog;
 use App\Models\BlogCategory;
 use App\Models\Category;
 use App\Models\CatVideoUpload;
+use App\Models\Coupon;
 use App\Models\Listing;
 use App\Models\ListingPackage;
 use App\Models\Location;
 use App\Models\Tag;
+use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Session;
 
@@ -100,9 +105,24 @@ class FrontendController extends Controller
             return response()->json(['error' => 'Listing Package not found'], 404);
         }
 
-        // Store the selected package ID in the session
-        // Session::put('selected_package_id', $listing->id);
+        if ($listing->type === 'free' || $listing->price == 0) {
+            $paymentInfo = [
+                'transaction_id' => uniqid(),
+                'payment_method' => 'free',
+                'paid_amount' => 0,
+                'paid_currency' => config('settings.site_default_currency'),
+                'payment_status' => 'completed',
+                'user_id' => Auth::id(),
+                'package_id' => $listing->id
+            ];
 
+            CreateOrder::dispatch($paymentInfo);
+            return response()->json([
+                'message' => 'Package subscribed successfully',
+                'selected_package_id' => $listing->id,
+                'listing' => $listing
+            ]);
+        }
         // Return the listing details
         return response()->json([
             'message' => 'Package stored in session successfully',
@@ -159,5 +179,64 @@ class FrontendController extends Controller
         }
 
         return response()->json($listings);
+    }
+
+
+    public function applyCoupon(Request $request)
+    {
+        $request->validate([
+            'coupon_code' => 'required|string',
+            'package_id' => 'required|integer',
+        ]);
+
+        $coupon = Coupon::where('status', 1)
+            ->where('code', $request->coupon_code)
+            ->first();
+
+        if (!$coupon) {
+            return response()->json(['status' => 'error', 'message' => 'Coupon does not exist!'], 404);
+        }
+
+        if ($coupon->start_date > Carbon::now()->toDateString()) {
+            return response()->json(['status' => 'error', 'message' => 'Coupon not active yet!'], 400);
+        }
+
+        if ($coupon->end_date < Carbon::now()->toDateString()) {
+            return response()->json(['status' => 'error', 'message' => 'Coupon expired!'], 400);
+        }
+
+        if ($coupon->total_used >= $coupon->quantity) {
+            return response()->json(['status' => 'error', 'message' => 'Coupon usage limit reached'], 400);
+        }
+
+        $package = ListingPackage::find($request->package_id);
+        if (!$package) {
+            return response()->json(['status' => 'error', 'message' => 'Invalid package ID'], 404);
+        }
+
+        $discount = 0;
+        if ($coupon->discount_type === 'amount') {
+            $discount = $coupon->discount;
+        } elseif ($coupon->discount_type === 'percent') {
+            $discount = ($package->price * $coupon->discount) / 100;
+        }
+
+        $finalAmount = max(0, round($package->price - $discount, 2));
+
+        // Cache coupon data against user
+        $cacheKey = 'coupon_user_' . Auth::id() . '_package_' . $package->id;
+        Cache::put($cacheKey, [
+            'coupon_id' => $coupon->id,
+            'discount' => $discount,
+            'final_amount' => $finalAmount,
+        ], now()->addMinutes(30));
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Coupon applied successfully',
+            'final_amount' => $finalAmount,
+            'discount' => $discount,
+            'original_price' => $package->price
+        ]);
     }
 }

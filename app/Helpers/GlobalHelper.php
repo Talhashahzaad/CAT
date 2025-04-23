@@ -2,6 +2,8 @@
 
 /** Set Sidebar Active */
 
+use App\Models\Setting;
+
 if (!function_exists('setSidebarActive')) {
     function setSidebarActive(array $routes): ?string
     {

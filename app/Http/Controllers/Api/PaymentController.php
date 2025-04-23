@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Events\CreateOrder;
 use App\Http\Controllers\Controller;
+use App\Models\Coupon;
 use App\Models\ListingPackage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -13,41 +14,152 @@ use Illuminate\Support\Facades\Cache;
 
 class PaymentController extends Controller
 {
+    // public function payWithPaypal(Request $request)
+    // {
+    //     $packageId = $request->input('selected_package_id');
+    //     $package = ListingPackage::find($packageId);
+
+    //     if (!$package) {
+    //         return response()->json(['error' => 'Invalid package ID'], 400);
+    //     }
+
+    //     $totalPayableAmount = round($package->price * config('payment.paypal_currency_rate'));
+
+    //     $provider = new PayPalClient($this->setPaypalConfig());
+    //     $provider->getAccessToken();
+
+    //     $response = $provider->createOrder([
+    //         'intent' => 'CAPTURE',
+    //         'application_context' => [
+    //             'return_url' => config('services.react_app.url') . '/paypal-success?package_id=' . $packageId, // Redirect to frontend
+    //             'cancel_url' => config('services.react_app.url') . '/paypal-cancel',
+    //         ],
+    //         'purchase_units' => [
+    //             [
+    //                 'amount' => [
+    //                     'currency_code' => config('payment.paypal_currency'),
+    //                     'value' => $totalPayableAmount
+    //                 ]
+    //             ]
+    //         ]
+    //     ]);
+
+    //     if (isset($response['id'])) {
+    //         // Cache the order session
+    //         Cache::put('paypal_session_' . $response['id'], [
+    //             'user_id' => Auth::id(),
+    //             'package_id' => $packageId,
+    //         ], now()->addMinutes(20));
+
+    //         foreach ($response['links'] as $link) {
+    //             if ($link['rel'] === 'approve') {
+    //                 return response()->json([
+    //                     'status' => 'success',
+    //                     'approval_url' => $link['href'],
+    //                     'order_id' => $response['id']
+    //                 ]);
+    //             }
+    //         }
+    //     }
+
+    //     Log::error('❌ PayPal Order Creation Failed', $response);
+
+    //     return response()->json([
+    //         'status' => 'error',
+    //         'message' => $response['error']['message'] ?? 'Something went wrong during payment creation'
+    //     ], 400);
+    // }
+
     public function payWithPaypal(Request $request)
     {
         $packageId = $request->input('selected_package_id');
-        $package = ListingPackage::find($packageId);
+        $couponCode = $request->input('coupon_code');
+        $user = Auth::user();
 
+        $package = ListingPackage::find($packageId);
         if (!$package) {
-            return response()->json(['error' => 'Invalid package ID'], 400);
+            return response()->json(['status' => 'error', 'message' => 'Invalid package ID'], 404);
         }
 
-        $totalPayableAmount = round($package->price * config('payment.paypal_currency_rate'));
+        $finalAmount = $package->price;
+        $discountDetails = null;
 
+        // Apply Coupon Logic
+        if ($couponCode) {
+            $coupon = Coupon::where(['status' => 1, 'code' => $couponCode])->first();
+
+            if (!$coupon || $coupon->start_date > now()->format('Y-m-d') || $coupon->end_date < now()->format('Y-m-d') || $coupon->total_used >= $coupon->quantity) {
+                return response()->json(['status' => 'error', 'message' => 'Invalid or expired coupon'], 400);
+            }
+
+            if ($coupon->discount_type === 'amount') {
+                $finalAmount -= $coupon->discount;
+            } elseif ($coupon->discount_type === 'percent') {
+                $finalAmount -= ($package->price * $coupon->discount / 100);
+            }
+
+            if ($finalAmount < 0) $finalAmount = 0;
+
+            $discountDetails = [
+                'coupon_id' => $coupon->id,
+                'coupon_code' => $coupon->code,
+                'discount' => $coupon->discount,
+                'discount_type' => $coupon->discount_type,
+            ];
+        }
+
+        $finalAmount = round($finalAmount * config('payment.paypal_currency_rate'), 2);
+
+        // If final price is zero, skip PayPal
+        if ($finalAmount == 0) {
+            $paymentInfo = [
+                'transaction_id' => uniqid(),
+                'payment_method' => $package->type === 'free' ? 'free' : 'coupon',
+                'paid_amount' => 0,
+                'paid_currency' => config('payment.paypal_currency'),
+                'payment_status' => 'completed',
+                'user_id' => $user->id,
+                'package_id' => $package->id,
+                'discount_applied' => $discountDetails,
+                'coupon_code' => $coupon->code ?? null,
+                'discount_type' => $coupon->discount_type ?? null,
+                'discount_amount' => $calculatedDiscount ?? 0,
+            ];
+
+            CreateOrder::dispatch($paymentInfo);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Package subscribed successfully without payment',
+                // 'redirect_to' => '/thank-you-or-dashboard'
+            ]);
+        }
+
+        // Create PayPal Order
         $provider = new PayPalClient($this->setPaypalConfig());
         $provider->getAccessToken();
 
         $response = $provider->createOrder([
             'intent' => 'CAPTURE',
             'application_context' => [
-                'return_url' => config('services.react_app.url') . '/paypal-success?package_id=' . $packageId, // Redirect to frontend
+                'return_url' => config('services.react_app.url') . '/paypal-success?package_id=' . $packageId,
                 'cancel_url' => config('services.react_app.url') . '/paypal-cancel',
             ],
             'purchase_units' => [
                 [
                     'amount' => [
                         'currency_code' => config('payment.paypal_currency'),
-                        'value' => $totalPayableAmount
+                        'value' => $finalAmount
                     ]
                 ]
             ]
         ]);
 
         if (isset($response['id'])) {
-            // Cache the order session
             Cache::put('paypal_session_' . $response['id'], [
-                'user_id' => Auth::id(),
+                'user_id' => $user->id,
                 'package_id' => $packageId,
+                'discount_applied' => $discountDetails
             ], now()->addMinutes(20));
 
             foreach ($response['links'] as $link) {
@@ -61,13 +173,14 @@ class PaymentController extends Controller
             }
         }
 
-        Log::error('❌ PayPal Order Creation Failed', $response);
+        Log::error('PayPal Order Creation Failed', $response);
 
         return response()->json([
             'status' => 'error',
-            'message' => $response['error']['message'] ?? 'Something went wrong during payment creation'
+            'message' => 'Something went wrong during PayPal payment creation.'
         ], 400);
     }
+
     public function paypalSuccess(Request $request)
     {
         $token = $request->query('token');

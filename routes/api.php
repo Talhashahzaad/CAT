@@ -61,6 +61,12 @@ Route::middleware(['auth:sanctum', 'role:agent'])->group(function () {
     Route::get('/paypal/success', [PaymentController::class, 'paypalSuccess'])->name('paypal.success');
     Route::get('/paypal/session', [PaymentController::class, 'getPaypalSession']);
 
+    Route::get('checkout/{id}', [FrontendController::class, 'checkout'])->name('checkout.index');
+
+    /** Coupon Route */
+
+    Route::post('/apply-coupon', [FrontendController::class, 'applyCoupon']);
+
 
     // Route::post('/paypal/payment', [PaymentController::class, 'payWithPaypal']);
     // Route::post('/verify-paypal-payment', [PaymentController::class, 'verifyPaypalPayment']);
@@ -82,7 +88,7 @@ Route::get('blog-category', [FrontendController::class, 'blogCategory']);
 /**Listing Package Route */
 
 Route::get('listing-packages', [FrontendController::class, 'listingPackage']);
-Route::get('checkout/{id}', [FrontendController::class, 'checkout'])->name('checkout.index');
+
 
 /** Contact Route */
 Route::post('contact-store', [ContactController::class, 'store']);

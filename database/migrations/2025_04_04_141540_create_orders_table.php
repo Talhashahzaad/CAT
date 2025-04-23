@@ -23,6 +23,9 @@ return new class extends Migration
             $table->string('base_currency');
             $table->double('paid_amount');
             $table->string('paid_currency');
+            $table->decimal('discount_amount', 10, 2)->nullable();
+            $table->string('discount_type')->nullable(); // 'amount' or 'percent'
+            $table->string('coupon_code')->nullable();
             $table->timestamp('purchase_date');
             $table->timestamps();
         });

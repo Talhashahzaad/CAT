@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\CatVideoUploadController;
+use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\PaymentSettingController;
 use App\Http\Controllers\Admin\PendingListingController;
 use App\Http\Controllers\Admin\SettingController;
@@ -99,6 +100,10 @@ Route::group([
 
     /**Cat Video Upload Route */
     Route::resource('/cat-video-upload', CatVideoUploadController::class);
+
+    /**Coupon Route */
+    Route::resource('/coupon', CouponController::class);
+    Route::put('coupon/change-status', [CouponController::class, 'changeStatus'])->name('coupon.change-status');
 
     /**Setting Route */
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');

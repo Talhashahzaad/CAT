@@ -25,7 +25,7 @@ class ListingStoreRequest extends FormRequest
         return [
             'image' => ['required', 'image', 'max:3000'],
             'thumbnail_image' => ['required', 'image', 'max:3000'],
-            'title' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255', 'unique:listings,title'],
             'category' => ['required', 'integer'],
             'location' => ['required', 'integer'],
             'address' => ['required', 'string', 'max:255'],
