@@ -194,6 +194,43 @@ namespace App\Models{
  * 
  *
  * @property int $id
+ * @property string $title
+ * @property string $code
+ * @property int $quantity
+ * @property int $max_use
+ * @property string $start_date
+ * @property string $end_date
+ * @property string $discount_type
+ * @property float $discount
+ * @property int $status
+ * @property int $total_used
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Coupon newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Coupon newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Coupon query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Coupon whereCode($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Coupon whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Coupon whereDiscount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Coupon whereDiscountType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Coupon whereEndDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Coupon whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Coupon whereMaxUse($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Coupon whereQuantity($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Coupon whereStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Coupon whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Coupon whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Coupon whereTotalUsed($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Coupon whereUpdatedAt($value)
+ */
+	class Coupon extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
  * @property int $user_id
  * @property int $category_id
  * @property int $location_id
@@ -542,6 +579,9 @@ namespace App\Models{
  * @property float $paid_amount
  * @property string $paid_currency
  * @property string $purchase_date
+ * @property string|null $coupon_code
+ * @property string|null $discount_type
+ * @property string|null $discount_amount
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Order newModelQuery()
@@ -549,7 +589,10 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Order query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereBaseAmount($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereBaseCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereCouponCode($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereDiscountAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereDiscountType($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Order whereOrderId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Order wherePackageId($value)
@@ -639,6 +682,33 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|PackageServiceVariant whereVariants($value)
  */
 	class PackageServiceVariant extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
+ * @property int $id
+ * @property string $token
+ * @property int $user_id
+ * @property int $package_id
+ * @property string $amount
+ * @property string $currency
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|PayPalSession newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|PayPalSession newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|PayPalSession query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|PayPalSession whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|PayPalSession whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|PayPalSession whereCurrency($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|PayPalSession whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|PayPalSession wherePackageId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|PayPalSession whereToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|PayPalSession whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|PayPalSession whereUserId($value)
+ */
+	class PayPalSession extends \Eloquent {}
 }
 
 namespace App\Models{

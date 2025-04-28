@@ -47,7 +47,7 @@ return [
         'redirect' => env('GOOGLE_REDIRECT_URI'),
     ],
     'react_app' => [
-        'url' => env('REACT_APP_URL', 'http://3.8.140.227:5173'),
+        'url' => env('REACT_APP_URL', 'https://checkatreatment.com'),
     ],
 
 ];

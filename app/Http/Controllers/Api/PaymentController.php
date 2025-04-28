@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use App\Models\PayPalSession;
 
 class PaymentController extends Controller
 {
@@ -70,6 +71,117 @@ class PaymentController extends Controller
     //     ], 400);
     // }
 
+    // public function payWithPaypal(Request $request)
+    // {
+    //     $packageId = $request->input('selected_package_id');
+    //     $couponCode = $request->input('coupon_code');
+    //     $user = Auth::user();
+
+    //     $package = ListingPackage::find($packageId);
+    //     if (!$package) {
+    //         return response()->json(['status' => 'error', 'message' => 'Invalid package ID'], 404);
+    //     }
+
+    //     $finalAmount = $package->price;
+    //     $discountDetails = null;
+
+    //     // Apply Coupon Logic
+    //     if ($couponCode) {
+    //         $coupon = Coupon::where(['status' => 1, 'code' => $couponCode])->first();
+
+    //         if (!$coupon || $coupon->start_date > now()->format('Y-m-d') || $coupon->end_date < now()->format('Y-m-d') || $coupon->total_used >= $coupon->quantity) {
+    //             return response()->json(['status' => 'error', 'message' => 'Invalid or expired coupon'], 400);
+    //         }
+
+    //         if ($coupon->discount_type === 'amount') {
+    //             $finalAmount -= $coupon->discount;
+    //         } elseif ($coupon->discount_type === 'percent') {
+    //             $finalAmount -= ($package->price * $coupon->discount / 100);
+    //         }
+
+    //         if ($finalAmount < 0) $finalAmount = 0;
+
+    //         $discountDetails = [
+    //             'coupon_id' => $coupon->id,
+    //             'coupon_code' => $coupon->code,
+    //             'discount' => $coupon->discount,
+    //             'discount_type' => $coupon->discount_type,
+    //         ];
+    //     }
+
+    //     $finalAmount = round($finalAmount * config('payment.paypal_currency_rate'), 2);
+
+    //     // If final price is zero, skip PayPal
+    //     if ($finalAmount == 0) {
+    //         $paymentInfo = [
+    //             'transaction_id' => uniqid(),
+    //             'payment_method' => $package->type === 'free' ? 'free' : 'coupon',
+    //             'paid_amount' => 0,
+    //             'paid_currency' => config('payment.paypal_currency'),
+    //             'payment_status' => 'completed',
+    //             'user_id' => $user->id,
+    //             'package_id' => $package->id,
+    //             'discount_applied' => $discountDetails,
+    //             'coupon_code' => $coupon->code ?? null,
+    //             'discount_type' => $coupon->discount_type ?? null,
+    //             'discount_amount' => $calculatedDiscount ?? 0,
+    //         ];
+
+    //         CreateOrder::dispatch($paymentInfo);
+
+    //         return response()->json([
+    //             'status' => 'success',
+    //             'message' => 'Package subscribed successfully without payment',
+    //             // 'redirect_to' => '/thank-you-or-dashboard'
+    //         ]);
+    //     }
+
+    //     // Create PayPal Order
+    //     $provider = new PayPalClient($this->setPaypalConfig());
+    //     $provider->getAccessToken();
+
+    //     $response = $provider->createOrder([
+    //         'intent' => 'CAPTURE',
+    //         'application_context' => [
+    //             'return_url' => config('services.react_app.url') . '/paypal-success?package_id=' . $packageId,
+    //             'cancel_url' => config('services.react_app.url') . '/paypal-cancel',
+    //         ],
+    //         'purchase_units' => [
+    //             [
+    //                 'amount' => [
+    //                     'currency_code' => config('payment.paypal_currency'),
+    //                     'value' => $finalAmount
+    //                 ]
+    //             ]
+    //         ]
+    //     ]);
+
+    //     if (isset($response['id'])) {
+    //         Cache::put('paypal_session_' . $response['id'], [
+    //             'user_id' => $user->id,
+    //             'package_id' => $packageId,
+    //             'discount_applied' => $discountDetails
+    //         ], now()->addMinutes(20));
+
+    //         foreach ($response['links'] as $link) {
+    //             if ($link['rel'] === 'approve') {
+    //                 return response()->json([
+    //                     'status' => 'success',
+    //                     'approval_url' => $link['href'],
+    //                     'order_id' => $response['id']
+    //                 ]);
+    //             }
+    //         }
+    //     }
+
+    //     Log::error('PayPal Order Creation Failed', $response);
+
+    //     return response()->json([
+    //         'status' => 'error',
+    //         'message' => 'Something went wrong during PayPal payment creation.'
+    //     ], 400);
+    // }
+
     public function payWithPaypal(Request $request)
     {
         $packageId = $request->input('selected_package_id');
@@ -83,6 +195,7 @@ class PaymentController extends Controller
 
         $finalAmount = $package->price;
         $discountDetails = null;
+        $calculatedDiscount = 0;
 
         // Apply Coupon Logic
         if ($couponCode) {
@@ -93,9 +206,11 @@ class PaymentController extends Controller
             }
 
             if ($coupon->discount_type === 'amount') {
+                $calculatedDiscount = $coupon->discount;
                 $finalAmount -= $coupon->discount;
             } elseif ($coupon->discount_type === 'percent') {
-                $finalAmount -= ($package->price * $coupon->discount / 100);
+                $calculatedDiscount = ($package->price * $coupon->discount) / 100;
+                $finalAmount -= $calculatedDiscount;
             }
 
             if ($finalAmount < 0) $finalAmount = 0;
@@ -110,7 +225,9 @@ class PaymentController extends Controller
 
         $finalAmount = round($finalAmount * config('payment.paypal_currency_rate'), 2);
 
-        // If final price is zero, skip PayPal
+        // ==============================
+        // 1. If final price is ZERO
+        // ==============================
         if ($finalAmount == 0) {
             $paymentInfo = [
                 'transaction_id' => uniqid(),
@@ -131,11 +248,12 @@ class PaymentController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Package subscribed successfully without payment',
-                // 'redirect_to' => '/thank-you-or-dashboard'
             ]);
         }
 
-        // Create PayPal Order
+        // ==============================
+        // 2. Proceed to PayPal
+        // ==============================
         $provider = new PayPalClient($this->setPaypalConfig());
         $provider->getAccessToken();
 
@@ -156,11 +274,15 @@ class PaymentController extends Controller
         ]);
 
         if (isset($response['id'])) {
-            Cache::put('paypal_session_' . $response['id'], [
+            // Save PayPal Session in DATABASE
+            PayPalSession::create([
+                'token' => $response['id'],
                 'user_id' => $user->id,
                 'package_id' => $packageId,
-                'discount_applied' => $discountDetails
-            ], now()->addMinutes(20));
+                'amount' => $finalAmount,
+                'currency' => config('payment.paypal_currency'),
+                'discount_applied' => $discountDetails,
+            ]);
 
             foreach ($response['links'] as $link) {
                 if ($link['rel'] === 'approve') {
@@ -181,6 +303,67 @@ class PaymentController extends Controller
         ], 400);
     }
 
+
+    // public function paypalSuccess(Request $request)
+    // {
+    //     $token = $request->query('token');
+    //     $packageId = $request->query('package_id');
+
+    //     if (!$token || !$packageId) {
+    //         return response()->json(['error' => 'Missing token or package_id'], 400);
+    //     }
+
+    //     // Pull session from cache
+    //     $session = Cache::pull('paypal_session_' . $token);
+
+    //     if (!$session || Auth::id() !== $session['user_id']) {
+    //         return response()->json(['error' => 'Unauthorized or expired session'], 403);
+    //     }
+
+    //     $package = ListingPackage::find($packageId);
+    //     if (!$package) {
+    //         return response()->json(['error' => 'Invalid package ID'], 400);
+    //     }
+
+    //     $provider = new PayPalClient($this->setPaypalConfig());
+    //     $provider->getAccessToken();
+
+    //     $response = $provider->capturePaymentOrder($token);
+
+    //     if (isset($response['status']) && $response['status'] === 'COMPLETED') {
+    //         $capture = $response['purchase_units'][0]['payments']['captures'][0];
+
+    //         $paymentInfo = [
+    //             'transaction_id' => $capture['id'],
+    //             'payment_method' => 'paypal',
+    //             'paid_amount' => $capture['amount']['value'],
+    //             'paid_currency' => $capture['amount']['currency_code'],
+    //             'payment_status' => strtolower($response['status']),
+    //             'user_id' => Auth::id(),
+    //             'package_id' => $packageId,
+    //         ];
+
+    //         // Fire event to create the order
+    //         event(new \App\Events\CreateOrder($paymentInfo));
+
+    //         Log::info('✅ PayPal Payment Captured', $response);
+
+    //         return response()->json([
+    //             'status' => 'success',
+    //             'message' => 'Payment successful',
+    //             'order_id' => $response['id'],
+    //             'details' => $response,
+    //         ]);
+    //     }
+
+    //     Log::warning('❌ PayPal capture failed', $response);
+
+    //     return response()->json([
+    //         'status' => 'error',
+    //         'message' => 'Payment capture failed'
+    //     ], 400);
+    // }
+
     public function paypalSuccess(Request $request)
     {
         $token = $request->query('token');
@@ -190,10 +373,10 @@ class PaymentController extends Controller
             return response()->json(['error' => 'Missing token or package_id'], 400);
         }
 
-        // Pull session from cache
-        $session = Cache::pull('paypal_session_' . $token);
+        // Fetch session from database
+        $session = PaypalSession::where('token', $token)->first();
 
-        if (!$session || Auth::id() !== $session['user_id']) {
+        if (!$session || Auth::id() !== $session->user_id) {
             return response()->json(['error' => 'Unauthorized or expired session'], 403);
         }
 
@@ -202,9 +385,11 @@ class PaymentController extends Controller
             return response()->json(['error' => 'Invalid package ID'], 400);
         }
 
+        // Initialize PayPal Provider
         $provider = new PayPalClient($this->setPaypalConfig());
         $provider->getAccessToken();
 
+        // Capture payment
         $response = $provider->capturePaymentOrder($token);
 
         if (isset($response['status']) && $response['status'] === 'COMPLETED') {
@@ -215,13 +400,16 @@ class PaymentController extends Controller
                 'payment_method' => 'paypal',
                 'paid_amount' => $capture['amount']['value'],
                 'paid_currency' => $capture['amount']['currency_code'],
-                'payment_status' => strtolower($response['status']),
+                'payment_status' => strtolower($response['status']), // 'completed'
                 'user_id' => Auth::id(),
                 'package_id' => $packageId,
             ];
 
             // Fire event to create the order
-            event(new \App\Events\CreateOrder($paymentInfo));
+            event(new CreateOrder($paymentInfo));
+
+            // Remove the session record
+            $session->delete();
 
             Log::info('✅ PayPal Payment Captured', $response);
 
